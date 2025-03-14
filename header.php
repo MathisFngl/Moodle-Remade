@@ -6,7 +6,7 @@
 </head>
 
 <div class="navbar">
-    <a href="#tableau_de_bord">Tableau de bord</a>
+    <a href="index.php">Tableau de bord</a>
     <a href="mes_cours.php">Mes cours</a>
     <div class="dropdown">
         <button class="dropbtn">Sites UTBM </button>

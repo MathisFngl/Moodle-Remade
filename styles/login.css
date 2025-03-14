@@ -20,7 +20,7 @@ form {
     align-items: center; /* Center items horizontally */
 }
 
-input[type=text], input[type=password] {
+input[type=text] {
     width: 100%; /* Full width */
     padding: 12px 20px;
     margin: 0; /* Remove default margin */
@@ -46,17 +46,8 @@ button:hover {
     opacity: 0.8;
 }
 
-.register_button {
-    width: auto;
-    padding: 10px 18px;
-    background-color: #1dcb00;
-    margin: 0px;
-    border-radius: 4px; /* Rounded corners */
-
-}
-
 .forgot_password_button {
-    width: auto;
+    width: 35%;
     padding: 10px 18px;
     background-color: #ff3357;
     margin: 0px;
@@ -78,15 +69,6 @@ button:hover {
     flex-direction: column; /* Stack items vertically */
 }
 
-.container_down {
-    padding: 8px;
-    width: 100%; /* Full width */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #e8e8e8;
-}
-
 .login_button {
     font-size: 20px;
     margin: 0px;
@@ -99,6 +81,36 @@ button:hover {
 
 .checkbox {
     margin-bottom: 18px;
+}
+
+input[type=password] {
+    width: 90%; /* Full width */
+    padding: 12px 20px;
+    margin: 0; /* Remove default margin */
+    margin-bottom: 18px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px; /* Rounded corners */
+}
+
+.password-container {
+    display: flex;
+    flex-direction: row;
+    flex-grow: inherit;
+}
+
+.toggle_password {
+    height: 41px;
+    width: 41px;
+    margin: 0;
+    font-size: 19px;
+    background-color: #cccccc;
+    margin-left: 10px;
+    display: flex; /* Added this */
+    align-items: center; /* Vertically centers the content */
+    justify-content: center; /* Horizontally centers the content */
+    text-align: center; /* Ensures the text is centered */
 }
 
 span.psw {
