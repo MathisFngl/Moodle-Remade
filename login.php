@@ -19,7 +19,7 @@
                 <label for="password" ><b>Password</b></label>
                 <div class="password-container">
                     <input type="password" id="password" placeholder="Enter Password" name="password" required>
-                    <button type="button" id="togglePassword" class="toggle_password" onclick="toggle()"><i class="fas fa-eye-slash"></i></button>
+                    <button type="button" id="togglePassword" class="toggle_password" onclick="togglePwd()"><i class="fas fa-eye-slash"></i></button>
                 </div>
 
                 <button class="login_button" type="submit">Login</button>
@@ -29,22 +29,5 @@
                 <button type="button" href="#" class="forgot_password_button">Forgot Password</button>
             </div>
         </form>
-
-        <script>
-            function toggle() {
-                var passwordField = document.getElementById("password");
-                var toggleBtn = document.getElementById("togglePassword");
-
-                if (passwordField.type === "password") {
-                    passwordField.type = "text"; // Show password
-                    toggleBtn.innerHTML = '<i class="fas fa-eye"></i>'; // Eye with slash icon
-                    console.log("Password is now visible.");
-                } else {
-                    passwordField.type = "password"; // Hide password
-                    toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>'; // Eye icon
-                    console.log("Password is now hidden.");
-                }
-            }
-        </script>
-
+        <script src="scripts/script.js"></script>
     </body>
