@@ -37,7 +37,8 @@
 
     <div class="right">
         <a href="#notifications"><i class="fa fa-bell"></i></a>
-        <a href="#profile"><i class="fa fa-user"></i> Profil</a>
+        <a href="#profile.php"><i class="fa fa-user"></i> Profil</a>
         <a href="login.php"><i class="fa fa-sign-out"></i> Déconnexion</a>
+        <a href="#messagerie.php"><i class="fa fa-chat"></i> messagerie</a>
     </div>
 </div>
