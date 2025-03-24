@@ -12,8 +12,8 @@
         <main class="compte">
             <h2>Informations du Compte</h2>
             <section class="informations-profil">
-                <p><strong>Nom :</strong> <?php echo $nom_utilisateur; ?></p>
-                <p><strong>Adresse Email :</strong> <?php echo $email_utilisateur; ?></p>
+                <p><strong>Nom :</strong> Gardiol</p>
+                <p><strong>Adresse Email :</strong> Emilie </p>
             </section>
 
             <section class="modifier-informations">
