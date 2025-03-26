@@ -35,15 +35,14 @@
         </div>
     </div>
 
-    <div class="right">
+      <div class="right">
         <a href="#notifications"><i class="fa fa-bell"></i></a>
-<<<<<<< Updated upstream
-        <a href="#profile"><i class="fa fa-user"></i> Profil</a>
         <a href="login.php"><i class="fa fa-sign-out"></i> Déconnexion</a>
-=======
+        <a id="openChat"><i class="fa fa-chat"></i> Messagerie</a>
         <a href="profile.php"><i class="fa fa-user"></i> Profil</a>
         <a href="login.php"><i class="fa fa-sign-out"></i> Déconnexion</a>
-        <a href="messagerie.php"><i class="fa fa-chat"></i> messagerie</a>
->>>>>>> Stashed changes
+
     </div>
 </div>
+<div id="chatContainer"></div>
+<script src="scripts/chat.js"></script>
