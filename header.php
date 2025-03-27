@@ -37,7 +37,6 @@
 
       <div class="right">
         <a href="#notifications"><i class="fa fa-bell"></i></a>
-        <a href="login.php"><i class="fa fa-sign-out"></i> Déconnexion</a>
         <a id="openChat"><i class="fa fa-chat"></i> Messagerie</a>
         <a href="profile.php"><i class="fa fa-user"></i> Profil</a>
         <a href="login.php"><i class="fa fa-sign-out"></i> Déconnexion</a>

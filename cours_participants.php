@@ -36,7 +36,7 @@
             </div>
             <div class="participant">
                 <div class="pic">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png    " alt="Placeholder"/>
+                    <img src="images/bombardino.jpg" alt="Placeholder"/>
                 </div>
                 <a href="#href" class="name">Esteban Gomez</a>
                 <div class="role"> Etudiant</div>
@@ -44,7 +44,7 @@
             </div>
             <div class="participant">
                 <div class="pic">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png    " alt="Placeholder"/>
+                    <img src="images/bombardino.jpg" alt="Placeholder"/>
                 </div>
                 <a href="#href" class="name">Esteban Gomez</a>
                 <div class="role"> Etudiant</div>
@@ -52,7 +52,7 @@
             </div>
             <div class="participant">
                 <div class="pic">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png    " alt="Placeholder"/>
+                    <img src="images/bombardino.jpg" alt="Placeholder"/>
                 </div>
                 <a href="#href" class="name">Esteban Gomez</a>
                 <div class="role"> Etudiant</div>
@@ -60,7 +60,7 @@
             </div>
             <div class="participant">
                 <div class="pic">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png    " alt="Placeholder"/>
+                    <img src="images/bombardino.jpg" alt="Placeholder"/>
                 </div>
                 <a href="#href" class="name">Esteban Gomez</a>
                 <div class="role"> Etudiant</div>
@@ -68,7 +68,7 @@
             </div>
             <div class="participant">
                 <div class="pic">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png    " alt="Placeholder"/>
+                    <img src="images/bombardino.jpg" alt="Placeholder"/>
                 </div>
                 <a href="#href" class="name">Esteban Gomez</a>
                 <div class="role"> Etudiant</div>
@@ -76,7 +76,7 @@
             </div>
             <div class="participant">
                 <div class="pic">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png    " alt="Placeholder"/>
+                    <img src="images/bombardino.jpg" alt="Placeholder"/>
                 </div>
                 <a href="#href" class="name">Esteban Gomez</a>
                 <div class="role"> Etudiant</div>
