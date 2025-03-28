@@ -6,6 +6,10 @@ body {
     overflow: hidden;
     background-color: #008fda;
     top: 0;
+    left:0;
+    width:100%;
+    position:fixed;
+    z-index:10;
 }
 
 .navbar a {
