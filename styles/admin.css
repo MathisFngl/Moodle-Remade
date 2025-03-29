@@ -1,0 +1,26 @@
+.body-container{
+    display: block;
+    margin: 30px;
+    padding: 5px;
+    border: 2px solid #dcdcdc;
+}
+
+.titre_panel_gestion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.button-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-add{
+    width: 60%;
+    margin-bottom: 30px;
+}

@@ -6,8 +6,8 @@
 </head>
 
 <div class="navbar">
-    <a href="index.php">Tableau de bord</a>
-    <a href="mes_cours.php">Mes cours</a>
+    <a href="index.php"class="normal_padding">Tableau de bord</a>
+    <a href="mes_cours.php"class="normal_padding">Mes cours</a>
     <div class="dropdown">
         <button class="dropbtn">Sites UTBM </button>
         <div class="dropdown-content">
@@ -35,12 +35,13 @@
         </div>
     </div>
 
-      <div class="right">
-        <a href="#notifications"><i class="fa fa-bell"></i></a>
-        <a id="openChat"><i class="fa fa-chat"></i> Messagerie</a>
-        <a href="profile.php"><i class="fa fa-user"></i> Profil</a>
-        <a href="login.php"><i class="fa fa-sign-out"></i> Déconnexion</a>
-
+      <div class="right ">
+          <a href="admin.php" class="normal_padding"><i class="fa fa-cubes"></i> Admin </a>
+        <a href="#notifications" class="small_padding"><i class="fa fa-bell "></i></a>
+        <a id="openChat" class="normal_padding"><i class="fa fa-chat"></i> Messagerie</a>
+        <a href="profile.php" class="normal_padding"><i class="fa fa-user"></i> Profil</a>
+          <!--- A mettre dans USER ---!>
+        <a href="login.php" class="normal_padding"><i class="fa fa-sign-out"></i> Déconnexion</a>
     </div>
 </div>
 <div id="chatContainer"></div>
