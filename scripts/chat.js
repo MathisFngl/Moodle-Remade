@@ -1,7 +1,6 @@
-// Référence à l'endroit où le panneau sera inséré
+
 const body = document.body;
 
-// Charger dynamiquement le contenu HTML du panneau
 fetch('chat.php')
     .then(response => response.text())
     .then(html => {

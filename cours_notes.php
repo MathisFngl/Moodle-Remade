@@ -27,6 +27,9 @@
             <a href="cours_participants.php">Participants</a>
             <a class="current">Notes</a>
         </div>
+        <span class="add">
+            <a href="ajouter_note.php">add mark</a>
+        </span>
 
     <script src="scripts/script.js"></script>
 </body>

@@ -27,6 +27,9 @@
             <a class="current">Participants</a>
             <a href="cours_notes.php">Notes</a>
         </div>
+        <span class= "add">
+            <a href="ajouter_participant.php" class="ajouter_participant">New participant</a>
+        </span>
         <div class="participant_container">
             <div class="participant">
                 <div class="pic header"></div>
@@ -82,6 +85,7 @@
                 <div class="role"> Etudiant</div>
                 <div class="group"> Groupe A </div>
             </div>
+
 
         </div>
 
