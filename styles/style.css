@@ -6,11 +6,12 @@ body {
     overflow: visible;
     background-color: #008fda;
     top: 0;
-    left:0;
-    width:100%;
-    position:fixed;
-    z-index:10;
-    box-shadow:0px 0px 10px;
+    left: 0;
+    padding: 0 !important;
+    width: 100%;
+    position: fixed;
+    z-index: 10;
+    box-shadow: 0px 0px 10px;
 }
 
 .navbar a {
@@ -23,7 +24,7 @@ body {
 
 .dropdown {
     float: left;
-    overflow: hidden;
+    position: relative;
 }
 
 .dropdown .dropbtn {
@@ -31,7 +32,6 @@ body {
     border: none;
     outline: none;
     color: white;
-    padding: 24px 20px;
     background-color: inherit;
     font-family: inherit;
     margin: 0;
@@ -44,9 +44,11 @@ body {
 .dropdown-content {
     display: none;
     position: absolute;
+    left: 0;
+    top: 100%; /* Assure qu'il s'affiche sous le bouton */
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
 
@@ -67,13 +69,12 @@ body {
     display: block;
 }
 
-.small_padding{
+.small_padding {
     padding: 24px 5px;
 }
 
-.normal_padding{
-    padding: 24px 20px;
-    user-select: none;
+.normal_padding {
+    padding: 15px 15px;
 }
 
 /* Right-aligned elements */
