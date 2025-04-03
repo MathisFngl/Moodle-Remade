@@ -28,5 +28,81 @@
             <a href="cours_notes.php">Notes</a>
         </div>
 
-    <script src="scripts/script.js"></script>
+        <!-- Ajouter un bouton pour ouvrir la modale -->
+        <button id="openModalBtn"><img src="images/+.png" alt="Ajouter" class="btn-icon"></button>
+    
+        <!-- Modale -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Ajouter un Cours/TD/TP</h2>
+                <form id="addElementForm">
+                    <label for="type">Type :</label>
+                    <select id="type" name="type">
+                        <option value="CM">Cours</option>
+                        <option value="TD">TD</option>
+                        <option value="TP">TP</option>
+                    </select>
+                    <br><br>
+
+                    <label for="number">Numéro :</label>
+                    <input type="number" id="number" name="number" required min="1">
+                    <br><br>
+
+                    <button type="submit">+</button>
+                </form>
+            </div>
+        </div>
+
+        <script src="scripts/add_file.js"></script>
+
+        <div class="class_part">
+            <a class="title">Cours</a>
+            <div class="class_content">
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> CM 1
+                </div>
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> CM 2
+                </div>
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> CM 3
+                </div>
+            </div>
+        </div>
+
+        <div class="class_part">
+            <a class="title">TD</a>
+            <div class="class_content">
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> TD 1
+                </div>
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> TD 2
+                </div>
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> TD 3
+                </div>
+            </div>
+        </div>
+
+        <div class="class_part">
+            <a class="title">TP</a>
+            <div class="class_content">
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> TP 1
+                </div>
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> TP 2
+                </div>
+                <div class="element">
+                    <img src="images/pdf.png" alt="Icon" class="icon"> TP 3
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="scripts/add_file.js"></script>
 </body>
+</html>
