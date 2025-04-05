@@ -2,19 +2,19 @@
 include("header.php");
 
 $ues = [
-    ["code" => "INF1", "nom" => "Informatique 1", "desc" => "Introduction à la programmation."],
-    ["code" => "MAT2", "nom" => "Mathématiques 2", "desc" => "Algèbre et analyse avancées."],
-    ["code" => "PHY3", "nom" => "Physique 3", "desc" => "Mécanique et thermodynamique."],
-    ["code" => "CHM4", "nom" => "Chimie 4", "desc" => "Chimie organique et inorganique."],
-    ["code" => "ELE5", "nom" => "Électronique 5", "desc" => "Circuits et systèmes électroniques."]
+    ["code" => "INF1", "nom" => "Informatique 1", "desc" => "Introduction à la programmation.", "image" => "path_to_image_1.jpg"],
+    ["code" => "MAT2", "nom" => "Mathématiques 2", "desc" => "Algèbre et analyse avancées.", "image" => "path_to_image_2.jpg"],
+    ["code" => "PHY3", "nom" => "Physique 3", "desc" => "Mécanique et thermodynamique.", "image" => "path_to_image_3.jpg"],
+    ["code" => "CHM4", "nom" => "Chimie 4", "desc" => "Chimie organique et inorganique.", "image" => "path_to_image_4.jpg"],
+    ["code" => "ELE5", "nom" => "Électronique 5", "desc" => "Circuits et systèmes électroniques.", "image" => "path_to_image_5.jpg"]
 ];
 
 $users = [
-    ["prenom" => "Alice", "nom" => "Dupont", "email" => "alice.dupont@utbm.fr"],
-    ["prenom" => "Bob", "nom" => "Martin", "email" => "bob.martin@utbm.fr"],
-    ["prenom" => "Charlie", "nom" => "Lemoine", "email" => "charlie.lemoine@utbm.fr"],
-    ["prenom" => "David", "nom" => "Bernard", "email" => "david.bernard@utbm.fr"],
-    ["prenom" => "Emma", "nom" => "Rousseau", "email" => "emma.rousseau@utbm.fr"]
+    ["prenom" => "Alice", "nom" => "Dupont", "email" => "alice.dupont@utbm.fr", "role" => "étudiant", "admin" => false],
+    ["prenom" => "Bob", "nom" => "Martin", "email" => "bob.martin@utbm.fr", "role" => "prof", "admin" => true],
+    ["prenom" => "Charlie", "nom" => "Lemoine", "email" => "charlie.lemoine@utbm.fr", "role" => "admin", "admin" => true],
+    ["prenom" => "David", "nom" => "Bernard", "email" => "david.bernard@utbm.fr", "role" => "prof", "admin" => false],
+    ["prenom" => "Emma", "nom" => "Rousseau", "email" => "emma.rousseau@utbm.fr", "role" => "étudiant", "admin" => false]
 ];
 ?>
 
@@ -46,17 +46,25 @@ $users = [
                         <th>Code UE</th>
                         <th>Nom</th>
                         <th>Description</th>
+                        <th>Image</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($ues as $ue): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($ue["code"]); ?></td>
-                            <td><?php echo htmlspecialchars($ue["nom"]); ?></td>
-                            <td><?php echo htmlspecialchars($ue["desc"]); ?></td>
+                            <td><?= htmlspecialchars($ue["code"]); ?></td>
+                            <td><?= htmlspecialchars($ue["nom"]); ?></td>
+                            <td><?= htmlspecialchars($ue["desc"]); ?></td>
                             <td>
-                                <button class="btn btn-warning btn-sm">Modifier</button>
+                                <?php if (!empty($ue["image"])): ?>
+                                    <img src="<?= $ue['image']; ?>" alt="<?= $ue['nom']; ?>" class="img-thumbnail" style="width: 50px;">
+                                <?php else: ?>
+                                    <span>Pas d'image</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick='editUE(<?= json_encode($ue) ?>)'>Modifier</button>
                                 <button class="btn btn-danger btn-sm">Supprimer</button>
                             </td>
                         </tr>
@@ -64,7 +72,7 @@ $users = [
                     </tbody>
                 </table>
             </div>
-            <button class="btn btn-success mt-3">Ajouter une UE</button>
+            <button class="btn btn-success mt-3" onclick="editUE(null)">Ajouter une UE</button>
         </div>
         <div class="tab-pane fade" id="users" role="tabpanel">
             <div class="text-center p-2 bg-primary text-white">Gestion des Utilisateurs</div>
@@ -72,22 +80,34 @@ $users = [
                 <table class="table table-striped table-bordered">
                     <thead class="thead-dark">
                     <tr>
-                        <th>Photo</th>
                         <th>Nom</th>
                         <th>Prénom</th>
                         <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Admin</th>
+                        <th>UEs</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($users as $user): ?>
                         <tr>
-                            <td><img src="images/bombardino.jpg" alt="Profil" class="rounded-circle" width="30" height="30"></td>
-                            <td><?php echo htmlspecialchars($user["nom"]); ?></td>
-                            <td><?php echo htmlspecialchars($user["prenom"]); ?></td>
-                            <td><?php echo htmlspecialchars($user["email"]); ?></td>
+                            <td><?= htmlspecialchars($user["nom"]); ?></td>
+                            <td><?= htmlspecialchars($user["prenom"]); ?></td>
+                            <td><?= htmlspecialchars($user["email"]); ?></td>
+                            <td><?= htmlspecialchars($user["role"]); ?></td>
+                            <td><?= $user["admin"] ? 'Oui' : 'Non'; ?></td>
                             <td>
-                                <button class="btn btn-warning btn-sm">Modifier</button>
+                                <?php // Display assigned UEs as badges
+                                foreach ($ues as $ue) {
+                                    if (rand(0, 1)) {
+                                        echo '<span class="badge bg-secondary me-2">'.$ue["code"].'</span>';
+                                    }
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick='editUser(<?= json_encode($user) ?>)'>Modifier</button>
                                 <button class="btn btn-danger btn-sm">Supprimer</button>
                             </td>
                         </tr>
@@ -95,9 +115,176 @@ $users = [
                     </tbody>
                 </table>
             </div>
-            <button class="btn btn-success mt-3">Ajouter un Utilisateur</button>
+            <button class="btn btn-success mt-3" onclick="editUser(null)">Ajouter un Utilisateur</button>
         </div>
     </div>
 </div>
+
+<!-- MODALE UE -->
+<div class="modal fade" id="ueModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="ueForm" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer / Modifier une UE</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Code</label>
+                    <input type="text" class="form-control" id="ueCode" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="ueNom" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="ueDesc" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="file" class="form-control" id="ueImage">
+                    <small class="text-muted">Choisissez une image pour cette UE</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODALE UTILISATEUR -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="userForm">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer / Modifier un utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="w-45">
+                        <label class="form-label">Prénom</label>
+                        <input type="text" class="form-control" id="prenom" required>
+                    </div>
+                    <div class="w-45">
+                        <label class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="nom" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="w-45">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="w-45">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" placeholder="par défaut : 1234">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="w-45">
+                        <label class="form-label">Rôle</label>
+                        <select class="form-select" id="role">
+                            <option value="étudiant">Étudiant</option>
+                            <option value="prof">Professeur</option>
+                            <option value="admin">Administrateur</option>
+                        </select>
+                    </div>
+                    <div class="w-45 d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="isAdmin">
+                        <label class="form-check-label ms-2">Administrateur</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">UEs assignées</label>
+                    <div id="ueBadges" class="d-flex flex-wrap">
+                        <!-- Assigned UEs will appear here as badges -->
+                    </div>
+                    <select class="form-select mt-2" id="ueSelect">
+                        <option value="">Ajouter une UE</option>
+                        <?php foreach ($ues as $ue): ?>
+                            <option value="<?= $ue['code'] ?>"><?= $ue['nom'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let assignedUEs = [];
+
+    function editUE(ue) {
+        const modal = new bootstrap.Modal(document.getElementById('ueModal'));
+        document.getElementById('ueForm').reset();
+
+        if (ue) {
+            document.getElementById('ueCode').value = ue.code;
+            document.getElementById('ueNom').value = ue.nom;
+            document.getElementById('ueDesc').value = ue.desc;
+        }
+
+        modal.show();
+    }
+
+    function editUser(user) {
+        const modal = new bootstrap.Modal(document.getElementById('userModal'));
+        document.getElementById('userForm').reset();
+
+        if (user) {
+            document.getElementById('prenom').value = user.prenom;
+            document.getElementById('nom').value = user.nom;
+            document.getElementById('email').value = user.email;
+            document.getElementById('role').value = user.role;
+            document.getElementById('isAdmin').checked = user.admin;
+        } else {
+            document.getElementById('password').value = "1234";
+        }
+
+        modal.show();
+    }
+
+    document.getElementById("userForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+        modal.hide();
+    });
+
+    document.getElementById('ueSelect').addEventListener('change', function(e) {
+        if (e.target.value) {
+            const selectedUE = e.target.options[e.target.selectedIndex];
+            const ueCode = selectedUE.value;
+            const ueName = selectedUE.text;
+
+            if (assignedUEs.includes(ueCode)) {
+                return;
+            }
+
+            assignedUEs.push(ueCode);
+            const badge = document.createElement('span');
+            badge.classList.add('badge', 'bg-secondary', 'me-2');
+            badge.textContent = ueName;
+
+            const removeBtn = document.createElement('span');
+            removeBtn.classList.add('badge-close-button');
+            removeBtn.textContent = '×';
+            removeBtn.onclick = () => {
+                assignedUEs = assignedUEs.filter(code => code !== ueCode);
+                badge.remove();
+            };
+
+            badge.appendChild(removeBtn);
+            document.getElementById('ueBadges').appendChild(badge);
+        }
+    });
+</script>
 </body>
 </html>
