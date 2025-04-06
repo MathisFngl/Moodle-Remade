@@ -28,81 +28,58 @@
             <a href="cours_notes.php">Notes</a>
         </div>
 
-        <!-- Ajouter un bouton pour ouvrir la modale -->
+        <!-- Bouton pour ouvrir la modale -->
         <button id="openModalBtn"><img src="images/+.png" alt="Ajouter" class="btn-icon"></button>
-    
-        <!-- Modale -->
+
+        <!-- Div invisible pour contenir les nouveaux éléments -->
+        <div id="addedElementsContainer" style="display: none;"></div>
+
+        <!-- Modale avec deux onglets -->
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>Ajouter un Cours/TD/TP</h2>
-                <form id="addElementForm">
-                    <label for="type">Type :</label>
-                    <select id="type" name="type">
-                        <option value="CM">Cours</option>
-                        <option value="TD">TD</option>
-                        <option value="TP">TP</option>
+                <h2>Ajouter un élément</h2>
+
+                <!-- Onglets -->
+                <div class="tabs">
+                    <button id="tabMessage" class="tab-button active">Message</button>
+                    <button id="tabFile" class="tab-button">Fichier</button>
+                </div>
+
+                <!-- Contenu du formulaire pour Message -->
+                <form id="formMessage" class="tab-content active">
+                    <label for="messageType">Type :</label>
+                    <select id="messageType" name="messageType" required>
+                        <option value="Important">Important</option>
+                        <option value="Information">Information</option>
                     </select>
                     <br><br>
-
-                    <label for="number">Numéro :</label>
-                    <input type="number" id="number" name="number" required min="1">
+                    <label for="messageTitle">Titre :</label>
+                    <input type="text" id="messageTitle" name="messageTitle" required>
                     <br><br>
+                    <label for="messageContent">Message :</label>
+                    <textarea id="messageContent" name="messageContent" rows="4" required></textarea>
+                    <br><br>
+                    <button type="submit">Ajouter Message</button>
+                </form>
 
-                    <button type="submit">+</button>
+                <!-- Contenu du formulaire pour Fichier -->
+                <form id="formFile" class="tab-content">
+                    <label for="fileTitle">Titre :</label>
+                    <input type="text" id="fileTitle" name="fileTitle" required>
+                    <br><br>
+                    <label for="fileDescription">Description :</label>
+                    <textarea id="fileDescription" name="fileDescription" rows="2" required></textarea>
+                    <br><br>
+                    <label for="fileUpload">Déposer un fichier :</label>
+                    <input type="file" id="fileUpload" name="fileUpload" required>
+                    <br><br>
+                    <button type="submit">Ajouter Fichier</button>
                 </form>
             </div>
         </div>
 
         <script src="scripts/add_file.js"></script>
-
-        <div class="class_part">
-            <a class="title">Cours</a>
-            <div class="class_content">
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> CM 1
-                </div>
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> CM 2
-                </div>
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> CM 3
-                </div>
-            </div>
-        </div>
-
-        <div class="class_part">
-            <a class="title">TD</a>
-            <div class="class_content">
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> TD 1
-                </div>
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> TD 2
-                </div>
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> TD 3
-                </div>
-            </div>
-        </div>
-
-        <div class="class_part">
-            <a class="title">TP</a>
-            <div class="class_content">
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> TP 1
-                </div>
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> TP 2
-                </div>
-                <div class="element">
-                    <img src="images/pdf.png" alt="Icon" class="icon"> TP 3
-                </div>
-            </div>
-        </div>
-
     </div>
-
-    <script src="scripts/add_file.js"></script>
 </body>
 </html>
