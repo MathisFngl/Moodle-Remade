@@ -13,7 +13,8 @@
     transform: translateX(-50%);
     border: 2px solid #dcdcdc;
     box-sizing: border-box;
-    padding: 25px
+    padding: 25px;
+    min-height: 1000px;
 }
 
 .path_container{
@@ -321,5 +322,75 @@ button:hover {
     text-decoration: none;
     cursor: pointer;
 }
+/* Style pour les onglets */
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    font-size: 16px;
+    flex: 1;
+    text-align: center;
+}
+
+.tab-button.active {
+    background-color: #ddd;
+    font-weight: bold;
+    border-bottom: 2px solid #008fda;
+}
+
+.tab-content {
+    display: none; /* Caché par défaut */
+}
+
+.tab-content.active {
+    display: block; /* Affiché uniquement si actif */
+}
+#addedElementsContainer {
+    display: none; /* Invisible par défaut */
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.element {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Répartit les parties sur une ligne */
+    margin-bottom: 10px;
+    gap: 10px; /* Espacement entre les icônes et le contenu */
+    cursor: pointer; /* Pointeur de clic */
+}
+
+.element .icon {
+    width: 40px;
+    height: 40px;
+    background-color: #008fda; /* Fond bleu */
+    border-radius: 5px;
+    padding: 5px;
+    object-fit: contain;
+    box-sizing: border-box;
+}
+
+.element span {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    flex: 1; /* Permet au contenu de s'étendre si nécessaire */
+}
+
+.element .date {
+    font-size: 14px;
+    color: #999;
+    white-space: nowrap; /* Empêche la date de se couper */
+    text-align: right;
+}
+
+
 
 
