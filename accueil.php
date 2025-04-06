@@ -27,7 +27,7 @@
 </header>
 
 <main>
-    <!-- Bandeau d'accueil -->
+
     <section class="banner">
         <div class="container">
             <h1>Plateforme Pédagogique</h1>
@@ -35,7 +35,6 @@
         </div>
     </section>
 
-    <!-- Section des annonces -->
     <section class="announcements">
         <div class="container">
             <h2>Annonces</h2>
