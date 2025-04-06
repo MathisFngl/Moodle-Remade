@@ -23,6 +23,7 @@ $users = [
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/admin.js"></script>
     <title>Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -201,7 +202,6 @@ $users = [
                 <div class="mb-3">
                     <label class="form-label">UEs assignées</label>
                     <div id="ueBadges" class="d-flex flex-wrap">
-                        <!-- Assigned UEs will appear here as badges -->
                     </div>
                     <select class="form-select mt-2" id="ueSelect">
                         <option value="">Ajouter une UE</option>
@@ -218,73 +218,5 @@ $users = [
         </form>
     </div>
 </div>
-
-<script>
-    let assignedUEs = [];
-
-    function editUE(ue) {
-        const modal = new bootstrap.Modal(document.getElementById('ueModal'));
-        document.getElementById('ueForm').reset();
-
-        if (ue) {
-            document.getElementById('ueCode').value = ue.code;
-            document.getElementById('ueNom').value = ue.nom;
-            document.getElementById('ueDesc').value = ue.desc;
-        }
-
-        modal.show();
-    }
-
-    function editUser(user) {
-        const modal = new bootstrap.Modal(document.getElementById('userModal'));
-        document.getElementById('userForm').reset();
-
-        if (user) {
-            document.getElementById('prenom').value = user.prenom;
-            document.getElementById('nom').value = user.nom;
-            document.getElementById('email').value = user.email;
-            document.getElementById('role').value = user.role;
-            document.getElementById('isAdmin').checked = user.admin;
-        } else {
-            document.getElementById('password').value = "1234";
-        }
-
-        modal.show();
-    }
-
-    document.getElementById("userForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
-        modal.hide();
-    });
-
-    document.getElementById('ueSelect').addEventListener('change', function(e) {
-        if (e.target.value) {
-            const selectedUE = e.target.options[e.target.selectedIndex];
-            const ueCode = selectedUE.value;
-            const ueName = selectedUE.text;
-
-            if (assignedUEs.includes(ueCode)) {
-                return;
-            }
-
-            assignedUEs.push(ueCode);
-            const badge = document.createElement('span');
-            badge.classList.add('badge', 'bg-secondary', 'me-2');
-            badge.textContent = ueName;
-
-            const removeBtn = document.createElement('span');
-            removeBtn.classList.add('badge-close-button');
-            removeBtn.textContent = '×';
-            removeBtn.onclick = () => {
-                assignedUEs = assignedUEs.filter(code => code !== ueCode);
-                badge.remove();
-            };
-
-            badge.appendChild(removeBtn);
-            document.getElementById('ueBadges').appendChild(badge);
-        }
-    });
-</script>
 </body>
 </html>
