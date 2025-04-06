@@ -1,4 +1,4 @@
-/* Global */
+
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +21,6 @@ body {
     justify-content: space-between;
 }
 
-/* Header */
 header {
     background-color: #008fda;
     color: #fff;
@@ -34,7 +33,7 @@ header {
     font-weight: bold;
     color: white;
     text-decoration: none;
-    margin-right: 40px; /* Ajout d'espace entre le logo et les liens */
+    margin-right: 40px; 
 }
 
 nav {
@@ -82,7 +81,7 @@ nav {
     background-color: #008fda;
     color: white;
 }
-/* Bandeau d'accueil */
+
 .banner {
 
     color: #000000;
@@ -96,7 +95,7 @@ nav {
     margin-bottom: 10px;
 }
 
-/* Section des annonces */
+
 .announcements {
     margin-top: 40px;
     text-align: center;
@@ -132,7 +131,7 @@ nav {
     font-weight: bold;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     header .container {
         flex-direction: column;
