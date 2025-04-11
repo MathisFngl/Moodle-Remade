@@ -1,0 +1,34 @@
+{% extends '../base.html.twig' %}
+
+{% block title %}Notes - WE4E{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
+
+    <div class="conteneur">
+        <div class="path_container">
+            <ol class="path_list">
+                <li class="path_item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                <li class="path_item"><a href="#fise_info">FISE Informatique</a></li>
+                <li class="path_item"><span>WE4E : Langages Web</span></li>
+            </ol>
+        </div>
+
+        <div class="title_container">
+            <div class="code_uv_container"><h1>WE4E</h1></div>
+            <div class="title_uv_container"><h1>Technologies et programmation WEB</h1></div>
+        </div>
+
+        <div class="cours_nav">
+            <a href="{{ path('cours_we4e') }}">Cours</a>
+            <a href="{{ path('cours_participants') }}">Participants</a>
+            <a class="current">Notes</a>
+        </div>
+
+        <span class="add">
+        <a href="{{ path('ajouter_note') }}">add mark</a>
+    </span>
+    </div>
+
+    <script src="{{ asset('scripts/script.js') }}"></script>
+{% endblock %}

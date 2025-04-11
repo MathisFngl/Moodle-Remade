@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <ul class="nav nav-tabs justify-content-center" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="ue-tab" data-bs-toggle="tab" data-bs-target="#ue" type="button" role="tab">Gestion des UE</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">Gestion des Utilisateurs</button>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="adminTabsContent">
+            <div class="tab-pane fade show active" id="ue" role="tabpanel">
+                <div class="text-center p-2 bg-primary text-white">Gestion des UE</div>
+                <div class="table-responsive mt-3">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Code UE</th>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ue in ues %}
+                            <tr>
+                                <td>{{ ue.code }}</td>
+                                <td>{{ ue.nom }}</td>
+                                <td>{{ ue.desc }}</td>
+                                <td>
+                                    {% if ue.image %}
+                                        <img src="{{ asset(ue.image) }}" alt="{{ ue.nom }}" class="img-thumbnail" style="width: 50px;">
+                                    {% else %}
+                                        <span>Pas d'image</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm" onclick='editUE({{ ue|json_encode|raw }})'>Modifier</button>
+                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success mt-3" onclick="editUE(null)">Ajouter une UE</button>
+            </div>
+
+            <div class="tab-pane fade" id="users" role="tabpanel">
+                <div class="text-center p-2 bg-primary text-white">Gestion des Utilisateurs</div>
+                <div class="table-responsive mt-3">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Admin</th>
+                            <th>UEs</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.nom }}</td>
+                                <td>{{ user.prenom }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role }}</td>
+                                <td>{{ user.admin ? 'Oui' : 'Non' }}</td>
+                                <td>
+                                    {% for ue in ues if random(0, 1) %}
+                                        <span class="badge bg-secondary me-2">{{ ue.code }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm" onclick='editUser({{ user|json_encode|raw }})'>Modifier</button>
+                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success mt-3" onclick="editUser(null)">Ajouter un Utilisateur</button>
+            </div>
+        </div>
+    </div>
+
+    {% include 'admin/_modals.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('scripts/admin.js') }}"></script>
+{% endblock %}

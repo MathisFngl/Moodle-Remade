@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter Participant{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
+
+    <div class="conteneur">
+        <div class="path_container">
+            <ol class="path_list">
+                <li class="path_item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                <li class="path_item"><a href="#fise_info">FISE Informatique</a></li>
+                <li class="path_item"><span>WE4E : Langages Web</span></li>
+            </ol>
+        </div>
+
+        <div class="title_container">
+            <div class="code_uv_container"><h1>WE4E</h1></div>
+            <div class="title_uv_container"><h1>Technologies et programmation WEB</h1></div>
+        </div>
+
+        <div class="cours_nav">
+            <a href="{{ path('cours_we4e') }}">Cours</a>
+            <a href="{{ path('cours_participants') }}">Participants</a>
+            <a href="{{ path('cours_notes') }}">Notes</a>
+        </div>
+
+        <span class="add">
+        <form action="{{ path('ajouter_participant') }}" method="POST">
+            <label for="etudiant"><b>Nouveau participant</b></label>
+            <input type="text" name="etudiant" placeholder="Enter new student" required>
+            <button type="submit" class="add_button">Add Student</button>
+        </form>
+    </span>
+    </div>
+{% endblock %}
