@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a25ef3d0-e3f8-41ff-9a79-ee035d9f7d38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AdminController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/CoursController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CoursController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/ajouter_note.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/ajouter_note.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/ajouter_participant.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/ajouter_participant.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/notes.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/notes.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/participants.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/participants.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +135,7 @@
       <updated>1744352880361</updated>
       <workItem from="1744352881528" duration="5506000" />
       <workItem from="1744361598265" duration="3091000" />
-      <workItem from="1744633059588" duration="5427000" />
+      <workItem from="1744633059588" duration="7269000" />
     </task>
     <servers />
   </component>
