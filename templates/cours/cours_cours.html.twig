@@ -1,6 +1,4 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Cours - WE4E{% endblock %}
+{% include 'header.html.twig' %}
 
 {% block body %}
     <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
@@ -8,7 +6,7 @@
     <div class="conteneur">
         <div class="path_container">
             <ol class="path_list">
-            {#    <li class="path_item"><a href="{{ path('app_home') }}">Accueil</a></li> #}
+                <li class="path_item"><a href="{{path('app_dashboard')}}">Accueil</a></li>
                 <li class="path_item"><a href="#fise_info">FISE Informatique</a></li>
                 <li class="path_item"><span>WE4E : Langages Web</span></li>
             </ol>
