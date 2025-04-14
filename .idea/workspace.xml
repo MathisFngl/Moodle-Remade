@@ -5,70 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a25ef3d0-e3f8-41ff-9a79-ee035d9f7d38" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Controller/AdminController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/ChatController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/CoursController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/DashboardController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/LoginController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/MainController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/MesCoursController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Controller/ProfileController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/accueil.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/admin.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/chat.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cours/ajouter_note.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cours/ajouter_participant.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cours/notes.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/cours/participants.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/dashboard.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/header.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/login.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/mes_cours.html.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/profil.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Moodle-Remade.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accueil.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ajouter_note.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ajouter_participant.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cours_cours.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cours_notes.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cours_participants.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/+.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Important.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Information.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/actu.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/bombardino.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/pdf.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/utbm-blanc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mes_cours.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/profile.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/accueil.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/add_file.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/admin.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/chat.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/note.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/profile.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/script.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/accueil.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/admin.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/chat.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/cours_acceuil.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/login.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/mes_cours.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/note.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/profile.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AdminController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +23,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "claralonguet"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MathisFngl/Moodle-Remade.git",
+    "accountId": "7ac4466e-15fe-4bee-9bbd-7895ce30a4d7"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -127,6 +80,10 @@
       <path value="$PROJECT_DIR$/vendor/symfony/asset" />
     </include_path>
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 6
+}]]></component>
   <component name="ProjectId" id="2vZW3vXo330WCg45augX7lvDkBQ" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -139,12 +96,15 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Dev",
     "last_opened_file_path": "C:/xampp/htdocs/Moodle",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -154,6 +114,14 @@
       <recent name="C:\xampp\htdocs\Moodle\templates" />
       <recent name="C:\xampp\htdocs\Moodle\public" />
     </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PS-243.26053.13" />
+        <option value="bundled-php-predefined-a98d8de5180a-1ec7b7818973-com.jetbrains.php.sharedIndexes-PS-243.26053.13" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -165,6 +133,7 @@
       <updated>1744352880361</updated>
       <workItem from="1744352881528" duration="5506000" />
       <workItem from="1744361598265" duration="3091000" />
+      <workItem from="1744633059588" duration="5427000" />
     </task>
     <servers />
   </component>

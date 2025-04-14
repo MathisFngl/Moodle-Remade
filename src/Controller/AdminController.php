@@ -27,7 +27,7 @@ class AdminController extends AbstractController
             ["prenom" => "Emma", "nom" => "Rousseau", "email" => "emma.rousseau@utbm.fr", "role" => "étudiant", "admin" => false],
         ];
 
-        return $this->render('admin/index.html.twig', [
+        return $this->render('admin.html.twig', [
             'ues' => $ues,
             'users' => $users,
         ]);
