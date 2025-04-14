@@ -19,9 +19,9 @@
         </div>
 
         <div class="cours_nav">
-            <a href="current">Cours</a>
-            <a href="{{ path('cours_participants') }}">Participants</a>
-            <a class="{{ path('cours_notes') }}">Notes</a>
+            <a class="current">Cours</a>
+            <a href="{{path('cours_participants')}}">Participants</a>
+            <a href="{{ path('cours_notes') }}">Notes</a>
         </div>
 
         <button id="openModalBtn"><img src="{{ asset('images/+.png') }}" alt="Ajouter" class="btn-icon"></button>

@@ -1,8 +1,18 @@
 {# templates/parts/header.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Moodle UTBM</title>
+</head>
+
 <nav class="navbar">
     <div class="nav-left">
         <a class="normal_padding" href="{{ path('app_dashboard') }}">Tableau de bord</a>
-        <a class="normal_padding" href="#">Mes cours</a>
+        <a class="normal_padding" href="{{ path('mes_cours') }}">Mes cours</a>
 
         <div class="dropdown">
             <button class="dropbtn normal_padding">Sites UTBM <i class="fa fa-caret-down"></i></button>

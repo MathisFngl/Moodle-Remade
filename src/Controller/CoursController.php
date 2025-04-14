@@ -3,13 +3,13 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 
 class CoursController extends AbstractController
 {
-    #[Route('/cours/cours', name: 'cours_we4e')]
+    #[Route('/cours/cours', name: 'cours_cours')]
     public function we4e(): Response
     {
         return $this->render('cours/cours_cours.html.twig');
@@ -38,7 +38,7 @@ class CoursController extends AbstractController
         ]);
     }
 
-    #[Route('/cours/we4e/ajouter-participant', name: 'ajouter_participant', methods: ['GET', 'POST'])]
+    #[Route('/cours/cours/ajouter-participant', name: 'ajouter_participant', methods: ['GET', 'POST'])]
     public function ajouterParticipant(Request $request)
     {
         if ($request->isMethod('POST')) {

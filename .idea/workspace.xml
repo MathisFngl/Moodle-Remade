@@ -8,10 +8,19 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/CoursController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CoursController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/cours/ajouter_note.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/ajouter_note.html.twig" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/templates/cours/ajouter_participant.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/ajouter_participant.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/cours/notes.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/notes.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/cours/participants.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/participants.html.twig" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/cours_cours.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/notes.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/notes.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cours/participants.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cours/participants.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/header.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/header.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/mes_cours.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/mes_cours.html.twig" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,18 +34,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "claralonguet"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;claralonguet&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/MathisFngl/Moodle-Remade.git",
-    "accountId": "7ac4466e-15fe-4bee-9bbd-7895ce30a4d7"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MathisFngl/Moodle-Remade.git&quot;,
+    &quot;accountId&quot;: &quot;7ac4466e-15fe-4bee-9bbd-7895ce30a4d7&quot;
   }
-}]]></component>
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -82,10 +91,10 @@
       <path value="$PROJECT_DIR$/vendor/symfony/asset" />
     </include_path>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2vZW3vXo330WCg45augX7lvDkBQ" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -94,22 +103,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Dev",
-    "last_opened_file_path": "C:/xampp/htdocs/Moodle",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/Moodle&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\Moodle\templates\cours" />
@@ -135,7 +144,12 @@
       <updated>1744352880361</updated>
       <workItem from="1744352881528" duration="5506000" />
       <workItem from="1744361598265" duration="3091000" />
+<<<<<<< Updated upstream
       <workItem from="1744633059588" duration="7269000" />
+=======
+      <workItem from="1744633059588" duration="5427000" />
+      <workItem from="1744663605429" duration="2904000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
