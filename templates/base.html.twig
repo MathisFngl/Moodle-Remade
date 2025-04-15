@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Ma plateforme{% endblock %}</title>
     <link rel="stylesheet" href="{{ asset('styles/index.css') }}">
+    {% block stylesheets %}{% endblock %}
 </head>
 <body>
 {% include 'header.html.twig' %}

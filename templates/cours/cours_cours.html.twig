@@ -1,16 +1,22 @@
-{% include 'header.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours WE4E{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
+{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
-
     <div class="conteneur">
         <div class="path_container">
             <ol class="path_list">
-                <li class="path_item"><a href="{{path('app_dashboard')}}">Accueil</a></li>
+                <li class="path_item"><a href="{{ path('app_dashboard') }}">Accueil</a></li>
                 <li class="path_item"><a href="#fise_info">FISE Informatique</a></li>
                 <li class="path_item"><span>WE4E : Langages Web</span></li>
             </ol>
         </div>
+
         <div class="title_container">
             <div class="code_uv_container"><h1>WE4E</h1></div>
             <div class="title_uv_container"><h1>Technologies et programmation WEB</h1></div>
@@ -18,11 +24,13 @@
 
         <div class="cours_nav">
             <a class="current">Cours</a>
-            <a href="{{path('cours_participants')}}">Participants</a>
+            <a href="{{ path('cours_participants') }}">Participants</a>
             <a href="{{ path('cours_notes') }}">Notes</a>
         </div>
 
-        <button id="openModalBtn"><img src="{{ asset('images/+.png') }}" alt="Ajouter" class="btn-icon"></button>
+        <button id="openModalBtn">
+            <img src="{{ asset('images/+.png') }}" alt="Ajouter" class="btn-icon">
+        </button>
 
         <div id="addedElementsContainer" style="display: none;"></div>
 
