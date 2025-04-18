@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             isAdminCheckbox.disabled = false;
         }
     });
+
     window.editUser = function (user) {
         const modal = new bootstrap.Modal(document.getElementById('userModal'));
         document.getElementById('userForm').reset();
@@ -55,6 +56,7 @@ function editUE(ue) {
         document.getElementById('ueCode').value = ue.code;
         document.getElementById('ueNom').value = ue.nom;
         document.getElementById('ueDesc').value = ue.desc;
+        document.getElementById('ueRespo').value = ue.responsable_id || ''; // Si l'UE a un responsable, le sélectionner
         editingUECode = ue.code;
     }
     modal.show();
@@ -110,6 +112,7 @@ document.getElementById('ueForm').addEventListener('submit', function(e) {
     const code = document.getElementById('ueCode').value.trim();
     const nom = document.getElementById('ueNom').value.trim();
     const desc = document.getElementById('ueDesc').value.trim();
+    const respo = document.getElementById('ueRespo').value; // Récupère l'ID du responsable sélectionné
     const imageInput = document.getElementById('ueImage');
     const imagePath = imageInput.files.length > 0 ? URL.createObjectURL(imageInput.files[0]) : "path_to_default.jpg";
 
@@ -119,6 +122,7 @@ document.getElementById('ueForm').addEventListener('submit', function(e) {
         code,
         nom,
         desc,
+        responsable_id: respo,  // Ajout du responsable
         image: imagePath
     };
 
@@ -143,6 +147,7 @@ document.getElementById('ueForm').addEventListener('submit', function(e) {
                 <td>${ueData.nom}</td>
                 <td>${ueData.desc}</td>
                 <td><img src="${ueData.image}" class="img-thumbnail" style="width: 50px;" alt="uv"></td>
+                <td>${ueData.responsable_id ? 'Responsable ID: ' + ueData.responsable_id : 'Aucun'}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick='editUE(${JSON.stringify(ueData)})'>Modifier</button>
                     <button class="btn btn-danger btn-sm">Supprimer</button>

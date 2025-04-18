@@ -21,6 +21,12 @@ class Utilisateur
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $mail = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $mot_de_passe = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $role = null;
 
     #[ORM\Column]
@@ -64,6 +70,31 @@ class Utilisateur
 
         return $this;
     }
+
+    public function getEmail(): ?string
+    {
+        return $this->mail;
+    }
+
+    public function setEmail(string $mail): static
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    public function getMotDePasse(): ?string
+    {
+        return $this->mot_de_passe;
+    }
+
+    public function setMotDePasse(string $mot_de_passe): static
+    {
+        $this->mot_de_passe = $mot_de_passe;
+
+        return $this;
+    }
+
 
     public function getRole(): ?string
     {

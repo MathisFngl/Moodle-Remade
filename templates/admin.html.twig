@@ -27,6 +27,7 @@
                             <th>Nom</th>
                             <th>Description</th>
                             <th>Image</th>
+                            <th>Responsable UE</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -35,14 +36,15 @@
                             <tr>
                                 <td>{{ ue.code }}</td>
                                 <td>{{ ue.nom }}</td>
-                                <td>{{ ue.desc }}</td>
+                                <td>{{ ue.description }}</td>
                                 <td>
                                     {% if ue.image %}
-                                        <img src="{{ asset(ue.image) }}" alt="{{ ue.nom }}" class="img-thumbnail" style="width: 50px;">
+                                        <span>Image chargée</span>
                                     {% else %}
                                         <span>Pas d'image</span>
                                     {% endif %}
                                 </td>
+                                <td>{{ ue.responsableUe }}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" onclick='editUE({{ ue|json_encode|raw }})'>Modifier</button>
                                     <button class="btn btn-danger btn-sm">Supprimer</button>

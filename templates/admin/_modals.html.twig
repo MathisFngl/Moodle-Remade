@@ -24,7 +24,17 @@
                     <input type="file" class="form-control" id="ueImage">
                     <small class="text-muted">Choisissez une image pour cette UE</small>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Responsable UE</label>
+                    <select class="form-select" id="ueRespo">
+                        <option value="">Sélectionner un responsable</option>
+                        {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.prenom }} {{ user.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -66,7 +76,7 @@
                     <div class="w-45">
                         <label class="form-label">Rôle</label>
                         <select class="form-select" id="role">
-                            <option value="étudiant">Étudiant</option>
+                            <option value="etudiant">Étudiant</option>
                             <option value="prof">Professeur</option>
                             <option value="admin">Administrateur</option>
                         </select>
