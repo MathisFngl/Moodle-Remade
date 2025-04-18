@@ -1,0 +1,97 @@
+{# MODALE UE #}
+<div class="modal fade" id="ueModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="ueForm" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer / Modifier une UE</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Code</label>
+                    <input type="text" class="form-control" id="ueCode" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="ueNom" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="ueDesc" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="file" class="form-control" id="ueImage">
+                    <small class="text-muted">Choisissez une image pour cette UE</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# MODALE UTILISATEUR #}
+<div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="userForm">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer / Modifier un utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="w-45">
+                        <label class="form-label">Prénom</label>
+                        <input type="text" class="form-control" id="prenom" required>
+                    </div>
+                    <div class="w-45">
+                        <label class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="nom" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="w-45">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="w-45">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" placeholder="par défaut : 1234">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="w-45">
+                        <label class="form-label">Rôle</label>
+                        <select class="form-select" id="role">
+                            <option value="étudiant">Étudiant</option>
+                            <option value="prof">Professeur</option>
+                            <option value="admin">Administrateur</option>
+                        </select>
+                    </div>
+                    <div class="w-45 d-flex align-items-center">
+                        <input class="form-check-input" type="checkbox" id="isAdmin">
+                        <label class="form-check-label ms-2">Administrateur</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">UEs assignées</label>
+                    <div id="ueBadges" class="d-flex flex-wrap">
+                    </div>
+                    <select class="form-select mt-2" id="ueSelect">
+                        <option value="">Ajouter une UE</option>
+                        {% for ue in ues %}
+                            <option value="{{ ue.code }}">{{ ue.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>

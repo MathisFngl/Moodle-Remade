@@ -1,32 +1,11 @@
-{% include 'header.html.twig' %}
+{% extends 'cours/base_cours.html.twig' %}
 
-{% block body %}
-    <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
+{% set nav = 'notes' %}
 
-    <div class="conteneur">
-        <div class="path_container">
-            <ol class="path_list">
-                <li class="path_item"><a href="{{ path('app_dashboard') }}">Accueil</a></li>
-                <li class="path_item"><a href="#fise_info">FISE Informatique</a></li>
-                <li class="path_item"><span>WE4E : Langages Web</span></li>
-            </ol>
-        </div>
-
-        <div class="title_container">
-            <div class="code_uv_container"><h1>WE4E</h1></div>
-            <div class="title_uv_container"><h1>Technologies et programmation WEB</h1></div>
-        </div>
-
-        <div class="cours_nav">
-            <a href="{{ path('cours_cours') }}">Cours</a>
-            <a href="{{ path('cours_participants') }}">Participants</a>
-            <a class="current">Notes</a>
-        </div>
-
-        <span class="add">
-        <a href="{{ path('ajouter_note') }}">add mark</a>
-    </span>
-    </div>
-
-    <script src="{{ asset('scripts/script.js') }}"></script>
+{% block cours_content %}
+    <span class="d-flex justify-content-center mb-3 pt-2">
+    <a href="{{ path('ajouter_note') }}" class="btn btn-primary d-flex align-items-center">
+        <i class="bi bi-plus-lg"></i> Ajouter une note
+    </a>
+</span>
 {% endblock %}

@@ -1,0 +1,100 @@
+{%extends 'cours/base_cours.html.twig'%}
+
+{% set nav = 'cours' %}
+
+{% block cours_content %}
+    <div class="d-flex justify-content-center mb-3 pt-2">
+        <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-backdrop="false">
+            <i class="bi bi-plus-lg me-2"></i> Ajouter un message
+        </button>
+    </div>
+
+    <div id="addedElementsContainer" style="display: none;"></div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Ajouter un élément</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs mb-3" id="modalTabs">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="tabMessage" type="button">Message</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="tabFile" type="button">Fichier</button>
+                        </li>
+                    </ul>
+
+                    <form id="formMessage" class="tab-content show">
+                        <div class="mb-3">
+                            <label for="messageType" class="form-label">Type :</label>
+                            <select id="messageType" name="messageType" class="form-select" required>
+                                <option value="Important">Important</option>
+                                <option value="Information">Information</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="messageTitle" class="form-label">Titre :</label>
+                            <input type="text" id="messageTitle" name="messageTitle" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="messageContent" class="form-label">Message :</label>
+                            <textarea id="messageContent" name="messageContent" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Ajouter Message</button>
+                    </form>
+
+                    <form id="formFile" class="tab-content d-none">
+                        <div class="mb-3">
+                            <label for="fileTitle" class="form-label">Titre :</label>
+                            <input type="text" id="fileTitle" name="fileTitle" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fileDescription" class="form-label">Description :</label>
+                            <textarea id="fileDescription" name="fileDescription" class="form-control" rows="2" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fileUpload" class="form-label">Déposer un fichier :</label>
+                            <input type="file" id="fileUpload" name="fileUpload" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Ajouter Fichier</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block cours_scripts %}
+    <script>
+        const tabMessage = document.getElementById('tabMessage');
+        const tabFile = document.getElementById('tabFile');
+        const formMessage = document.getElementById('formMessage');
+        const formFile = document.getElementById('formFile');
+
+        tabMessage.addEventListener('click', () => {
+            tabMessage.classList.add('active');
+            tabFile.classList.remove('active');
+            formMessage.classList.remove('d-none');
+            formFile.classList.add('d-none');
+        });
+
+        tabFile.addEventListener('click', () => {
+            tabFile.classList.add('active');
+            tabMessage.classList.remove('active');
+            formFile.classList.remove('d-none');
+            formMessage.classList.add('d-none');
+        });
+    </script>
+{% endblock %}

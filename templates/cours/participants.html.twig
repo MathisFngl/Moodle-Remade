@@ -1,44 +1,22 @@
-{% include 'header.html.twig' %}
+{% extends 'cours/base_cours.html.twig' %}
 
-{% block body %}
-    <link rel="stylesheet" href="{{ asset('styles/cours_acceuil.css') }}">
-    <div class="conteneur">
-        <div class="path_container">
-            <ol class="path_list">
-                <li class="path_item"><a href="{{ path('app_dashboard') }}">Accueil</a></li>
-                <li class="path_item"><a href="#fise_info">FISE Informatique</a></li>
-                <li class="path_item"><span>WE4E : Langages Web</span></li>
-            </ol>
-        </div>
+{% set nav = 'participants' %}
 
-        <div class="title_container">
-            <div class="code_uv_container"><h1>WE4E</h1></div>
-            <div class="title_uv_container"><h1>Technologies et programmation WEB</h1></div>
-        </div>
-
-        <div class="cours_nav">
-            <a href="{{ path('cours_cours') }}">Cours</a>
-            <a class="current">Participants</a>
-            <a href="{{ path('cours_notes') }}">Notes</a>
-        </div>
-
-        <span class="add">
+{% block cours_content %}
+    <span class="add">
         <a href="{{ path('ajouter_participant') }}" class="ajouter_participant">New participant</a>
     </span>
 
-        <div class="participant_container">
-            {% for participant in participants %}
-                <div class="participant">
-                    <div class="pic">
-                        <img src="{{ asset('images/bombardino.jpg') }}" alt="Placeholder"/>
-                    </div>
-                    <a href="#href" class="name">{{ participant.name }}</a>
-                    <div class="role">{{ participant.role }}</div>
-                    <div class="group">{{ participant.group }}</div>
+    <div class="participant_container">
+        {% for participant in participants %}
+            <div class="participant">
+                <div class="pic">
+                    <img src="{{ asset('images/bombardino.jpg') }}" alt="Placeholder"/>
                 </div>
-            {% endfor %}
-        </div>
+                <a href="#href" class="name">{{ participant.name }}</a>
+                <div class="role">{{ participant.role }}</div>
+                <div class="group">{{ participant.group }}</div>
+            </div>
+        {% endfor %}
     </div>
-
-    <script src="{{ asset('scripts/script.js') }}"></script>
 {% endblock %}

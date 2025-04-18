@@ -15,7 +15,7 @@ class CoursController extends AbstractController
     #[Route('/cours/cours', name: 'cours_cours')]
     public function we4e(): Response
     {
-        return $this->render('cours/cours_cours.html.twig');
+        return $this->render('cours/cours.html.twig');
     }
 
     #[Route('/cours/cours/notes', name: 'cours_notes')]
