@@ -1,11 +1,11 @@
+/* Conteneur principal */
 .conteneur{
-    background-color : #ffffff;
-
+    background-color: #ffffff;
     display: flex;
-    flex-direction : column;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    width : 90%;
+    width: 90%;
     margin: auto;
     position: absolute;
     top: 90px;
@@ -17,6 +17,7 @@
     min-height: 1000px;
 }
 
+/* Barre de navigation */
 .path_container{
     background-color: #aad0d7;
     display: inline-flex;
@@ -35,7 +36,6 @@
 }
 
 .path_item{
-    display: list-item;
     list-style: none;
 }
 
@@ -46,7 +46,6 @@
 
 .path_item a:hover, span:hover{
     text-decoration: underline;
-    color: black;
 }
 
 .path_item a::after{
@@ -54,6 +53,7 @@
     margin: 0 5px;
 }
 
+/* Titres */
 .title_container{
     display: flex;
     margin-bottom: 40px;
@@ -81,6 +81,7 @@ h1{
     margin: 0;
 }
 
+/* Navigation des cours */
 .cours_nav{
     display: inline-flex;
     border-bottom: 1px solid #dcdcdc;
@@ -100,10 +101,7 @@ h1{
     background-color: #e3e3e3;
 }
 
-.current{
-    border-bottom: 4px solid #008fda;
-}
-
+/* Participant */
 .participant_container{
     display: flex;
     flex-direction: column;
@@ -116,63 +114,25 @@ h1{
     flex-direction: row;
 }
 
-.pic {
-    width: 50px;
-    height: 50px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.pic img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 50%;
-    padding: 5px;
-}
 .name{
     display: flex;
     align-items: center;
     padding-left: 15px;
     width: 300px;
-
     font-size: 16px;
     font-weight: bold;
-    text-decoration: none;
     color: #008fda;
 }
 
-.role{
+.role, .group{
     display: flex;
     align-items: center;
     padding-left: 15px;
     width: 100px;
-
     font-size: 16px;
-    color: #000000;
 }
 
-.group{
-    display: flex;
-    align-items: center;
-    padding-left: 15px;
-    width: 100px;
-
-    font-size: 16px;
-    color: #000000;
-}
-
-.header{
-    background-color: #e0e0e0;
-    height: 30px;
-    font-size: 16px;
-    font-weight: normal;
-    color: #000000;
-    border-left: 1px solid #cecece;
-}
-
-
+/* Formulaire d'ajout */
 .add {
     display: flex;
     flex-direction: row;
@@ -200,6 +160,7 @@ h1{
     border-radius: 4px;
 }
 
+/* Bouton d'ajout */
 .add_button {
     padding: 10px 20px;
     background-color: #0078d7;
@@ -215,81 +176,30 @@ h1{
     background-color: #005bb5;
 }
 
-
-.path_container {
-    margin-bottom: 25px;
+/* 🔹 Liste des résultats de recherche AJAX */
+.autocomplete-results {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 300px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.class_part {
-    display: flex;
-    flex-direction: column; /* Placer les éléments en colonne */
-    justify-content: flex-start;
-    align-items: stretch;
-    margin: 10px auto; /* Ajuste pour donner de l'espace entre chaque div */
-    width: 100%; /* Ou une largeur spécifique */
-    box-sizing: border-box;
-    gap:20px;
-}
-.class_content {
-    margin: auto;
-    display: flex;
-    flex-direction: column; /* Garde la disposition en colonne */
-    justify-content: flex-start; /* Aligne les éléments verticalement */
-    align-items: flex-start; /* Aligne les éléments à gauche */
-    gap: 20px; /* Espacement entre les éléments */
-    width: 100%; /* S'assurer que le conteneur prend toute la largeur de son parent */
-    margin-left: 2%; /* Décaler tous les éléments enfants de 5% vers la droite */
-    padding-left: 2%;
-}
-
-.title {
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.class_part .icon {
-    width: 40px; /* Largeur de l'icône */
-    height: 40px; /* Hauteur de l'icône */
-    margin-right: 5px; /* Espace entre l'icône et le texte */
-    vertical-align: middle; /* Aligner l'icône avec le texte */
-    background-color: #008fda; /* Couleur du fond */
-    border-radius: 5px; /* Arrondir les bords */
-    padding: 5px; /* Espacement autour de l'icône pour faire le fond de 50px */
-    box-sizing: border-box; /* Inclure le padding dans la taille totale de l'élément */
-}
-
-
-button {
-    padding: 10px 20px;
-    background-color: #008fda;
-    color: white;
-    border: none;
+.autocomplete-item {
+    padding: 10px;
     cursor: pointer;
-    border-radius: 5px; /* Ajout d'un léger arrondi aux bords */
-    font-size: 16px; /* Taille de police pour le bouton */
-    display: inline-block; /* Assurer que le bouton est affiché comme un bloc en ligne */
-}
-#openModalBtn {
-    width: 40px;                   /* Largeur du bouton (carré) */
-    height: 40px;                  /* Hauteur du bouton (carré) */
-    padding: 0;                    /* Retirer le padding */
-    text-align: center;            /* Centrer l'image à l'intérieur du bouton */
-    margin-left: 0;
+    border-bottom: 1px solid #eee;
 }
 
-button img {
-    width: 35px;  /* Ajuste la taille de l'image */
-    height: 35px;  /* Ajuste la taille de l'image */
-    vertical-align: middle;  /* Aligner l'image verticalement si nécessaire */
+.autocomplete-item:hover {
+    background-color: #f1f1f1;
 }
 
-button:hover {
-    background-color: #006fa3;
-}
-
-/* Style de la modale */
+/* Style pour la modale */
 .modal {
-    display: none; /* Cachée par défaut */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -297,7 +207,7 @@ button:hover {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4); /* Fond gris transparent */
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -316,81 +226,8 @@ button:hover {
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
-/* Style pour les onglets */
-.tabs {
-    display: flex;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-}
-
-.tab-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #f1f1f1;
-    cursor: pointer;
-    font-size: 16px;
-    flex: 1;
-    text-align: center;
-}
-
-.tab-button.active {
-    background-color: #ddd;
-    font-weight: bold;
-    border-bottom: 2px solid #008fda;
-}
-
-.tab-content {
-    display: none; /* Caché par défaut */
-}
-
-.tab-content.active {
-    display: block; /* Affiché uniquement si actif */
-}
-#addedElementsContainer {
-    display: none; /* Invisible par défaut */
-    margin-top: 20px;
-    padding: 10px;
-}
-
-.element {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Répartit les parties sur une ligne */
-    margin-bottom: 10px;
-    gap: 10px; /* Espacement entre les icônes et le contenu */
-    cursor: pointer; /* Pointeur de clic */
-}
-
-.element .icon {
-    width: 40px;
-    height: 40px;
-    background-color: #008fda; /* Fond bleu */
-    border-radius: 5px;
-    padding: 5px;
-    object-fit: contain;
-    box-sizing: border-box;
-}
-
-.element span {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    flex: 1; /* Permet au contenu de s'étendre si nécessaire */
-}
-
-.element .date {
-    font-size: 14px;
-    color: #999;
-    white-space: nowrap; /* Empêche la date de se couper */
-    text-align: right;
-}
-
-
-
-

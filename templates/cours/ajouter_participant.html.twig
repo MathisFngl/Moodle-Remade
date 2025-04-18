@@ -25,12 +25,15 @@
             <a href="{{ path('cours_notes') }}">Notes</a>
         </div>
 
-        <span class="add">
-        <form action="{{ path('ajouter_participant') }}" method="POST">
-            <label for="etudiant"><b>Nouveau participant</b></label>
-            <input type="text" name="etudiant" placeholder="Enter new student" required>
-            <button type="submit" class="add_button">Add Student</button>
-        </form>
-    </span>
+        <div class="add">
+            <form action="{{ path('ajouter_participant') }}" method="POST">
+                <label for="etudiant"><b>Nouveau participant</b></label>
+                <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
+                <div class="autocomplete-results"></div>
+                <button type="submit" class="add_button">Ajouter</button>
+            </form>
+        </div>
     </div>
+
+    <script src="{{ asset('script/add_participant.js') }}"></script>
 {% endblock %}
