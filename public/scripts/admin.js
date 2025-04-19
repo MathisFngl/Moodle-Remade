@@ -1,163 +1,167 @@
 let editingUECode = null;
+let editingUserId = null;
 let assignedUEs = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     const roleSelect = document.getElementById('role');
     const isAdminCheckbox = document.getElementById('isAdmin');
+    const userForm = document.getElementById('userForm');
+    const ueForm = document.getElementById('ueForm');
 
+    // --- Rôle & Admin checkbox ---
     roleSelect.addEventListener('change', function () {
-        const selectedRole = roleSelect.value;
-
-        if (selectedRole === 'admin') {
+        if (this.value === 'admin') {
             isAdminCheckbox.checked = true;
             isAdminCheckbox.disabled = true;
-        } else if (selectedRole === 'étudiant') {
+        } else if (this.value === 'étudiant') {
             isAdminCheckbox.checked = false;
             isAdminCheckbox.disabled = true;
-        } else if (selectedRole === 'prof') {
+        } else {
             isAdminCheckbox.disabled = false;
         }
     });
 
-    window.editUser = function (user) {
-        const modal = new bootstrap.Modal(document.getElementById('userModal'));
-        document.getElementById('userForm').reset();
-        if (user) {
-            document.getElementById('prenom').value = user.prenom;
-            document.getElementById('nom').value = user.nom;
-            document.getElementById('email').value = user.email;
-            roleSelect.value = user.role;
-            isAdminCheckbox.checked = user.admin;
+    // --- Ajouter / Modifier une UE ---
+    ueForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const code = document.getElementById('ueCode').value.trim();
+        const nom = document.getElementById('ueNom').value.trim();
+        const desc = document.getElementById('ueDesc').value.trim();
+        const respo = document.getElementById('ueRespo').value.trim();
 
-            if (user.role === "admin") {
-                isAdminCheckbox.disabled = true;
-            } else if (user.role === "étudiant") {
-                isAdminCheckbox.disabled = true;
-            } else {
-                isAdminCheckbox.disabled = false;
-            }
-        } else {
-            document.getElementById('password').value = "1234";
-            isAdminCheckbox.disabled = false;
-            isAdminCheckbox.checked = false;
-            roleSelect.value = "étudiant";
-        }
-        modal.show();
-    };
-});
+        if (!code || !nom) return;
 
-function editUE(ue) {
-    const modal = new bootstrap.Modal(document.getElementById('ueModal'));
-    document.getElementById('ueForm').reset();
+        const ueData = { code, nom, description: desc, responsable_ue: respo };
 
-    editingUECode = null;
+        const url = editingUECode ? '/admin/modifier-ue' : '/admin/ajouter-ue';
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(ueData)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("Erreur lors de l'enregistrement de l'UE.");
+            });
 
-    if (ue) {
-        document.getElementById('ueCode').value = ue.code;
-        document.getElementById('ueNom').value = ue.nom;
-        document.getElementById('ueDesc').value = ue.desc;
-        document.getElementById('ueRespo').value = ue.responsable_id || ''; // Si l'UE a un responsable, le sélectionner
-        editingUECode = ue.code;
-    }
-    modal.show();
-}
+        const modal = bootstrap.Modal.getInstance(document.getElementById('ueModal'));
+        modal.hide();
+    });
 
-document.getElementById("userForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
-    modal.hide();
-});
+    // --- Ajouter / Modifier un utilisateur ---
+    userForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const prenom = document.getElementById('prenom').value.trim();
+        const nom = document.getElementById('nom').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const role = document.getElementById('role').value;
+        const isAdmin = document.getElementById('isAdmin').checked;
 
-document.getElementById('ueSelect').addEventListener('change', function(e) {
-    if (e.target.value) {
-        const selectedUE = e.target.options[e.target.selectedIndex];
-        const ueCode = selectedUE.value;
-        const ueName = selectedUE.text;
+        const userData = { prenom, nom, email, password, role, isAdmin, ues: assignedUEs };
 
-        if (assignedUEs.includes(ueCode)) {
-            return;
-        }
+        fetch('/admin/ajouter-utilisateur', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("Erreur lors de l'enregistrement de l'utilisateur.");
+            });
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+        modal.hide();
+    });
+
+    // --- Sélection des UEs (badges) ---
+    document.getElementById('ueSelect').addEventListener('change', function (e) {
+        const ueCode = this.value;
+        const ueName = this.options[this.selectedIndex].text;
+
+        if (!ueCode || assignedUEs.includes(ueCode)) return;
 
         assignedUEs.push(ueCode);
-        const badge = document.createElement('span');
-        badge.classList.add('badge', 'bg-secondary', 'me-2');
-        badge.textContent = ueName;
 
-        const removeBtn = document.createElement('span');
-        removeBtn.classList.add('badge-close-button');
-        removeBtn.textContent = '×';
-        removeBtn.onclick = () => {
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-secondary me-2';
+        badge.innerHTML = `${ueName} <span class="badge-close-button" style="cursor:pointer;">×</span>`;
+
+        badge.querySelector('.badge-close-button').onclick = () => {
             assignedUEs = assignedUEs.filter(code => code !== ueCode);
             badge.remove();
         };
 
-        badge.appendChild(removeBtn);
         document.getElementById('ueBadges').appendChild(badge);
-    }
+    });
 });
 
-document.getElementById('role').addEventListener('change', function () {
-    const isAdminCheckbox = document.getElementById('isAdmin');
-    if (this.value === 'étudiant') {
-        isAdminCheckbox.checked = false;
-        isAdminCheckbox.disabled = true;
-    } else {
-        isAdminCheckbox.disabled = false;
-    }
-});
-
-document.getElementById('ueForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const code = document.getElementById('ueCode').value.trim();
-    const nom = document.getElementById('ueNom').value.trim();
-    const desc = document.getElementById('ueDesc').value.trim();
-    const respo = document.getElementById('ueRespo').value; // Récupère l'ID du responsable sélectionné
-    const imageInput = document.getElementById('ueImage');
-    const imagePath = imageInput.files.length > 0 ? URL.createObjectURL(imageInput.files[0]) : "path_to_default.jpg";
-
-    if (!code || !nom) return;
-
-    const ueData = {
-        code,
-        nom,
-        desc,
-        responsable_id: respo,  // Ajout du responsable
-        image: imagePath
-    };
-
-    const tableBody = document.querySelector('#ue table tbody');
-    //modifier
-    if (editingUECode) {
-        const row = Array.from(tableBody.rows).find(r => r.cells[0].textContent === editingUECode);
-        if (row) {
-            row.cells[0].textContent = ueData.code;
-            row.cells[1].textContent = ueData.nom;
-            row.cells[2].textContent = ueData.desc;
-            row.cells[3].innerHTML = `<img src="${ueData.image}" class="img-thumbnail" style="width: 50px;" alt="uv">`;
-            row.cells[4].innerHTML = `
-                    <button class="btn btn-warning btn-sm" onclick='editUE(${JSON.stringify(ueData)})'>Modifier</button>
-                    <button class="btn btn-danger btn-sm">Supprimer</button>`;
-        }
-    } else {
-        //ajouter
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-                <td>${ueData.code}</td>
-                <td>${ueData.nom}</td>
-                <td>${ueData.desc}</td>
-                <td><img src="${ueData.image}" class="img-thumbnail" style="width: 50px;" alt="uv"></td>
-                <td>${ueData.responsable_id ? 'Responsable ID: ' + ueData.responsable_id : 'Aucun'}</td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick='editUE(${JSON.stringify(ueData)})'>Modifier</button>
-                    <button class="btn btn-danger btn-sm">Supprimer</button>
-                </td>
-            `;
-        tableBody.appendChild(newRow);
-    }
+// --- Édition d’une UE ---
+function editUE(ue) {
+    const modal = new bootstrap.Modal(document.getElementById('ueModal'));
+    editingUECode = ue.code;
 
     document.getElementById('ueForm').reset();
-    editingUECode = null;
-    const modal = bootstrap.Modal.getInstance(document.getElementById('ueModal'));
-    modal.hide();
-});
+    document.getElementById('ueCode').value = ue.code;
+    document.getElementById('ueNom').value = ue.nom;
+    document.getElementById('ueDesc').value = ue.description;
+    document.getElementById('ueRespo').value = ue.responsable_ue || '';
+
+    modal.show();
+}
+
+// --- Suppression d’une UE ---
+function deleteUE(code) {
+    if (confirm("Supprimer cette UE ?")) {
+        fetch(`/admin/supprimer-ue/${code}`, { method: 'DELETE' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("Erreur lors de la suppression.");
+            });
+    }
+}
+
+// --- Édition d’un utilisateur ---
+function editUser(user) {
+    const modal = new bootstrap.Modal(document.getElementById('userModal'));
+    editingUserId = user.id;
+    assignedUEs = user.ues || [];
+
+    document.getElementById('userForm').reset();
+    document.getElementById('prenom').value = user.prenom;
+    document.getElementById('nom').value = user.nom;
+    document.getElementById('email').value = user.email;
+    document.getElementById('role').value = user.role;
+    document.getElementById('isAdmin').checked = user.admin;
+
+    document.getElementById('ueBadges').innerHTML = '';
+    user.ues.forEach(ueCode => {
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-secondary me-2';
+        badge.innerHTML = `${ueCode} <span class="badge-close-button" style="cursor:pointer;">×</span>`;
+
+        badge.querySelector('.badge-close-button').onclick = () => {
+            assignedUEs = assignedUEs.filter(code => code !== ueCode);
+            badge.remove();
+        };
+
+        document.getElementById('ueBadges').appendChild(badge);
+    });
+
+    modal.show();
+}
+
+// --- Suppression d’un utilisateur ---
+function deleteUser(id) {
+    if (confirm("Supprimer cet utilisateur ?")) {
+        fetch(`/admin/supprimer-utilisateur/${id}`, { method: 'DELETE' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("Erreur lors de la suppression.");
+            });
+    }
+}
