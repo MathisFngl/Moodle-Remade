@@ -91,7 +91,7 @@ class AdminController extends AbstractController
         $utilisateur->setRole($data['role']);
         $utilisateur->setAdmin($data['isAdmin']);
 
-        // Assignation des UEs (si nécessaire plus tard)
+        // Assignation des UEs
         // foreach ($data['ues'] as $ueCode) {
         //     $ue = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
         //     if ($ue) {
@@ -138,7 +138,7 @@ class AdminController extends AbstractController
                 'email' => $user->getEmail(),
                 'role' => $user->getRole(),
                 'isAdmin' => $user->isAdmin(),
-                // 'ues' => array_map(fn($ue) => $ue->getCode(), $user->getUes()->toArray()), // si relation dispo
+                // 'ues' => array_map(fn($ue) => $ue->getCode(), $user->getUes()->toArray())
             ]
         ]);
     }
