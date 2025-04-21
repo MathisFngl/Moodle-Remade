@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Utilisateur;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Student;
 
 class CoursController extends AbstractController
 {
@@ -33,7 +33,7 @@ class CoursController extends AbstractController
     #[Route('/cours/cours/participants', name: 'cours_participants')]
     public function participants(EntityManagerInterface $entityManager)
     {
-        $participants = $entityManager->getRepository(Student::class)->findAll();
+        $participants = $entityManager->getRepository(Utilisateur::class)->findAll();
 
         return $this->render('cours/participants.html.twig', [
             'participants' => $participants,
@@ -47,18 +47,37 @@ class CoursController extends AbstractController
             $etudiantName = $request->get('etudiant');
 
             if (!empty($etudiantName)) {
-                // Vérifie si l'étudiant existe déjà
-                $existingStudent = $entityManager->getRepository(Student::class)
-                    ->findOneBy(['name' => $etudiantName]);
+                $nomPrenom = explode(' ', trim($etudiantName));
+                $prenom = $nomPrenom[0] ?? '';
+                $nom = $nomPrenom[1] ?? '';
+
+                // Vérifier si l'étudiant existe déjà
+                $existingStudent = $entityManager->getRepository(Utilisateur::class)
+                    ->findOneBy(['nom' => $nom, 'prenom' => $prenom]);
 
                 if (!$existingStudent) {
-                    $student = new Student();
-                    $student->setName($etudiantName);
+                    $email = strtolower($prenom . '.' . $nom . '@example.com');
 
-                    $entityManager->persist($student);
-                    $entityManager->flush();
+                    // Vérifier si l'email existe déjà
+                    $existingEmail = $entityManager->getRepository(Utilisateur::class)
+                        ->findOneBy(['mail' => $email]);
 
-                    $this->addFlash('success', 'Nouvel étudiant ajouté avec succès!');
+                    if (!$existingEmail) {
+                        $student = new Utilisateur();
+                        $student->setNom($nom);
+                        $student->setPrenom($prenom);
+                        $student->setMail($email);
+                        $student->setMotDePasse(password_hash('mdp', PASSWORD_BCRYPT));
+                        $student->setRole('etudiant');
+                        $student->setAdmin(false);
+
+                        $entityManager->persist($student);
+                        $entityManager->flush();
+
+                        $this->addFlash('success', 'Nouvel étudiant ajouté avec succès!');
+                    } else {
+                        $this->addFlash('warning', 'Cet email est déjà utilisé!');
+                    }
                 } else {
                     $this->addFlash('warning', 'Cet étudiant existe déjà!');
                 }
@@ -75,17 +94,27 @@ class CoursController extends AbstractController
     #[Route('/search_students', name: 'search_students', methods: ['GET'])]
     public function searchStudents(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $query = $request->query->get('q', '');
+        $query = $request->query->get('q');
 
-        $students = $entityManager->getRepository(Student::class)->createQueryBuilder('s')
-            ->where('s.name LIKE :query')
-            ->setParameter('query', "%$query%")
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
+        if (!$query) {
+            return new JsonResponse([], JsonResponse::HTTP_OK);
+        }
 
-        $data = array_map(fn($student) => ['name' => $student->getName()], $students);
+        try {
+            $students = $entityManager->getRepository(Utilisateur::class)
+                ->createQueryBuilder('u')
+                ->where('u.nom LIKE :query OR u.prenom LIKE :query')
+                ->setParameter('query', '%' . $query . '%')
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult();
 
-        return $this->json($data);
+            return new JsonResponse(array_map(fn($s) => [
+                'id' => $s->getId(),
+                'name' => $s->getPrenom() . ' ' . $s->getNom(),
+            ], $students), JsonResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

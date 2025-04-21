@@ -231,3 +231,28 @@ h1{
     text-decoration: none;
     cursor: pointer;
 }
+.autocomplete-results {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.autocomplete-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.autocomplete-item:hover {
+    background: #f0f0f0;
+}
+
+.autocomplete-item.error {
+    color: red;
+    font-weight: bold;
+}
+
