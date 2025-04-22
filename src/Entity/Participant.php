@@ -1,50 +1,51 @@
 <?php
-
 namespace App\Entity;
 
-use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Cours;
+use App\Entity\Utilisateur;
 
-#[ORM\Entity(repositoryClass: ParticipantRepository::class)]
+#[ORM\Entity]
 class Participant
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+#[ORM\Id]
+#[ORM\GeneratedValue]
+#[ORM\Column(type: "integer")]
+private int $id;
 
-    #[ORM\Column]
-    private ?int $id_cours = null;
+#[ORM\ManyToOne(targetEntity: Cours::class)]
+#[ORM\JoinColumn(name: "cours_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+private Cours $cours;
 
-    #[ORM\Column]
-    private ?int $id_utilisateur = null;
+#[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+#[ORM\JoinColumn(name: "utilisateur_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+private Utilisateur $utilisateur;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+// 🔹 Getter et Setter pour id
+public function getId(): int
+{
+return $this->id;
+}
 
-    public function getIdCours(): ?int
-    {
-        return $this->id_cours;
-    }
+// 🔹 Getters et Setters pour la relation avec Cours
+public function getCours(): Cours
+{
+return $this->cours;
+}
 
-    public function setIdCours(int $id_cours): static
-    {
-        $this->id_cours = $id_cours;
+public function setCours(Cours $cours): void
+{
+$this->cours = $cours;
+}
 
-        return $this;
-    }
+// 🔹 Getters et Setters pour la relation avec Utilisateur
+public function getUtilisateur(): Utilisateur
+{
+return $this->utilisateur;
+}
 
-    public function getIdUtilisateur(): ?int
-    {
-        return $this->id_utilisateur;
-    }
-
-    public function setIdUtilisateur(int $id_utilisateur): static
-    {
-        $this->id_utilisateur = $id_utilisateur;
-
-        return $this;
-    }
+public function setUtilisateur(Utilisateur $utilisateur): void
+{
+$this->utilisateur = $utilisateur;
+}
 }

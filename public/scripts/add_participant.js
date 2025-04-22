@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const input = document.querySelector("#searchInput");
     const resultContainer = document.querySelector("#autocomplete-results");
 
+    // Vérifier l'existence des éléments HTML
     if (!input || !resultContainer) {
         console.error("⚠️ Erreur : Les éléments HTML nécessaires n'existent pas !");
         return;
@@ -9,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     input.addEventListener("input", function () {
         let query = input.value.trim();
-        console.log("🔍 Requête envoyée :", query); // Voir ce que l'utilisateur tape
+        console.log("🔍 Requête envoyée :", query); // Vérification de la saisie utilisateur
 
         if (query.length > 0) {
             fetch(`/search_students?q=${query}`)
@@ -21,8 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     return response.json();
                 })
                 .then(data => {
-                    console.log("✅ Données reçues :", data); // Vérifie ce que Symfony retourne
-
+                    console.log("✅ Données reçues :", data); // Vérification de la réponse Symfony
                     resultContainer.innerHTML = "";
 
                     if (data.length === 0) {
@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.forEach(utilisateur => {
                         console.log("👤 Utilisateur trouvé :", utilisateur.name);
-
                         let div = document.createElement("div");
                         div.textContent = utilisateur.name;
                         div.className = "autocomplete-item";

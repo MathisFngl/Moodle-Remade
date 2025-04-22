@@ -31,7 +31,7 @@ class CoursController extends AbstractController
     }
 
     #[Route('/cours/cours/participants', name: 'cours_participants')]
-    public function participants(EntityManagerInterface $entityManager)
+    public function participants(EntityManagerInterface $entityManager): Response
     {
         $participants = $entityManager->getRepository(Utilisateur::class)->findAll();
 
@@ -41,7 +41,7 @@ class CoursController extends AbstractController
     }
 
     #[Route('/cours/cours/ajouter-participant', name: 'ajouter_participant', methods: ['GET', 'POST'])]
-    public function ajouterParticipant(Request $request, EntityManagerInterface $entityManager)
+    public function ajouterParticipant(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($request->isMethod('POST')) {
             $etudiantName = $request->get('etudiant');
