@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 class Utilisateur
@@ -32,19 +33,20 @@ class Utilisateur
     #[ORM\Column]
     private ?bool $admin = null;
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $photo;
+    #[ORM\Column(nullable: true)]
+    private ?string $photo = null;
+
+    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
+    private Collection $participants; // ✅ Ajout de la relation
+
+    public function __construct()
+    {
+        $this->participants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -52,23 +54,9 @@ class Utilisateur
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
     public function getPrenom(): ?string
     {
         return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -76,36 +64,14 @@ class Utilisateur
         return $this->mail;
     }
 
-    public function setEmail(string $mail): static
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
     public function getMotDePasse(): ?string
     {
         return $this->mot_de_passe;
     }
 
-    public function setMotDePasse(string $mot_de_passe): static
-    {
-        $this->mot_de_passe = $mot_de_passe;
-
-        return $this;
-    }
-
-
     public function getRole(): ?string
     {
         return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-
-        return $this;
     }
 
     public function isAdmin(): ?bool
@@ -113,22 +79,32 @@ class Utilisateur
         return $this->admin;
     }
 
-    public function setAdmin(bool $admin): static
-    {
-        $this->admin = $admin;
-
-        return $this;
-    }
-
-    public function getPhoto()
+    public function getPhoto(): ?string
     {
         return $this->photo;
     }
 
-    public function setPhoto($photo): static
+    public function getParticipants(): Collection
     {
-        $this->photo = $photo;
+        return $this->participants;
+    }
 
+    public function addParticipant(Participant $participant): static
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants->add($participant);
+            $participant->setUtilisateur($this);
+        }
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): static
+    {
+        if ($this->participants->removeElement($participant)) {
+            if ($participant->getUtilisateur() === $this) {
+                $participant->setUtilisateur(null);
+            }
+        }
         return $this;
     }
 }

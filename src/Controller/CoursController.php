@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Utilisateur;
+use App\Entity\Participant;
+use App\Entity\Cours;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,63 +35,18 @@ class CoursController extends AbstractController
     #[Route('/cours/cours/participants', name: 'cours_participants')]
     public function participants(EntityManagerInterface $entityManager): Response
     {
-        $participants = $entityManager->getRepository(Utilisateur::class)->findAll();
+        $cours = $entityManager->getRepository(Cours::class)->findOneBy([]); // Vérifie ici si un cours existe
+        $participants = $entityManager->getRepository(Participant::class)->findAll();
 
         return $this->render('cours/participants.html.twig', [
             'participants' => $participants,
+            'cours' => $cours, // ✅ Ajoute la variable cours ici !
         ]);
     }
 
-    #[Route('/cours/cours/ajouter-participant', name: 'ajouter_participant', methods: ['GET', 'POST'])]
-    public function ajouterParticipant(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        if ($request->isMethod('POST')) {
-            $etudiantName = $request->get('etudiant');
 
-            if (!empty($etudiantName)) {
-                $nomPrenom = explode(' ', trim($etudiantName));
-                $prenom = $nomPrenom[0] ?? '';
-                $nom = $nomPrenom[1] ?? '';
 
-                // Vérifier si l'étudiant existe déjà
-                $existingStudent = $entityManager->getRepository(Utilisateur::class)
-                    ->findOneBy(['nom' => $nom, 'prenom' => $prenom]);
 
-                if (!$existingStudent) {
-                    $email = strtolower($prenom . '.' . $nom . '@example.com');
-
-                    // Vérifier si l'email existe déjà
-                    $existingEmail = $entityManager->getRepository(Utilisateur::class)
-                        ->findOneBy(['mail' => $email]);
-
-                    if (!$existingEmail) {
-                        $student = new Utilisateur();
-                        $student->setNom($nom);
-                        $student->setPrenom($prenom);
-                        $student->setMail($email);
-                        $student->setMotDePasse(password_hash('mdp', PASSWORD_BCRYPT));
-                        $student->setRole('etudiant');
-                        $student->setAdmin(false);
-
-                        $entityManager->persist($student);
-                        $entityManager->flush();
-
-                        $this->addFlash('success', 'Nouvel étudiant ajouté avec succès!');
-                    } else {
-                        $this->addFlash('warning', 'Cet email est déjà utilisé!');
-                    }
-                } else {
-                    $this->addFlash('warning', 'Cet étudiant existe déjà!');
-                }
-            } else {
-                $this->addFlash('error', 'Veuillez entrer un nom valide!');
-            }
-
-            return $this->redirectToRoute('cours_participants');
-        }
-
-        return $this->render('cours/ajouter_participant.html.twig');
-    }
 
     #[Route('/search_students', name: 'search_students', methods: ['GET'])]
     public function searchStudents(Request $request, EntityManagerInterface $entityManager): JsonResponse
@@ -117,4 +74,59 @@ class CoursController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/cours/cours/ajouter-participant', name: 'ajouter_participant', methods: ['POST'])]
+    public function ajouterParticipant(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['id_utilisateur'] ?? null;
+        $coursId = $data['id_cours'] ?? null; // Vérifie que cet ID est bien récupéré
+
+        if (!$userId || !$coursId) {
+            return new JsonResponse(["error" => "Données invalides"], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // Vérifier que l'utilisateur et le cours existent
+        $utilisateur = $entityManager->getRepository(Utilisateur::class)->find($userId);
+        $cours = $entityManager->getRepository(Cours::class)->find($coursId);
+
+        if (!$utilisateur || !$cours) {
+            return new JsonResponse(["error" => "Utilisateur ou cours introuvable"], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Vérifier si l'utilisateur est déjà inscrit à ce cours
+        $existingParticipant = $entityManager->getRepository(Participant::class)
+            ->findOneBy(['utilisateur' => $utilisateur, 'cours' => $cours]);
+
+        if ($existingParticipant) {
+            return new JsonResponse(["error" => "Utilisateur déjà inscrit"], JsonResponse::HTTP_CONFLICT);
+        }
+
+        // Ajouter l'utilisateur comme participant
+        $participant = new Participant();
+        $participant->setUtilisateur($utilisateur);
+        $participant->setCours($cours);
+        $entityManager->persist($participant);
+        $entityManager->flush();
+
+        return new JsonResponse(["success" => "Utilisateur ajouté avec succès"], JsonResponse::HTTP_OK);
+    }
+    #[Route('/cours/cours/ajouter-participant-page', name: 'new_participant')]
+    public function afficherFormulaireAjout(EntityManagerInterface $entityManager): Response
+    {
+        // 🔍 Récupérer un cours existant (ajuste selon ta logique)
+        $cours = $entityManager->getRepository(Cours::class)->findOneBy([]);
+
+        if (!$cours) {
+            return new Response("Erreur : Aucun cours trouvé", Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->render('cours/ajouter_participant.html.twig', [
+            'cours' => $cours, // ✅ Envoie la variable "cours" à Twig !
+        ]);
+    }
+
+
+
+
 }

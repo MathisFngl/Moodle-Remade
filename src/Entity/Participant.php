@@ -1,51 +1,54 @@
 <?php
+
 namespace App\Entity;
 
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Cours;
 use App\Entity\Utilisateur;
+use App\Entity\Cours;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 class Participant
 {
-#[ORM\Id]
-#[ORM\GeneratedValue]
-#[ORM\Column(type: "integer")]
-private int $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-#[ORM\ManyToOne(targetEntity: Cours::class)]
-#[ORM\JoinColumn(name: "cours_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
-private Cours $cours;
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\JoinColumn(name: "id_utilisateur", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?Utilisateur $utilisateur = null;  // 🔥 Correction de la relation
 
-#[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-#[ORM\JoinColumn(name: "utilisateur_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
-private Utilisateur $utilisateur;
+    #[ORM\ManyToOne(targetEntity: Cours::class)]
+    #[ORM\JoinColumn(name: "id_cours", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?Cours $cours = null;  // 🔥 Correction de la relation
 
-// 🔹 Getter et Setter pour id
-public function getId(): int
-{
-return $this->id;
-}
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-// 🔹 Getters et Setters pour la relation avec Cours
-public function getCours(): Cours
-{
-return $this->cours;
-}
+    // ✅ Getter et setter pour `Utilisateur`
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
 
-public function setCours(Cours $cours): void
-{
-$this->cours = $cours;
-}
+    public function setUtilisateur(Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
+        return $this;
+    }
 
-// 🔹 Getters et Setters pour la relation avec Utilisateur
-public function getUtilisateur(): Utilisateur
-{
-return $this->utilisateur;
-}
+    // ✅ Getter et setter pour `Cours`
+    public function getCours(): ?Cours
+    {
+        return $this->cours;
+    }
 
-public function setUtilisateur(Utilisateur $utilisateur): void
-{
-$this->utilisateur = $utilisateur;
-}
+    public function setCours(Cours $cours): static
+    {
+        $this->cours = $cours;
+        return $this;
+    }
 }
