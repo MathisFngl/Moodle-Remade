@@ -1,20 +1,35 @@
 {% extends 'cours/base_cours.html.twig' %}
+
 {% set nav = 'participants' %}
 
 {% block cours_content %}
-    <span class="add">
-        <a href="{{ path('ajouter_participant') }}" class="ajouter_participant">New participant</a>
-    </span>
+    <div class="add">
+        <form id="participantForm">
+            <input type="hidden" name="id_cours" id="id_cours" value="{{ cours.id }}"> <!-- Ajout du champ caché pour l'ID du cours -->
 
-    <div class="participant_container">
-        {% for participant in participants %}
-            <div class="participant">
-                <div class="pic">
-                    <img src="{{ asset('images/bombardino.jpg') }}" alt="Placeholder"/>
-                </div>
-                <a href="#href" class="name">{{ participant.nom }}</a>
-                <div class="role">{{ participant.role }}</div>
-            </div>
-        {% endfor %}
+            <label for="searchInput"><b>Nouveau participant</b></label>
+            <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
+            <input type="hidden" name="id_utilisateur" id="id_utilisateur"> <!-- Champ caché pour l'utilisateur -->
+            <div id="autocomplete-results" class="autocomplete-results"></div>
+            <button type="submit" class="add_button">Ajouter</button>
+        </form>
     </div>
+
+    <h2>Liste des participants</h2>
+    <ul id="participantList">
+        {% for participant in participants %}
+            {% if participant.getUtilisateur() is not null %}
+                <li>{{ participant.getUtilisateur().getPrenom() }} {{ participant.getUtilisateur().getNom() }}</li>
+            {% else %}
+                <li>Participant sans utilisateur</li>
+            {% endif %}
+        {% else %}
+            <li>Aucun participant inscrit</li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}
+
+{% block cours_scripts %}
+    <script src="{{ asset('scripts/add_participant.js') }}"></script>
 {% endblock %}
