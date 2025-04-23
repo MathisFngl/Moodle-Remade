@@ -20,7 +20,7 @@ class Cours
     #[ORM\Column(length: 4)]
     private ?string $code = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]

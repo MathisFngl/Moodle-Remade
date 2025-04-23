@@ -9,7 +9,8 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">Code</label>
-                    <input type="text" class="form-control" id="ueCode" required>
+                    <input type="text" class="form-control bg-light text-muted" id="ueCode" required readonly>
+
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nom</label>
@@ -29,7 +30,9 @@
                     <select class="form-select" id="ueRespo">
                         <option value="">Sélectionner un responsable</option>
                         {% for user in users %}
-                            <option value="{{ user.id }}">{{ user.prenom }} {{ user.nom }}</option>
+                            {% if user.role == 'prof' %}
+                                <option value="{{ user.id }}">{{ user.prenom }} {{ user.nom }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>

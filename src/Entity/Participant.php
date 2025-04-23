@@ -14,11 +14,11 @@ class Participant
 private int $id;
 
 #[ORM\ManyToOne(targetEntity: Cours::class)]
-#[ORM\JoinColumn(name: "cours_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+#[ORM\JoinColumn(name: "id_cours", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
 private Cours $cours;
 
 #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-#[ORM\JoinColumn(name: "utilisateur_id", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
+#[ORM\JoinColumn(name: "id_utilisateur", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
 private Utilisateur $utilisateur;
 
 // 🔹 Getter et Setter pour id

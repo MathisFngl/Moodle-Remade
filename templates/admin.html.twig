@@ -46,8 +46,8 @@
                                 </td>
                                 <td>{{ ue.responsableUe }}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm" onclick='editUE({{ ue|json_encode|raw }})'>Modifier</button>
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    <button class="btn btn-warning btn-sm" onclick='editUE({{ { code: ue.code, nom: ue.nom, description: ue.description, responsable_ue: ue.responsableUe }|json_encode|raw }})'>Modifier</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteUE('{{ ue.code }}')">Supprimer</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -81,14 +81,13 @@
                                 <td>{{ user.role }}</td>
                                 <td>{{ user.admin ? 'Oui' : 'Non' }}</td>
                                 <td>
-                                    {% for ue in ues %}
-                                        {% if random(0, 1) %}
-                                            <span class="badge bg-secondary me-2">{{ ue.code }}</span>
-                                        {% endif %}
+                                    {% for ueCode in userUEs[user.id]|default([]) %}
+                                        <span class="badge bg-secondary me-2">{{ ueCode }}</span>
                                     {% endfor %}
+                                </td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm" onclick='editUser({{ user|json_encode|raw }})'>Modifier</button>
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    <button class="btn btn-warning btn-sm" onclick='editUser({{ { id: user.id, prenom: user.prenom, nom: user.nom, email: user.email, role: user.role, admin: user.admin, ues: userUEs[user.id] }|json_encode|raw }})'>Modifier</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteUser({{ user.id }})">Supprimer</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -100,7 +99,7 @@
         </div>
     </div>
 
-{% include 'admin/_modals.html.twig' %}
+    {% include 'admin/_modals.html.twig' %}
 {% endblock %}
 
 {% block javascripts %}
