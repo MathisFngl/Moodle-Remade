@@ -3,7 +3,7 @@
 {% set nav = 'participants' %}
 
 {% block cours_content %}
-    <div class="add">
+    <div class="add mb-4">
         <form id="participantForm">
             <input type="hidden" name="id_cours" id="id_cours" value="{{ cours.id }}">
 
@@ -15,36 +15,55 @@
         </form>
     </div>
 
-    <h2 class="mt-4 mb-3">Liste des participants</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="mb-3">Étudiants</h2>
+            <ul id="etudiantList" class="list-group">
+                {% for participant in participants %}
+                    {% if participant.utilisateur is not null and participant.utilisateur.role != 'prof' %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}</strong>
+                                <a href="mailto:{{ participant.utilisateur.email }}" class="ms-2 text-decoration-none">
+                                    📧 {{ participant.utilisateur.email }}
+                                </a>
+                                {% if participant.utilisateur.id == participant.cours.getResponsableUe() %}
+                                    <span class="badge bg-warning text-dark ms-2">Responsable de l'UE</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if participants|filter(p => p.utilisateur is not null and p.utilisateur.role != 'prof') is empty %}
+                    <li class="list-group-item text-center text-muted">Aucun étudiant inscrit</li>
+                {% endif %}
+            </ul>
+        </div>
 
-    <ul id="participantList" class="list-group">
-        {% for participant in participants %}
-            {% if participant.utilisateur is not null %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        {{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}
-
-                        {# Vérifier si l'utilisateur est un professeur #}
-                        {% if participant.utilisateur.role == 'prof' %}
-                            <span class="badge bg-info text-dark ms-2">Professeur</span>
-                        {% endif %}
-
-                        {# Vérifier si l'utilisateur est le responsable de l'UE #}
-                        {% if participant.utilisateur.id == participant.cours.getResponsableUe() %}
-                            <span class="badge bg-warning text-dark ms-2">Responsable de l'UE</span>
-                        {% endif %}
-                    </div>
-                </li>
-            {% else %}
-                <li class="list-group-item text-muted">Participant sans utilisateur</li>
-            {% endif %}
-        {% else %}
-            <li class="list-group-item text-center text-muted">Aucun participant inscrit</li>
-        {% endfor %}
-    </ul>
-
-
-
+        <div class="col-md-6">
+            <h2 class="mb-3">Professeurs</h2>
+            <ul id="profList" class="list-group">
+                {% for participant in participants %}
+                    {% if participant.utilisateur is not null and participant.utilisateur.role == 'prof' %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}</strong>
+                                <a href="mailto:{{ participant.utilisateur.email }}" class="ms-2 text-decoration-none">
+                                     {{ participant.utilisateur.email }}
+                                </a>
+                                {% if participant.utilisateur.id == participant.cours.getResponsableUe() %}
+                                    <span class="badge bg-warning text-dark ms-2">Responsable de l'UE</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if participants|filter(p => p.utilisateur is not null and p.utilisateur.role == 'prof') is empty %}
+                    <li class="list-group-item text-center text-muted">Aucun professeur inscrit</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
 {% block cours_scripts %}

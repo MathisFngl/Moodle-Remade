@@ -17,28 +17,51 @@ class AdminController extends AbstractController
     #[Route('/admin', name: 'admin_dashboard')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        // Récupération de toutes les UEs et utilisateurs
         $ues = $entityManager->getRepository(Cours::class)->findAll();
         $users = $entityManager->getRepository(Utilisateur::class)->findAll();
 
+        // Création du tableau pour associer les UEs aux utilisateurs
         $userUEs = [];
-
         foreach ($users as $user) {
             $userId = $user->getId();
             $userUEs[$userId] = [];
 
             $participants = $entityManager->getRepository(Participant::class)->findBy(['utilisateur' => $user]);
-
             foreach ($participants as $participant) {
                 $userUEs[$userId][] = $participant->getCours()->getCode();
             }
         }
 
+        $uesData = [];
+        foreach ($ues as $ue) {
+            $responsableUeId = $ue->getResponsableUe();
+            $responsableUe = $entityManager->getRepository(Utilisateur::class)->find($responsableUeId); // Récupération de l'utilisateur responsable
+
+            $responsableNom = $responsableUe ? $responsableUe->getNom() : 'Inconnu';
+            $responsablePrenom = $responsableUe ? $responsableUe->getPrenom() : 'Inconnu';
+
+            $uesData[] = [
+                'code' => $ue->getCode(),
+                'nom' => $ue->getNom(),
+                'description' => $ue->getDescription(),
+                'image' => $ue->getImage(),
+                'responsableUe' => [
+                    'id' => $responsableUeId,
+                    'nom' => $responsableNom,
+                    'prenom' => $responsablePrenom,
+                ],
+            ];
+        }
+
         return $this->render('admin.html.twig', [
-            'ues' => $ues,
+            'ues' => $uesData,
             'users' => $users,
             'userUEs' => $userUEs,
         ]);
     }
+
+
 
     #[Route('/admin/ajouter-ue', name: 'admin_ajouter_ue', methods: ['POST'])]
     public function ajouterUe(Request $request, EntityManagerInterface $em): JsonResponse

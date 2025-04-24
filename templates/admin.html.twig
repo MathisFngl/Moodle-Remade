@@ -17,6 +17,7 @@
             </li>
         </ul>
         <div class="tab-content mt-3" id="adminTabsContent">
+            <!-- Gestion des UE -->
             <div class="tab-pane fade show active" id="ue" role="tabpanel">
                 <div class="text-center p-2 bg-primary text-white">Gestion des UE</div>
                 <div class="table-responsive mt-3">
@@ -44,7 +45,13 @@
                                         <span>Pas d'image</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ ue.responsableUe }}</td>
+                                <td>
+                                    {% if ue.responsableUe %}
+                                        {{ ue.responsableUe.prenom }} {{ ue.responsableUe.nom }}
+                                    {% else %}
+                                        Aucun responsable
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" onclick='editUE({{ { code: ue.code, nom: ue.nom, description: ue.description, responsable_ue: ue.responsableUe }|json_encode|raw }})'>Modifier</button>
                                     <button class="btn btn-danger btn-sm" onclick="deleteUE('{{ ue.code }}')">Supprimer</button>
@@ -57,6 +64,7 @@
                 <button class="btn btn-success mt-3" onclick="editUE(null)">Ajouter une UE</button>
             </div>
 
+            <!-- Gestion des Utilisateurs -->
             <div class="tab-pane fade" id="users" role="tabpanel">
                 <div class="text-center p-2 bg-primary text-white">Gestion des Utilisateurs</div>
                 <div class="table-responsive mt-3">

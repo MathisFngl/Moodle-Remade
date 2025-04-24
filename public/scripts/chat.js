@@ -1,4 +1,3 @@
-
 const body = document.body;
 
 fetch('/chat-fragment')

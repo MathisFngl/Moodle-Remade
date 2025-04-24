@@ -28,11 +28,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Ajouter / Modifier une UE ---
     ueForm.addEventListener('submit', function (e) {
         e.preventDefault();
+
         const code = document.getElementById('ueCode').value.trim();
-        const nom = escapeStringForJS(document.getElementById('ueNom').value.trim());
-        const desc = escapeStringForJS(document.getElementById('ueDesc').value.trim());
+        const nom = document.getElementById('ueNom').value.trim();
+        const desc = document.getElementById('ueDesc').value.trim();
         const respo = document.getElementById('ueRespo').value.trim();
-        const img = document.getElementById('ueImage').value;
+        const imageInput = document.getElementById('ueImage');
+        const imageFile = imageInput.files[0];
 
         if (!code || !nom) return;
 
@@ -41,13 +43,21 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const ueData = { code, nom, description: desc, responsable_ue: respo, image: img };
+        const formData = new FormData();
+        formData.append('code', code);
+        formData.append('nom', nom);
+        formData.append('description', desc);
+        formData.append('responsable_ue', respo);
+
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
+
         const url = editingUECode ? '/admin/modifier-ue' : '/admin/ajouter-ue';
 
         fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(ueData)
+            body: formData
         })
             .then(res => res.json())
             .then(data => {
@@ -58,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('ueModal'));
         modal.hide();
     });
-
 
     // --- Ajouter / Modifier un utilisateur ---
     userForm.addEventListener('submit', function (e) {
@@ -75,8 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
             prenom, nom, email, password, role, isAdmin,
             ues: assignedUEs
         };
-
-        console.log(userData)
 
         const url = editingUserId ? '/admin/modifier-utilisateur' : '/admin/ajouter-utilisateur';
 
@@ -136,7 +143,7 @@ function editUE(ue = null) {
         editingUECode = ue.code;
         codeInput.value = ue.code ?? '';
         codeInput.readOnly = true;
-        codeInput.classList.add('bg-light', 'text-muted'); // Appliquer le style
+        codeInput.classList.add('bg-light', 'text-muted');
         document.getElementById('ueNom').value = ue.nom ?? '';
         document.getElementById('ueDesc').value = ue.description ?? '';
         document.getElementById('ueRespo').value = ue.responsable_ue ?? '';
@@ -144,10 +151,11 @@ function editUE(ue = null) {
         editingUECode = null;
         codeInput.value = '';
         codeInput.readOnly = false;
-        codeInput.classList.remove('bg-light', 'text-muted'); // Retirer le style
+        codeInput.classList.remove('bg-light', 'text-muted');
         document.getElementById('ueNom').value = '';
         document.getElementById('ueDesc').value = '';
         document.getElementById('ueRespo').value = '';
+        document.getElementById('ueImage').value = '';
     }
     modal.show();
 }
@@ -173,12 +181,22 @@ function editUser(user) {
     editingUserId = user?.id ?? null;
     assignedUEs = user?.ues ?? [];
 
+    const emailInput = document.getElementById('email');
+
     document.getElementById('userForm').reset();
     document.getElementById('prenom').value = user?.prenom ?? '';
     document.getElementById('nom').value = user?.nom ?? '';
-    document.getElementById('email').value = user?.email ?? '';
+    emailInput.value = user?.email ?? '';
     document.getElementById('role').value = user?.role ?? 'étudiant';
     document.getElementById('isAdmin').checked = user?.admin ?? false;
+
+    if (user?.id) {
+        emailInput.readOnly = true;
+        emailInput.classList.add('bg-light', 'text-muted');
+    } else {
+        emailInput.readOnly = false;
+        emailInput.classList.remove('bg-light', 'text-muted');
+    }
 
     document.getElementById('ueBadges').innerHTML = '';
     assignedUEs.forEach(ueCode => {
@@ -194,6 +212,15 @@ function editUser(user) {
 
     modal.show();
 }
+
+// --- Reset lecture seule sur fermeture ---
+document.getElementById('userModal').addEventListener('hidden.bs.modal', () => {
+    editingUserId = null;
+    assignedUEs = [];
+    const emailInput = document.getElementById('email');
+    emailInput.readOnly = false;
+    emailInput.classList.remove('bg-light', 'text-muted');
+});
 
 // --- Suppression d’un utilisateur ---
 function deleteUser(id) {
