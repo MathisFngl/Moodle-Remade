@@ -40,7 +40,6 @@ class AdminController extends AbstractController
         ]);
     }
 
-
     #[Route('/admin/ajouter-ue', name: 'admin_ajouter_ue', methods: ['POST'])]
     public function ajouterUe(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -50,7 +49,26 @@ class AdminController extends AbstractController
         $cours->setCode($data['code']);
         $cours->setNom($data['nom']);
         $cours->setDescription($data['description'] ?? '');
-        $cours->setResponsableUe($data['responsable_ue'] ?? '');
+
+        // Traitement du responsable UE
+        if (!empty($data['responsable_ue'])) {
+            $responsable = $em->getRepository(Utilisateur::class)->find($data['responsable_ue']);
+            if ($responsable) {
+                $cours->setResponsableUe($responsable->getId());
+
+                // Vérifie si le responsable est déjà inscrit comme participant
+                $existing = $em->getRepository(Participant::class)->findOneBy([
+                    'utilisateur' => $responsable,
+                    'cours' => $cours
+                ]);
+                if (!$existing) {
+                    $participant = new Participant();
+                    $participant->setUtilisateur($responsable);
+                    $participant->setCours($cours);
+                    $em->persist($participant);
+                }
+            }
+        }
 
         $em->persist($cours);
         $em->flush();
@@ -72,7 +90,26 @@ class AdminController extends AbstractController
         $cours->setNom($data['nom']);
         $cours->setDescription($data['description'] ?? '');
         $cours->setImage($data['image'] ?? null);
-        $cours->setResponsableUe($data['responsable_ue'] ?? '');
+
+        // Traitement du responsable UE
+        if (!empty($data['responsable_ue'])) {
+            $responsable = $em->getRepository(Utilisateur::class)->find($data['responsable_ue']);
+            if ($responsable) {
+                $cours->setResponsableUe($responsable->getId());
+
+                // Vérifie si le responsable est déjà inscrit comme participant
+                $existing = $em->getRepository(Participant::class)->findOneBy([
+                    'utilisateur' => $responsable,
+                    'cours' => $cours
+                ]);
+                if (!$existing) {
+                    $participant = new Participant();
+                    $participant->setUtilisateur($responsable);
+                    $participant->setCours($cours);
+                    $em->persist($participant);
+                }
+            }
+        }
 
         $em->flush();
 
@@ -149,13 +186,12 @@ class AdminController extends AbstractController
         $user->setRole($data['role']);
         $user->setAdmin($data['isAdmin']);
 
-        // Supprimer les participations existantes
         $participantRepo = $em->getRepository(Participant::class);
         $existingParticipants = $participantRepo->findBy(['utilisateur' => $user]);
         foreach ($existingParticipants as $participant) {
             $em->remove($participant);
         }
-        // Réassigner les nouvelles UEs via Participant
+
         if (!empty($data['ues'])) {
             foreach ($data['ues'] as $ueCode) {
                 $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
@@ -170,7 +206,6 @@ class AdminController extends AbstractController
         $em->flush();
         return new JsonResponse(['success' => true, 'message' => 'Utilisateur mis à jour']);
     }
-
 
     #[Route('/admin/supprimer-utilisateur/{id}', name: 'admin_supprimer_utilisateur', methods: ['POST'])]
     public function supprimerUtilisateur(int $id, EntityManagerInterface $em): JsonResponse
@@ -211,7 +246,6 @@ class AdminController extends AbstractController
                 'email' => $user->getEmail(),
                 'role' => $user->getRole(),
                 'isAdmin' => $user->isAdmin(),
-                // 'ues' => array_map(fn($ue) => $ue->getCode(), $user->getUes()->toArray())
             ]
         ]);
     }

@@ -2,6 +2,10 @@ let editingUECode = null;
 let editingUserId = null;
 let assignedUEs = [];
 
+function escapeStringForJS(str) {
+    return str.replace(/['"\\]/g, '');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const roleSelect = document.getElementById('role');
     const isAdminCheckbox = document.getElementById('isAdmin');
@@ -25,12 +29,17 @@ document.addEventListener('DOMContentLoaded', function () {
     ueForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const code = document.getElementById('ueCode').value.trim();
-        const nom = document.getElementById('ueNom').value.trim();
-        const desc = document.getElementById('ueDesc').value.trim();
+        const nom = escapeStringForJS(document.getElementById('ueNom').value.trim());
+        const desc = escapeStringForJS(document.getElementById('ueDesc').value.trim());
         const respo = document.getElementById('ueRespo').value.trim();
-        const img = document.getElementById('ueImage').value
+        const img = document.getElementById('ueImage').value;
 
         if (!code || !nom) return;
+
+        if (respo === '') {
+            alert("Veuillez sélectionner un responsable pour l'UE.");
+            return;
+        }
 
         const ueData = { code, nom, description: desc, responsable_ue: respo, image: img };
         const url = editingUECode ? '/admin/modifier-ue' : '/admin/ajouter-ue';
@@ -50,13 +59,14 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.hide();
     });
 
+
     // --- Ajouter / Modifier un utilisateur ---
     userForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        const prenom = document.getElementById('prenom').value.trim();
-        const nom = document.getElementById('nom').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
+        const prenom = escapeStringForJS(document.getElementById('prenom').value.trim());
+        const nom = escapeStringForJS(document.getElementById('nom').value.trim());
+        const email = escapeStringForJS(document.getElementById('email').value.trim());
+        const password = escapeStringForJS(document.getElementById('password').value.trim());
         const role = document.getElementById('role').value;
         const isAdmin = document.getElementById('isAdmin').checked;
 
@@ -141,8 +151,6 @@ function editUE(ue = null) {
     }
     modal.show();
 }
-
-
 
 // --- Suppression d’une UE ---
 function deleteUE(code) {

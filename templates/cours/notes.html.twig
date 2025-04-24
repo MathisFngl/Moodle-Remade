@@ -3,9 +3,16 @@
 {% set nav = 'notes' %}
 
 {% block cours_content %}
-    <span class="d-flex justify-content-center mb-3 pt-2">
-    <a href="{{ path('ajouter_note') }}" class="btn btn-primary d-flex align-items-center">
-        <i class="bi bi-plus-lg"></i> Ajouter une note
-    </a>
-</span>
+    <div class="d-flex justify-content-center mb-3 pt-2">
+        <a href="{{ path('ajouter_note', { code: cours.code }) }}" class="btn btn-primary d-flex align-items-center">
+            <i class="bi bi-plus-lg me-2"></i> Ajouter une note
+        </a>
+    </div>
+    {# <ul>
+        {% for note in cours.notes %}
+            <li>{{ note.titre }} - {{ note.note }}</li>
+        {% else %}
+            <li>Aucune note enregistrée</li>
+        {% endfor %}
+    </ul> #}
 {% endblock %}

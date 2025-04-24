@@ -5,29 +5,46 @@
 {% block cours_content %}
     <div class="add">
         <form id="participantForm">
-            <input type="hidden" name="id_cours" id="id_cours" value="{{ cours.id }}"> <!-- Ajout du champ caché pour l'ID du cours -->
+            <input type="hidden" name="id_cours" id="id_cours" value="{{ cours.id }}">
 
             <label for="searchInput"><b>Nouveau participant</b></label>
             <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
-            <input type="hidden" name="id_utilisateur" id="id_utilisateur"> <!-- Champ caché pour l'utilisateur -->
+            <input type="hidden" name="id_utilisateur" id="id_utilisateur">
             <div id="autocomplete-results" class="autocomplete-results"></div>
             <button type="submit" class="add_button">Ajouter</button>
         </form>
     </div>
 
-    <h2>Liste des participants</h2>
-    <ul id="participantList">
+    <h2 class="mt-4 mb-3">Liste des participants</h2>
+
+    <ul id="participantList" class="list-group">
         {% for participant in participants %}
-            {% if participant.getUtilisateur() is not null %}
-                <li>{{ participant.getUtilisateur().getPrenom() }} {{ participant.getUtilisateur().getNom() }}</li>
+            {% if participant.utilisateur is not null %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        {{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}
+
+                        {# Vérifier si l'utilisateur est un professeur #}
+                        {% if participant.utilisateur.role == 'prof' %}
+                            <span class="badge bg-info text-dark ms-2">Professeur</span>
+                        {% endif %}
+
+                        {# Vérifier si l'utilisateur est le responsable de l'UE #}
+                        {% if participant.utilisateur.id == participant.cours.getResponsableUe() %}
+                            <span class="badge bg-warning text-dark ms-2">Responsable de l'UE</span>
+                        {% endif %}
+                    </div>
+                </li>
             {% else %}
-                <li>Participant sans utilisateur</li>
+                <li class="list-group-item text-muted">Participant sans utilisateur</li>
             {% endif %}
         {% else %}
-            <li>Aucun participant inscrit</li>
+            <li class="list-group-item text-center text-muted">Aucun participant inscrit</li>
         {% endfor %}
-
     </ul>
+
+
+
 {% endblock %}
 
 {% block cours_scripts %}

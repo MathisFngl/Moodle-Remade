@@ -49,9 +49,23 @@ class Utilisateur
         return $this->id;
     }
 
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getNom(): ?string
     {
         return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
     }
 
     public function getPrenom(): ?string
@@ -59,9 +73,23 @@ class Utilisateur
         return $this->prenom;
     }
 
+    public function setPrenom(string $prenom): static
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
     public function getEmail(): ?string
     {
         return $this->mail;
+    }
+
+    public function setEmail(string $mail): static
+    {
+        $this->mail = $mail;
+
+        return $this;
     }
 
     public function getMotDePasse(): ?string
@@ -69,9 +97,24 @@ class Utilisateur
         return $this->mot_de_passe;
     }
 
+    public function setMotDePasse(string $mot_de_passe): static
+    {
+        $this->mot_de_passe = $mot_de_passe;
+
+        return $this;
+    }
+
+
     public function getRole(): ?string
     {
         return $this->role;
+    }
+
+    public function setRole(string $role): static
+    {
+        $this->role = $role;
+
+        return $this;
     }
 
     public function isAdmin(): ?bool
@@ -79,9 +122,23 @@ class Utilisateur
         return $this->admin;
     }
 
-    public function getPhoto(): ?string
+    public function setAdmin(bool $admin): static
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getPhoto()
     {
         return $this->photo;
+    }
+
+    public function setPhoto($photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 
     public function getParticipants(): Collection
