@@ -15,9 +15,9 @@ use Doctrine\ORM\EntityManagerInterface;
 class CoursController extends AbstractController
 {
     #[Route('/cours/{code}', name: 'cours_par_code')]
-    public function cours(string $code, EntityManagerInterface $em): Response
+    public function cours(string $code, EntityManagerInterface $entityManager): Response
     {
-        $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $code]);
+        $cours = $entityManager->getRepository(Cours::class)->findOneBy(['code' => $code]);
 
         if (!$cours) {
             throw $this->createNotFoundException('Cours non trouvé');
@@ -28,7 +28,6 @@ class CoursController extends AbstractController
             'nav' => 'cours',
         ]);
     }
-
     #[Route('/cours/{code}/notes', name: 'cours_notes')]
     public function notes(string $code, EntityManagerInterface $em): Response
     {
@@ -79,16 +78,16 @@ class CoursController extends AbstractController
     #[Route('/search_students', name: 'search_students', methods: ['GET'])]
     public function searchStudents(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $query = $request->query->get('q');
+        $query = trim($request->query->get('q', ''));
 
-        if (!$query) {
+        if (empty($query)) {
             return new JsonResponse([], JsonResponse::HTTP_OK);
         }
 
         try {
             $students = $entityManager->getRepository(Utilisateur::class)
                 ->createQueryBuilder('u')
-                ->where('u.nom LIKE :query OR u.prenom LIKE :query')
+                ->where('LOWER(u.nom) LIKE LOWER(:query) OR LOWER(u.prenom) LIKE LOWER(:query)')
                 ->setParameter('query', '%' . $query . '%')
                 ->setMaxResults(10)
                 ->getQuery()
@@ -96,7 +95,7 @@ class CoursController extends AbstractController
 
             return new JsonResponse(array_map(fn($s) => [
                 'id' => $s->getId(),
-                'name' => $s->getPrenom() . ' ' . $s->getNom(),
+                'name' => "{$s->getPrenom()} {$s->getNom()}",
             ], $students), JsonResponse::HTTP_OK);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
@@ -107,27 +106,24 @@ class CoursController extends AbstractController
     public function ajouterParticipant(string $code, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $cours = $entityManager->getRepository(Cours::class)->findOneBy(['code' => $code]);
+
         if (!$cours) {
             return new JsonResponse(["error" => "Cours introuvable"], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data = json_decode($request->getContent(), true);
-        $userId = $data['id_utilisateur'] ?? null;
 
-        if (!$userId) {
+        if (!isset($data['id_utilisateur']) || empty($data['id_utilisateur'])) {
             return new JsonResponse(["error" => "ID utilisateur manquant"], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        $utilisateur = $entityManager->getRepository(Utilisateur::class)->find($userId);
+        $utilisateur = $entityManager->getRepository(Utilisateur::class)->find($data['id_utilisateur']);
 
         if (!$utilisateur) {
             return new JsonResponse(["error" => "Utilisateur introuvable"], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $existingParticipant = $entityManager->getRepository(Participant::class)
-            ->findOneBy(['utilisateur' => $utilisateur, 'cours' => $cours]);
-
-        if ($existingParticipant) {
+        if ($entityManager->getRepository(Participant::class)->findOneBy(['utilisateur' => $utilisateur, 'cours' => $cours])) {
             return new JsonResponse(["error" => "Utilisateur déjà inscrit"], JsonResponse::HTTP_CONFLICT);
         }
 
@@ -137,20 +133,6 @@ class CoursController extends AbstractController
         $entityManager->persist($participant);
         $entityManager->flush();
 
-        return new JsonResponse(["success" => "Utilisateur ajouté avec succès"], JsonResponse::HTTP_OK);
-    }
-
-    #[Route('/cours/{code}/ajouter-participant-page', name: 'new_participant')]
-    public function afficherFormulaireAjout(string $code, EntityManagerInterface $entityManager): Response
-    {
-        $cours = $entityManager->getRepository(Cours::class)->findOneBy(['code' => $code]);
-
-        if (!$cours) {
-            return new Response("Erreur : Aucun cours trouvé", Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->render('cours/ajouter_participant.html.twig', [
-            'cours' => $cours,
-        ]);
+        return new JsonResponse(['success' => 'Utilisateur ajouté avec succès'], JsonResponse::HTTP_OK);
     }
 }
