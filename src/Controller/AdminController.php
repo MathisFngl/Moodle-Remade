@@ -17,28 +17,36 @@ class AdminController extends AbstractController
     #[Route('/admin', name: 'admin_dashboard')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        // Récupérer toutes les UEs et les utilisateurs
         $ues = $entityManager->getRepository(Cours::class)->findAll();
         $users = $entityManager->getRepository(Utilisateur::class)->findAll();
 
         $userUEs = [];
 
+        // Boucle pour récupérer les UEs des utilisateurs
         foreach ($users as $user) {
             $userId = $user->getId();
             $userUEs[$userId] = [];
 
             $participants = $entityManager->getRepository(Participant::class)->findBy(['utilisateur' => $user]);
 
+            // Boucle pour ajouter les UEs associées à chaque utilisateur
             foreach ($participants as $participant) {
-                $userUEs[$userId][] = $participant->getCours()->getCode();
+                $cours = $participant->getCours();
+                if ($cours !== null) {
+                    $userUEs[$userId][] = $cours->getCode();
+                }
             }
         }
 
+        // Retourner la réponse après la fin de la boucle
         return $this->render('admin.html.twig', [
             'ues' => $ues,
             'users' => $users,
             'userUEs' => $userUEs,
         ]);
     }
+
 
     #[Route('/admin/ajouter-ue', name: 'admin_ajouter_ue', methods: ['POST'])]
     public function ajouterUe(Request $request, EntityManagerInterface $em): JsonResponse
