@@ -17,19 +17,22 @@ class AdminController extends AbstractController
     #[Route('/admin', name: 'admin_dashboard')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        // Récupération de toutes les UEs et utilisateurs
         $ues = $entityManager->getRepository(Cours::class)->findAll();
         $users = $entityManager->getRepository(Utilisateur::class)->findAll();
 
-        // Création du tableau pour associer les UEs aux utilisateurs
         $userUEs = [];
+
         foreach ($users as $user) {
             $userId = $user->getId();
             $userUEs[$userId] = [];
 
             $participants = $entityManager->getRepository(Participant::class)->findBy(['utilisateur' => $user]);
+
             foreach ($participants as $participant) {
-                $userUEs[$userId][] = $participant->getCours()->getCode();
+                $cours = $participant->getCours();
+                if ($cours !== null) {
+                    $userUEs[$userId][] = $cours->getCode();
+                }
             }
         }
 

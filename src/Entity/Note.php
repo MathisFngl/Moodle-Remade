@@ -13,11 +13,13 @@ class Note
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_examen = null;
+    #[ORM\ManyToOne(targetEntity: Examen::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Examen $examen = null;
 
-    #[ORM\Column]
-    private ?int $id_utilisateur = null;
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $utilisateur = null;
 
     #[ORM\Column]
     private ?float $note = null;
@@ -27,27 +29,25 @@ class Note
         return $this->id;
     }
 
-    public function getIdExamen(): ?int
+    public function getExamen(): ?Examen
     {
-        return $this->id_examen;
+        return $this->examen;
     }
 
-    public function setIdExamen(int $id_examen): static
+    public function setExamen(?Examen $examen): static
     {
-        $this->id_examen = $id_examen;
-
+        $this->examen = $examen;
         return $this;
     }
 
-    public function getIdUtilisateur(): ?int
+    public function getUtilisateur(): ?Utilisateur
     {
-        return $this->id_utilisateur;
+        return $this->utilisateur;
     }
 
-    public function setIdUtilisateur(int $id_utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
-        $this->id_utilisateur = $id_utilisateur;
-
+        $this->utilisateur = $utilisateur;
         return $this;
     }
 
@@ -59,7 +59,6 @@ class Note
     public function setNote(float $note): static
     {
         $this->note = $note;
-
         return $this;
     }
 }

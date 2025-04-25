@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Entity\Participant;
 use App\Entity\Cours;
+use App\Entity\Examen;
+use App\Entity\Note;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,8 +39,11 @@ class CoursController extends AbstractController
             throw $this->createNotFoundException('Cours non trouvé');
         }
 
+        $participants = $em->getRepository(Participant::class)->findBy(['cours' => $cours]);
+
         return $this->render('cours/notes.html.twig', [
             'cours' => $cours,
+            'participants' => $participants,
             'nav' => 'notes',
         ]);
     }
@@ -52,10 +57,81 @@ class CoursController extends AbstractController
             throw $this->createNotFoundException('Cours non trouvé');
         }
 
+        $participants = $em->getRepository(Participant::class)->findBy(['cours' => $cours]);
+
         return $this->render('cours/ajouter_note.html.twig', [
             'cours' => $cours,
+            'participants' => $participants,
         ]);
     }
+    #[Route('/cours/{code}/notes/enregistrer', name: 'enregistrer_notes', methods: ['POST'])]
+    public function enregistrerNotes(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['idExamen']) || !isset($data['notes'])) {
+            return new JsonResponse(['error' => 'Données manquantes'], 400);
+        }
+
+        $examen = $em->getRepository(Examen::class)->find($data['idExamen']);
+        if (!$examen) {
+            return new JsonResponse(['error' => 'Examen introuvable'], 404);
+        }
+
+        foreach ($data['notes'] as $noteData) {
+            $utilisateur = $em->getRepository(Utilisateur::class)->find($noteData['idUtilisateur']);
+            if (!$utilisateur) continue;
+
+            $note = new Note();
+            $note->setExamen($examen);
+            $note->setUtilisateur($utilisateur);
+            $note->setNote((float) $noteData['note']);
+
+            $em->persist($note);
+        }
+
+        $em->flush();
+
+        return new JsonResponse(['success' => true, 'message' => 'Toutes les notes ont été enregistrées.']);
+    }
+    #[Route('/examen/creer', name: 'creer_examen', methods: ['POST'])]
+    public function creerExamen(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+
+            if (!isset($data['nom'], $data['bareme'], $data['codeCours'])) {
+                return new JsonResponse(['error' => 'Données incomplètes'], 400);
+            }
+
+            $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $data['codeCours']]);
+
+            if (!$cours) {
+                return new JsonResponse(['error' => 'Cours introuvable'], 404);
+            }
+
+            $examen = new Examen();
+            $examen->setTitre($data['nom']);
+            $examen->setBareme((float) $data['bareme']);
+            $examen->setCours($cours); // Assure-toi que cette méthode existe
+
+            $em->persist($examen);
+            $em->flush();
+
+            return new JsonResponse(['idExamen' => $examen->getId()], 201);
+
+        } catch (\Throwable $e) {
+            return new JsonResponse(['error' => 'Erreur interne : ' . $e->getMessage()], 500);
+        }
+    }
+
+
+
+
+
+
+
+
 
     #[Route('/cours/{code}/participants', name: 'cours_participants')]
     public function participants(string $code, EntityManagerInterface $entityManager): Response

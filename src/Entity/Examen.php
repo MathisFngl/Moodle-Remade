@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\ExamenRepository;
@@ -9,103 +8,84 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ExamenRepository::class)]
 class Examen
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+#[ORM\Id]
+#[ORM\GeneratedValue]
+#[ORM\Column]
+private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_cours = null;
+#[ORM\ManyToOne(targetEntity: Cours::class)]
+#[ORM\JoinColumn(name: "code_cours", referencedColumnName: "code", onDelete: "CASCADE")]
+private ?Cours $cours = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+#[ORM\Column(length: 255)]
+private ?string $titre = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+#[ORM\Column(type: Types::TEXT, nullable: true)]
+private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $coeff = null;
+#[ORM\Column(nullable: true)]
+private ?int $coeff = null;
 
-    #[ORM\Column]
-    private ?int $id_examen = null;
+#[ORM\Column(nullable: false)]
+private ?int $bareme = null;
 
-    #[ORM\Column]
-    private ?int $bareme = null;
+public function getId(): ?int
+{
+return $this->id;
+}
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+public function getCours(): ?Cours
+{
+return $this->cours;
+}
 
-    public function getIdCours(): ?int
-    {
-        return $this->id_cours;
-    }
+public function setCours(?Cours $cours): static
+{
+$this->cours = $cours;
+return $this;
+}
 
-    public function setIdCours(int $id_cours): static
-    {
-        $this->id_cours = $id_cours;
+public function getTitre(): ?string
+{
+return $this->titre;
+}
 
-        return $this;
-    }
+public function setTitre(string $titre): static
+{
+$this->titre = $titre;
+return $this;
+}
 
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
+public function getDescription(): ?string
+{
+return $this->description;
+}
 
-    public function setTitre(string $titre): static
-    {
-        $this->titre = $titre;
+public function setDescription(?string $description): static
+{
+$this->description = $description;
+return $this;
+}
 
-        return $this;
-    }
+public function getCoeff(): ?int
+{
+return $this->coeff;
+}
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+public function setCoeff(?int $coeff): static
+{
+$this->coeff = $coeff;
+return $this;
+}
 
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
+public function getBareme(): ?int
+{
+return $this->bareme;
+}
 
-        return $this;
-    }
-
-    public function getCoeff(): ?int
-    {
-        return $this->coeff;
-    }
-
-    public function setCoeff(int $coeff): static
-    {
-        $this->coeff = $coeff;
-
-        return $this;
-    }
-
-    public function getIdExamen(): ?int
-    {
-        return $this->id_examen;
-    }
-
-    public function setIdExamen(int $id_examen): static
-    {
-        $this->id_examen = $id_examen;
-
-        return $this;
-    }
-
-    public function getBareme(): ?int
-    {
-        return $this->bareme;
-    }
-
-    public function setBareme(int $bareme): static
-    {
-        $this->bareme = $bareme;
-
-        return $this;
-    }
+public function setBareme(int $bareme): static
+{
+$this->bareme = $bareme;
+return $this;
+}
 }

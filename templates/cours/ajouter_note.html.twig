@@ -1,5 +1,4 @@
 {% extends 'cours/base_cours.html.twig' %}
-
 {% set nav = 'notes' %}
 
 {% block cours_content %}
@@ -15,7 +14,7 @@
         <input type="number" id="maxGrade" placeholder="Entrez le barème" min="1">
     </div>
 
-    <table>
+    <table class="table">
         <thead>
         <tr>
             <th>Nom</th>
@@ -23,26 +22,24 @@
             <th>Note</th>
         </tr>
         </thead>
-        <tbody id="studentTable">
-        <tr>
-            <td>Gomez</td>
-            <td>Esteban</td>
-            <td><input type="number" class="gradeInput" min="0"></td>
-        </tr>
-        <tr>
-            <td>Dupont</td>
-            <td>Marie</td>
-            <td><input type="number" class="gradeInput" min="0"></td>
-        </tr>
-        <tr>
-            <td>Martin</td>
-            <td>Paul</td>
-            <td><input type="number" class="gradeInput" min="0"></td>
-        </tr>
+        <tbody>
+        {% for participant in participants %}
+            <tr>
+                <td>{{ participant.utilisateur.nom }}</td>
+                <td>{{ participant.utilisateur.prenom }}</td>
+                <td>
+                    <input type="number" class="gradeInput" min="0" data-user-id="{{ participant.utilisateur.id }}">
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">Aucun participant inscrit</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 
-    <button id="saveNotes">Enregistrer les Notes</button>
+    <button id="saveNotes" data-code="{{ cours.code }}">Enregistrer les Notes</button>
 {% endblock %}
 
 {% block stylesheets %}
