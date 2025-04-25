@@ -33,8 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const nom = document.getElementById('ueNom').value.trim();
         const desc = document.getElementById('ueDesc').value.trim();
         const respo = document.getElementById('ueRespo').value.trim();
-        const imageInput = document.getElementById('ueImage');
-        const imageFile = imageInput.files[0];
 
         if (!code || !nom) return;
 
@@ -43,31 +41,38 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('code', code);
-        formData.append('nom', nom);
-        formData.append('description', desc);
-        formData.append('responsable_ue', respo);
-
-        if (imageFile) {
-            formData.append('image', imageFile);
-        }
+        const data = {
+            code: code,
+            nom: nom,
+            description: desc,
+            responsable_ue: respo
+        };
 
         const url = editingUECode ? '/admin/modifier-ue' : '/admin/ajouter-ue';
 
         fetch(url, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
         })
             .then(res => res.json())
             .then(data => {
-                if (data.success) location.reload();
-                else alert(data.message || "Erreur lors de l'enregistrement de l'UE.");
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message || "Erreur lors de l'enregistrement de l'UE.");
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
             });
 
         const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('ueModal'));
         modal.hide();
     });
+
 
     // --- Ajouter / Modifier un utilisateur ---
     userForm.addEventListener('submit', function (e) {

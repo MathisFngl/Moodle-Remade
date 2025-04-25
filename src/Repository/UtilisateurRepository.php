@@ -40,15 +40,4 @@ class UtilisateurRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-
-    public function countByRole(string $role): int
-    {
-        return $this->createQueryBuilder('u')
-            ->select('COUNT(u.id)')
-            ->where('u.role = :role')
-            ->setParameter('role', $role)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
 }

@@ -64,38 +64,46 @@ class AdminController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/admin/ajouter-ue', name: 'admin_ajouter_ue', methods: ['POST'])]
     public function ajouterUe(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
+        // Validation: check for required fields
+        if (!isset($data['code']) || !isset($data['nom']) || !isset($data['responsable_ue'])) {
+            return new JsonResponse(['success' => false, 'message' => 'Données manquantes (code, nom, ou responsable_ue)']);
+        }
+
+        // Create new Cours entity and set its properties
         $cours = new Cours();
         $cours->setCode($data['code']);
         $cours->setNom($data['nom']);
-        $cours->setDescription($data['description'] ?? '');
+        $cours->setDescription($data['description'] ?? ''); // Default to empty string if description is not provided
 
-        // Traitement du responsable UE
+        // Handle responsible user
         if (!empty($data['responsable_ue'])) {
             $responsable = $em->getRepository(Utilisateur::class)->find($data['responsable_ue']);
             if ($responsable) {
                 $cours->setResponsableUe($responsable->getId());
 
-                // Vérifie si le responsable est déjà inscrit comme participant
+                // Check if the responsible user is already a participant in this course
                 $existing = $em->getRepository(Participant::class)->findOneBy([
                     'utilisateur' => $responsable,
                     'cours' => $cours
                 ]);
+
                 if (!$existing) {
                     $participant = new Participant();
                     $participant->setUtilisateur($responsable);
                     $participant->setCours($cours);
                     $em->persist($participant);
                 }
+            } else {
+                return new JsonResponse(['success' => false, 'message' => 'Responsable non trouvé']);
             }
         }
 
+        // Persist the course entity
         $em->persist($cours);
         $em->flush();
 
@@ -106,37 +114,47 @@ class AdminController extends AbstractController
     public function modifierUe(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
+        // Validation: check if the code is provided
+        if (!isset($data['code'])) {
+            return new JsonResponse(['success' => false, 'message' => 'Code de l\'UE manquant']);
+        }
+
         $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $data['code']]);
 
         if (!$cours) {
             return new JsonResponse(['success' => false, 'message' => 'UE non trouvée']);
         }
 
-        $cours->setCode($data['code']);
-        $cours->setNom($data['nom']);
-        $cours->setDescription($data['description'] ?? '');
-        $cours->setImage($data['image'] ?? null);
+        // Update course data
+        $cours->setNom($data['nom'] ?? $cours->getNom()); // Keep existing name if not provided
+        $cours->setDescription($data['description'] ?? $cours->getDescription()); // Keep existing description if not provided
+        $cours->setImage($data['image'] ?? $cours->getImage()); // Optional image field
 
-        // Traitement du responsable UE
+        // Handle responsible user update
         if (!empty($data['responsable_ue'])) {
             $responsable = $em->getRepository(Utilisateur::class)->find($data['responsable_ue']);
             if ($responsable) {
                 $cours->setResponsableUe($responsable->getId());
 
-                // Vérifie si le responsable est déjà inscrit comme participant
+                // Check if the responsible user is already a participant in this course
                 $existing = $em->getRepository(Participant::class)->findOneBy([
                     'utilisateur' => $responsable,
                     'cours' => $cours
                 ]);
+
                 if (!$existing) {
                     $participant = new Participant();
                     $participant->setUtilisateur($responsable);
                     $participant->setCours($cours);
                     $em->persist($participant);
                 }
+            } else {
+                return new JsonResponse(['success' => false, 'message' => 'Responsable non trouvé']);
             }
         }
 
+        // Persist the changes
         $em->flush();
 
         return new JsonResponse(['success' => true, 'message' => 'UE mise à jour']);
