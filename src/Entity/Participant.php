@@ -20,7 +20,7 @@ class Participant
     private ?Utilisateur $utilisateur = null;  // 🔥 Correction de la relation
 
     #[ORM\ManyToOne(targetEntity: Cours::class)]
-    #[ORM\JoinColumn(name: "id_cours", referencedColumnName: "id", onDelete: "CASCADE")]
+    #[ORM\JoinColumn(name: "code_cours", referencedColumnName: "code", onDelete: "CASCADE")]
     private ?Cours $cours = null;  // 🔥 Correction de la relation
 
     public function getId(): ?int
