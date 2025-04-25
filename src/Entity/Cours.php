@@ -3,35 +3,40 @@
 namespace App\Entity;
 
 use App\Repository\CoursRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 class Cours
 {
     #[ORM\Id]
-    #[ORM\Column(length: 4)]
-    private ?string $code = null;  // 🔥 Code devient la clé primaire
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
+    #[ORM\Column(length: 4)]
+    private ?string $code = null;
+
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $image = null;
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $image;
 
     #[ORM\Column]
     private ?int $responsable_ue = null;
 
-    public function getCode(): ?string
+    public function getId(): ?int
     {
-        return $this->code;
+        return $this->id;
     }
 
-    public function setCode(string $code): static
+    public function setId(int $id): static
     {
-        $this->code = $code;
+        $this->id = $id;
         return $this;
     }
 
@@ -43,6 +48,19 @@ class Cours
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
+
         return $this;
     }
 
@@ -54,17 +72,19 @@ class Cours
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(?string $image): static
+    public function setImage($image): static
     {
         $this->image = $image;
+
         return $this;
     }
 
@@ -76,6 +96,7 @@ class Cours
     public function setResponsableUe(int $responsable_ue): static
     {
         $this->responsable_ue = $responsable_ue;
+
         return $this;
     }
 }

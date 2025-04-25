@@ -17,17 +17,18 @@ class Participant
 
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
     #[ORM\JoinColumn(name: "id_utilisateur", referencedColumnName: "id", onDelete: "CASCADE")]
-    private ?Utilisateur $utilisateur = null;
+    private ?Utilisateur $utilisateur = null;  // 🔥 Correction de la relation
 
     #[ORM\ManyToOne(targetEntity: Cours::class)]
-    #[ORM\JoinColumn(name: "code_cours", referencedColumnName: "code", onDelete: "CASCADE")] // 🔥 Corrigé pour pointer vers `code`
-    private ?Cours $cours = null;
+    #[ORM\JoinColumn(name: "id_cours", referencedColumnName: "id", onDelete: "CASCADE")]
+    private ?Cours $cours = null;  // 🔥 Correction de la relation
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    // ✅ Getter et setter pour `Utilisateur`
     public function getUtilisateur(): ?Utilisateur
     {
         return $this->utilisateur;
@@ -39,6 +40,7 @@ class Participant
         return $this;
     }
 
+    // ✅ Getter et setter pour `Cours`
     public function getCours(): ?Cours
     {
         return $this->cours;

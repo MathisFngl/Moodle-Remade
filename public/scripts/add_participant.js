@@ -5,10 +5,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const resultContainer = document.querySelector("#autocomplete-results");
     const form = document.querySelector("#participantForm");
     const hiddenInput = document.querySelector("#id_utilisateur");
-    const hiddenCodeCoursInput = document.querySelector("#code_cours");
+    const hiddenCoursInput = document.querySelector("#id_cours");
     const participantList = document.querySelector("#participantList");
 
-    if (!input || !resultContainer || !form || !hiddenInput || !hiddenCodeCoursInput || !participantList) {
+
+    // Vérifier si tous les éléments existent
+    if (!input || !resultContainer || !form || !hiddenInput || !hiddenCoursInput || !participantList) {
         console.error("❌ Erreur : Certains éléments du DOM sont introuvables.");
         return;
     }
@@ -54,22 +56,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     form.addEventListener("submit", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Empêche le rechargement de la page
 
         const utilisateurId = hiddenInput.value;
-        const coursCode = hiddenCodeCoursInput.value.trim();
+        const coursId = hiddenCoursInput.value.trim();
 
-        if (!utilisateurId || !coursCode) {
+        if (!utilisateurId || !coursId) {
             alert("⚠️ Veuillez sélectionner un utilisateur et un cours avant d'ajouter !");
             return;
         }
 
-        console.log("📤 Données envoyées :", { id_utilisateur: utilisateurId, code_cours: coursCode });
+        console.log("📤 Données envoyées :", { id_utilisateur: utilisateurId, id_cours: coursId });
 
-        fetch(`/cours/${coursCode}/ajouter-participant`, {
+        fetch(`/cours/cours/ajouter-participant`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id_utilisateur: utilisateurId, code_cours: coursCode })
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id_utilisateur: utilisateurId, id_cours: coursId })
         })
             .then(response => {
                 console.log("🔍 Statut HTTP :", response.status);
@@ -84,7 +88,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 alert("🎉 Utilisateur ajouté avec succès !");
-                location.reload();
+
+                let newParticipant = document.createElement("li");
+                newParticipant.textContent = input.value;
+                participantList.appendChild(newParticipant);
+
+                input.value = "";
+                hiddenInput.value = "";
             })
             .catch(error => {
                 console.error("❌ Erreur lors de l'ajout :", error);

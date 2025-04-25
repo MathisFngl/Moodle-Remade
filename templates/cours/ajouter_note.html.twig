@@ -24,6 +24,7 @@
         </thead>
         <tbody>
         {% for participant in participants %}
+            {% if participant.utilisateur.role == "etudiant" %}
             <tr>
                 <td>{{ participant.utilisateur.nom }}</td>
                 <td>{{ participant.utilisateur.prenom }}</td>
@@ -31,6 +32,7 @@
                     <input type="number" class="gradeInput" min="0" data-user-id="{{ participant.utilisateur.id }}">
                 </td>
             </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="3" class="text-center text-muted">Aucun participant inscrit</td>
