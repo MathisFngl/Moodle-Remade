@@ -94,14 +94,24 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+        return array_unique($roles);
     }
+
 
     public function setRoles(array $roles): static
     {
+        if (count($roles) === 1 && str_contains($roles[0], ',')) {
+            $roles = explode(',', $roles[0]);
+        }
+
         $this->roles = $roles;
         return $this;
     }
+
 
     public function getRoleByIndex(int $index = 0): string
     {
