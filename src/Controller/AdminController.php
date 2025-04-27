@@ -186,14 +186,30 @@ class AdminController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+
+        if (!$data || !isset($data['prenom'], $data['nom'], $data['email'], $data['password'], $data['role'])) {
+            return new JsonResponse(['success' => false, 'message' => 'Données manquantes'], 400);
+        }
+
         $utilisateur = new Utilisateur();
         $utilisateur->setPrenom($data['prenom']);
         $utilisateur->setNom($data['nom']);
         $utilisateur->setEmail($data['email']);
-        $utilisateur->setMotDePasse($data['password']);
-        $utilisateur->setRole($data['role']);
-        $utilisateur->setAdmin($data['isAdmin']);
+        $utilisateur->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT)); // 🔒 Sécurisation du mot de passe
 
+        // ✅ Assurer l’ordre des rôles
+        $roles = [];
+        if (in_array($data['role'], ['Etudiant', 'Professeur'])) {
+            $roles[] = $data['role'];
+        }
+        if (!empty($data['isAdmin']) && $data['isAdmin']) {
+            $roles[] = 'admin';
+        }
+
+        $utilisateur->setRoles($roles); // 🚀 Utiliser setRoles() correctement
+        $utilisateur->setAdmin(false); // Toujours false comme demandé
+
+        // 🔹 Ajouter les UEs
         if (!empty($data['ues'])) {
             foreach ($data['ues'] as $ueCode) {
                 $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
@@ -205,6 +221,7 @@ class AdminController extends AbstractController
                 }
             }
         }
+
         $em->persist($utilisateur);
         $em->flush();
 
