@@ -30,7 +30,7 @@
                     <select class="form-select" id="ueRespo">
                         <option value="">Sélectionner un responsable</option>
                         {% for user in users %}
-                            {% if user.role == 'prof' %}
+                            {% if user.getRoleByIndex(0) == 'Professeur' %}
                                 <option value="{{ user.id }}">{{ user.prenom }} {{ user.nom }}</option>
                             {% endif %}
                         {% endfor %}

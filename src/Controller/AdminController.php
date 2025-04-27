@@ -288,7 +288,7 @@ class AdminController extends AbstractController
                 'prenom' => $user->getPrenom(),
                 'nom' => $user->getNom(),
                 'email' => $user->getEmail(),
-                'role' => $user->getRole(),
+                'role' => $user->getRoleByIndex(0),
                 'isAdmin' => $user->isAdmin(),
             ]
         ]);

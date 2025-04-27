@@ -45,7 +45,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setId(int $id): static
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -57,7 +56,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -69,7 +67,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -81,7 +78,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $mail): static
     {
         $this->mail = $mail;
-
         return $this;
     }
 
@@ -93,20 +89,23 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMotDePasse(string $mot_de_passe): static
     {
         $this->mot_de_passe = $mot_de_passe;
-
         return $this;
     }
-
 
     public function getRoles(): array
     {
         return $this->roles;
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles): static
     {
         $this->roles = $roles;
         return $this;
+    }
+
+    public function getRoleByIndex(int $index = 0): string
+    {
+        return $this->roles[$index] ?? 'ROLE_USER';
     }
 
     public function isAdmin(): ?bool
@@ -117,7 +116,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdmin(bool $admin): static
     {
         $this->admin = $admin;
-
         return $this;
     }
 
@@ -129,7 +127,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoto($photo): static
     {
         $this->photo = $photo;
-
         return $this;
     }
 
@@ -137,8 +134,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->mot_de_passe;
     }
-
-
 
     public function eraseCredentials(): void
     {
