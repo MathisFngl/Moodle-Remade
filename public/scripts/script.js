@@ -1,5 +1,5 @@
 function togglePwd() {
-    var passwordField = document.getElementById("password");
+    var passwordField = document.getElementById("inputPassword");
     var toggleBtn = document.getElementById("togglePassword");
 
     if (passwordField.type === "password") {
