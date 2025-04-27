@@ -86,7 +86,7 @@
                                 <td>{{ user.nom }}</td>
                                 <td>{{ user.prenom }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.role }}</td>
+                                <td>{{ user.roles }}</td>
                                 <td>{{ user.admin ? 'Oui' : 'Non' }}</td>
                                 <td>
                                     {% for ueCode in userUEs[user.id]|default([]) %}

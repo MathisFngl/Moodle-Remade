@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,22 +28,14 @@ class Utilisateur
     #[ORM\Column(length: 255)]
     private ?string $mot_de_passe = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     #[ORM\Column]
     private ?bool $admin = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?string $photo = null;
-
-    #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: "utilisateur", cascade: ["persist", "remove"])]
-    private Collection $participants; // ✅ Ajout de la relation
-
-    public function __construct()
-    {
-        $this->participants = new ArrayCollection();
-    }
+    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    private $photo;
 
     public function getId(): ?int
     {
@@ -105,15 +98,14 @@ class Utilisateur
     }
 
 
-    public function getRole(): ?string
+    public function getRoles(): array
     {
-        return $this->role;
+        return $this->roles;
     }
 
-    public function setRole(string $role): static
+    public function setRoles(array $roles): self
     {
-        $this->role = $role;
-
+        $this->roles = $roles;
         return $this;
     }
 
@@ -141,27 +133,20 @@ class Utilisateur
         return $this;
     }
 
-    public function getParticipants(): Collection
+    public function getPassword(): ?string
     {
-        return $this->participants;
+        return $this->mot_de_passe;
     }
 
-    public function addParticipant(Participant $participant): static
+
+
+    public function eraseCredentials(): void
     {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-            $participant->setUtilisateur($this);
-        }
-        return $this;
+        // TODO: Implement eraseCredentials() method.
     }
 
-    public function removeParticipant(Participant $participant): static
+    public function getUserIdentifier(): string
     {
-        if ($this->participants->removeElement($participant)) {
-            if ($participant->getUtilisateur() === $this) {
-                $participant->setUtilisateur(null);
-            }
-        }
-        return $this;
+        return $this->mail;
     }
 }
