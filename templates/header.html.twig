@@ -44,7 +44,9 @@
     </div>
 
     <div class="right">
-        <a class="normal_padding" href="{{ path('admin_dashboard', {}, false) }}"><i class="fa fa-cubes"></i> Admin</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="normal_padding" href="{{ path('admin_dashboard', {}, false) }}"><i class="fa fa-cubes"></i> Admin</a>
+        {% endif %}
         <a class="normal_padding" href="#notifications"><i class="fa fa-bell"></i></a>
         <a class="normal_padding" id="openChat"><i class="fa fa-comments"></i> Messagerie</a>
         <a class="normal_padding" href="{{ path('profil', {}, false) }}"><i class="fa fa-user"></i> Profil</a>
