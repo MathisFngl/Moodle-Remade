@@ -40,4 +40,14 @@ class ParticipantRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByUtilisateur($user)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.utilisateur', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
 }

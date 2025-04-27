@@ -17,19 +17,45 @@
 
     <div class="sections">
         <div class="section">
-            <h2>Cours consultés récemment</h2>
+            <h2>Cours disponibles</h2>
             <ul id="recent-courses">
-                <li><a href="#">SY43 - Android Development</a></li>
-                <li><a href="#">WE4A - Technologie et programmation WEB</a></li>
-                <li><a href="#">IT44 - Analyse Numérique</a></li>
-                <li><a href="#">WE4B - Technologie WEB avancées</a></li>
+                {% for cour in cours %}
+                    <li><a href="/cours/{{cour.code}}" style="text-decoration : none; color: black">{{ cour.nom }} - {{ cour.code }}</a></li>
+                {% else %}
+                    <li>Aucun cours a afficher.</li>
+                {% endfor %}
             </ul>
         </div>
 
         <div class="section">
-            <h2>Cours favoris</h2>
-            <p id="favorites">Aucun cours marqué comme favori</p>
+            <h2>Messages récents</h2>
+            <div class="messages">
+                {% for cour in cours %}
+                    <div class="course-messages">
+                        {% if messages[cour.code] is not empty %}
+                            <ul>
+                                {% for message in messages[cour.code] %}
+                                    <li>
+                                        <a href="/cours/{{ cour.code }}" style="text-decoration : none; color: black">
+                                            {% if message.important %}
+                                                <span class="text-warning">⚠️</span>
+                                            {% endif %}
+                                            <strong>{{ cour.code }} - {{ message.title }} - </strong>
+                                            {{ message.timestamp|date('d/m/Y H:i') }}<br>
+                                            {{ message.content|slice(0, 100) }}...
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>Aucun message récent.</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
+
+
     </div>
 
     <div class="calendar-container">

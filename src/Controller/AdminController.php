@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cours;
+use App\Entity\Message;
 use App\Entity\Participant;
 use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
@@ -164,11 +165,18 @@ class AdminController extends AbstractController
     public function supprimerUe(string $code, EntityManagerInterface $em): JsonResponse
     {
         $ue = $em->getRepository(Cours::class)->findOneBy(['code' => $code]);
-
         if (!$ue) {
             return new JsonResponse(['success' => false, 'message' => 'UE non trouvée']);
         }
 
+        // MESSAGE DELETION
+        $messageRepo = $em->getRepository(Message::class);
+        $messages = $messageRepo->findBy(['cours_code' => $ue->getCode()]);
+        foreach ($messages as $message) {
+            $em->remove($message);
+        }
+
+        // PARTICIPANTS DELETION
         $participantRepo = $em->getRepository(Participant::class);
         $existingParticipants = $participantRepo->findBy(['cours' => $ue]);
         foreach ($existingParticipants as $participant) {
@@ -178,8 +186,9 @@ class AdminController extends AbstractController
         $em->remove($ue);
         $em->flush();
 
-        return new JsonResponse(['success' => true, 'message' => 'UE supprimée']);
+        return new JsonResponse(['success' => true, 'message' => 'UE et ses messages supprimés']);
     }
+
 
     #[Route('/admin/ajouter-utilisateur', name: 'admin_ajouter_utilisateur', methods: ['POST'])]
     public function ajouterUtilisateur(Request $request, EntityManagerInterface $em): JsonResponse
