@@ -6,7 +6,7 @@
 
 {% block cours_content %}
     <div class="d-flex justify-content-center mb-3 pt-2">
-        <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-backdrop="false">
+        <button class="btn btn-primary d-flex" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-backdrop="false">
             <i class="bi bi-plus-lg me-2"></i> Ajouter un message
         </button>
     </div>
@@ -14,6 +14,55 @@
     <div id="addedElementsContainer" style="display: none;"></div>
 
     {% include 'cours/modal_message.html.twig' %}
+
+    {% if messages is not empty %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message card mb-3 {% if message.important %}bg-warning{% endif %}">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            {% if message.file %}
+                                <i class="bi bi-file-earmark me-2" style="font-size: 1.5rem;" title="Message with file"></i>
+                            {% else %}
+                                <i class="bi bi-envelope-fill me-2" style="font-size: 1.5rem;" title="Message"></i>
+                            {% endif %}
+                            <h5 class="card-title mb-0">{{ message.title }}</h5>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <small class="text-muted me-3">{{ message.timestamp|date('d/m/Y H:i') }}</small>
+
+                            <div class="ms-auto">
+                                <button class="btn btn-warning btn-mm btn-edit-message"
+                                        data-id="{{ message.id }}"
+                                        data-title="{{ message.title|e('html_attr') }}"
+                                        data-content="{{ message.content|e('html_attr') }}"
+                                        data-file="{% if message.file %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+                                <button class="btn btn-danger btn-mm btn-delete-message" data-id="{{ message.id }}" title="Delete Message">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-text">{{ message.content }}</p>
+
+                    {% if message.file %}
+                        <div class="mt-3">
+                            <a href="{{ asset('uploads/messages/' ~ message.file) }}" class="btn btn-success" download>
+                                <i class="bi bi-download me-2"></i> Télécharger le fichier
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun message disponible pour ce cours.</p>
+    {% endif %}
+
 {% endblock %}
 
 {% block javascripts %}

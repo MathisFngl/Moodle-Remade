@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\Utilisateur;
 use App\Entity\Participant;
 use App\Entity\Cours;
@@ -25,8 +26,14 @@ class CoursController extends AbstractController
             throw $this->createNotFoundException('Cours non trouvé');
         }
 
+        $messages = $em->getRepository(Message::class)->findBy(
+            ['cours_code' => $code],
+            ['timestamp' => 'DESC']
+        );
+
         return $this->render('cours/cours.html.twig', [
             'cours' => $cours,
+            'messages' => $messages,
             'nav' => 'cours',
         ]);
     }
@@ -229,4 +236,49 @@ class CoursController extends AbstractController
             'cours' => $cours,
         ]);
     }
+
+
+
+
+
+    #[Route('/delete-message/{id}', name: 'delete_message', methods: ['DELETE'])]
+    public function deleteMessage(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $message = $em->getRepository(Message::class)->find($id);
+
+        if (!$message) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Message not found'], 404);
+        }
+
+        $em->remove($message);
+        $em->flush();
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Message deleted successfully']);
+    }
+
+    #[Route('/update-message/{id}', name: 'update_message', methods: ['PUT'])]
+    public function updateMessage(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $message = $em->getRepository(Message::class)->find($id);
+
+        if (!$message) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Message not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['title'])) {
+            $message->setTitle($data['title']);
+        }
+        if (isset($data['content'])) {
+            $message->setContent($data['content']);
+        }
+
+        $em->flush();
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Message updated successfully']);
+    }
 }
+
+
+
