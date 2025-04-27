@@ -1,6 +1,6 @@
 {# templates/dashboard/dashboard.html.twig #}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,12 +17,10 @@
 
     <div class="sections">
         <div class="section">
-            <h2>Cours disponibles</h2>
+            <h2>Cours consultés récemment</h2>
             <ul id="recent-courses">
                 {% for cour in cours %}
-                    <li><a href="/cours/{{cour.code}}" style="text-decoration : none; color: black">{{ cour.nom }} - {{ cour.code }}</a></li>
-                {% else %}
-                    <li>Aucun cours a afficher.</li>
+                    <li><a href="/cours/{{ cour.code }}">{{ cour.nom }} - {{ cour.code }}</a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -32,17 +30,30 @@
             <div class="messages">
                 {% for cour in cours %}
                     <div class="course-messages">
+                        <h4>{{ cour.nom }} - {{ cour.code }}</h4>
                         {% if messages[cour.code] is not empty %}
                             <ul>
                                 {% for message in messages[cour.code] %}
                                     <li>
-                                        <a href="/cours/{{ cour.code }}" style="text-decoration : none; color: black">
+                                        <a href="/cours/{{ cour.code }}" style="text-decoration: none; color: black">
                                             {% if message.important %}
                                                 <span class="text-warning">⚠️</span>
                                             {% endif %}
-                                            <strong>{{ cour.code }} - {{ message.title }} - </strong>
+                                            <strong>{{ message.author_name }} a posté un
+                                                {% if message.file is not null %}
+                                                    fichier
+                                                {% else %}
+                                                    message
+                                                {% endif %}
+                                            </strong> -
+
                                             {{ message.timestamp|date('d/m/Y H:i') }}<br>
-                                            {{ message.content|slice(0, 100) }}...
+
+                                            {% if message.file is not null %}
+                                                {{ message.file|slice(0, 100) }}...
+                                            {% else %}
+                                                {{ message.content|slice(0, 100) }}...
+                                            {% endif %}
                                         </a>
                                     </li>
                                 {% endfor %}
@@ -54,11 +65,9 @@
                 {% endfor %}
             </div>
         </div>
-
-
     </div>
 
-    <div class="calendar-container">
+<div class="calendar-container">
         <div class="calendar-header">
             <h2>Calendrier - <span id="current-date"></span></h2>
         </div>

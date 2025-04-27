@@ -204,9 +204,8 @@ class AdminController extends AbstractController
         $utilisateur->setPrenom($data['prenom']);
         $utilisateur->setNom($data['nom']);
         $utilisateur->setEmail($data['email']);
-        $utilisateur->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT)); // 🔒 Sécurisation du mot de passe
+        $utilisateur->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT));
 
-        // ✅ Assurer l’ordre des rôles
         $roles = [];
         if (in_array($data['role'], ['Etudiant', 'Professeur'])) {
             $roles[] = $data['role'];
