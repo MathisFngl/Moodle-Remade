@@ -28,12 +28,12 @@
                 <form id="profile-form" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="nouveau_nom" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="nouveau_nom" name="nouveau_nom" value="{{ user.nom }}" required>
+                        <input type="text" class="form-control" id="nouveau_nom" name="nouveau_nom" value="{{ app.user.nom }}" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="nouveau_prenom" class="form-label">Prénom</label>
-                        <input type="text" class="form-control" id="nouveau_prenom" name="nouveau_prenom" value="{{ user.prenom }}" required>
+                        <input type="text" class="form-control" id="nouveau_prenom" name="nouveau_prenom" value="{{ app.user.prenom }}" required>
                     </div>
 
                     <hr>
@@ -59,7 +59,7 @@
                     </div>
                 </form>
 
-                <p class="mt-3 text-muted text-center">Votre email est : <strong>{{ user.email }}</strong></p>
+                <p class="mt-3 text-muted text-center">Votre email est : <strong>{{ app.user.email }}</strong></p>
                 <p class="text-muted text-center">Les UE sont attribuées par les administrateurs.</p>
 
                 <div class="mt-5"></div>
