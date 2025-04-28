@@ -20,10 +20,41 @@ class CoursController extends AbstractController
     #[Route('/cours/{code}', name: 'cours_par_code')]
     public function cours(string $code, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $code]);
 
         if (!$cours) {
-            throw $this->createNotFoundException('Cours non trouvé');
+            $admins = $em->getRepository(Utilisateur::class)->createQueryBuilder('u')
+                ->where('u.roles LIKE :role')
+                ->setParameter('role', '%ROLE_ADMIN%')
+                ->getQuery()
+                ->getResult();
+
+            return $this->render('cours/non-autorise.html.twig', [
+                'admins' => $admins,
+            ]);
+        }
+
+        $participant = $em->getRepository(Participant::class)->findOneBy([
+            'cours' => $cours,
+            'utilisateur' => $user,
+        ]);
+
+        if (!$participant) {
+            $admins = $em->getRepository(Utilisateur::class)->createQueryBuilder('u')
+                ->where('u.roles LIKE :role')
+                ->setParameter('role', '%ROLE_ADMIN%')
+                ->getQuery()
+                ->getResult();
+
+            return $this->render('cours/non-autorise.html.twig', [
+                'admins' => $admins,
+            ]);
         }
 
         $messages = $em->getRepository(Message::class)->findBy(
@@ -37,6 +68,8 @@ class CoursController extends AbstractController
             'nav' => 'cours',
         ]);
     }
+
+
 
     #[Route('/cours/{code}/notes', name: 'cours_notes')]
     public function notes(string $code, EntityManagerInterface $em): Response

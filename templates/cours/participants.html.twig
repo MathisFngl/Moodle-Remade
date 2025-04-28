@@ -3,10 +3,11 @@
 {% set nav = 'participants' %}
 
 {% block cours_content %}
+
+    {% if is_granted('ROLE_PROFESSEUR') %}
     <div class="add mb-4">
         <form id="participantForm">
             <input type="hidden" name="code_cours" id="code_cours" value="{{ cours.code }}">
-
             <label for="searchInput"><b>Nouveau participant</b></label>
             <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
             <input type="hidden" name="id_utilisateur" id="id_utilisateur">
@@ -15,6 +16,7 @@
             <button type="submit" class="add_button">Ajouter</button>
         </form>
     </div>
+    {% endif %}
 
     <div class="row">
         <div class="col-md-6">
