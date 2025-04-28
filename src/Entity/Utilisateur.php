@@ -31,8 +31,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    #[ORM\Column]
-    private ?bool $admin = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $photo;
@@ -120,12 +118,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): ?bool
     {
-        return $this->admin;
+        return $this->ROLE_ADMIN;
     }
 
     public function setAdmin(bool $admin): static
     {
-        $this->admin = $admin;
+        $this->ROLE_ADMIN = $admin;
         return $this;
     }
 

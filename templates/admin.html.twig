@@ -75,7 +75,6 @@
                             <th>Prénom</th>
                             <th>Email</th>
                             <th>Rôle</th>
-                            <th>Admin</th>
                             <th>UEs</th>
                             <th>Actions</th>
                         </tr>
@@ -86,8 +85,20 @@
                                 <td>{{ user.nom }}</td>
                                 <td>{{ user.prenom }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.roles|join(', ') }}</td>
-                                <td>{{ user.admin ? 'Oui' : 'Non' }}</td>
+                                <td>
+                                    {% set roleLabels = [] %}
+                                    {% for role in user.roles %}
+                                        {% if role == 'ROLE_ELEVE' %}
+                                            {% set roleLabels = roleLabels|merge(['Étudiant']) %}
+                                        {% elseif role == 'ROLE_PROFESSEUR' %}
+                                            {% set roleLabels = roleLabels|merge(['Professeur']) %}
+                                        {% elseif role == 'ROLE_ADMIN' %}
+                                            {% set roleLabels = roleLabels|merge(['Administrateur']) %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {{ roleLabels|join(', ') }}
+                                </td>
+
                                 <td>
                                     {% for ueCode in userUEs[user.id]|default([]) %}
                                         <span class="badge bg-secondary me-2">{{ ueCode }}</span>
@@ -95,7 +106,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" onclick='editUser({{ { id: user.id, prenom: user.prenom, nom: user.nom, email: user.email, role: user.roles|join(', ')
-                                    , admin: user.admin, ues: userUEs[user.id] }|json_encode|raw }})'>Modifier</button>
+                                    , ues: userUEs[user.id] }|json_encode|raw }})'>Modifier</button>
                                     <button class="btn btn-danger btn-sm" onclick="deleteUser({{ user.id }})">Supprimer</button>
                                 </td>
                             </tr>

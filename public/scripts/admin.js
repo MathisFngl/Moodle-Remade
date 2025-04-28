@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Rôle & Admin checkbox ---
     roleSelect.addEventListener('change', function () {
-        if (this.value === 'admin') {
+        if (this.value === 'ROLE_ADMIN') {
             isAdminCheckbox.checked = true;
             isAdminCheckbox.disabled = true;
-        } else if (this.value === 'étudiant') {
+        } else if (this.value === 'ROLE_ELEVE') {
             isAdminCheckbox.checked = false;
             isAdminCheckbox.disabled = true;
-        } else if (this.value === 'prof') {
+        } else if (this.value === 'ROLE_PROFESSEUR') {
             isAdminCheckbox.disabled = false;
         }
     });
@@ -81,12 +81,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const nom = escapeStringForJS(document.getElementById('nom').value.trim());
         const email = escapeStringForJS(document.getElementById('email').value.trim());
         const password = escapeStringForJS(document.getElementById('password').value.trim());
-        const role = document.getElementById('role').value;
+
+        const selectedRole = document.getElementById('role').value;
         const isAdmin = document.getElementById('isAdmin').checked;
+
+        let roles = [];
+
+        if (selectedRole === 'ROLE_ELEVE') {
+            roles.push('ROLE_ELEVE');
+        } else if (selectedRole === 'ROLE_PROFESSEUR') {
+            roles.push('ROLE_PROFESSEUR');
+        }
+
+        if (isAdmin && !roles.includes('ROLE_ADMIN')) {
+            roles.push('ROLE_ADMIN');
+        }
 
         const userData = {
             id: editingUserId,
-            prenom, nom, email, password, role, isAdmin,
+            prenom,
+            nom,
+            email,
+            password,
+            roles, // <- Attention ici : ROLES (pluriel)
+            isAdmin,
             ues: assignedUEs
         };
 
@@ -106,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('userModal'));
         modal.hide();
     });
+
 
     // --- Sélection des UEs (badges) ---
     document.getElementById('ueSelect').addEventListener('change', function () {

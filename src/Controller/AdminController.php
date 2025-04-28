@@ -195,9 +195,9 @@ class AdminController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-
-        if (!$data || !isset($data['prenom'], $data['nom'], $data['email'], $data['password'], $data['role'])) {
-            return new JsonResponse(['success' => false, 'message' => 'Données manquantes'], 400);
+        // Vérification des données reçues
+        if (!$data || !isset($data['prenom'], $data['nom'], $data['email'], $data['password'], $data['roles']) || !is_array($data['roles'])) {
+            return new JsonResponse(['success' => false, 'message' => 'Données manquantes ou format invalide.'], 400);
         }
 
         $utilisateur = new Utilisateur();
@@ -206,19 +206,14 @@ class AdminController extends AbstractController
         $utilisateur->setEmail($data['email']);
         $utilisateur->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT));
 
-        $roles = [];
-        if (in_array($data['role'], ['Etudiant', 'Professeur'])) {
-            $roles[] = $data['role'];
-        }
-        if (!empty($data['isAdmin']) && $data['isAdmin']) {
-            $roles[] = 'admin';
-        }
+        // Affecter les rôles (liste)
+        $utilisateur->setRoles($data['roles']);
 
-        $utilisateur->setRoles($roles); // 🚀 Utiliser setRoles() correctement
-        $utilisateur->setAdmin(false); // Toujours false comme demandé
+        // isAdmin: tu veux forcer à false ici
+        $utilisateur->setAdmin(false);
 
-        // 🔹 Ajouter les UEs
-        if (!empty($data['ues'])) {
+        // Traitement des UEs si fournis
+        if (!empty($data['ues']) && is_array($data['ues'])) {
             foreach ($data['ues'] as $ueCode) {
                 $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
                 if ($cours) {
@@ -236,32 +231,44 @@ class AdminController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'Utilisateur ajouté']);
     }
 
+
     #[Route('/admin/modifier-utilisateur', name: 'admin_modifier_utilisateur', methods: ['POST'])]
     public function modifierUtilisateur(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $user = $em->getRepository(Utilisateur::class)->find($data['id']);
 
+        if (!$data || !isset($data['id'], $data['prenom'], $data['nom'], $data['email'], $data['roles']) || !is_array($data['roles'])) {
+            return new JsonResponse(['success' => false, 'message' => 'Données manquantes ou format invalide.'], 400);
+        }
+
+        $user = $em->getRepository(Utilisateur::class)->find($data['id']);
         if (!$user) {
-            return new JsonResponse(['success' => false, 'message' => 'Utilisateur non trouvé']);
+            return new JsonResponse(['success' => false, 'message' => 'Utilisateur non trouvé'], 404);
         }
 
         $user->setPrenom($data['prenom']);
         $user->setNom($data['nom']);
         $user->setEmail($data['email']);
-        if (!empty($data['password'])) {
-            $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));
-        }
-        $user->setRole($data['role']);
-        $user->setAdmin($data['isAdmin']);
 
+        if (!empty($data['password'])) {
+            $user->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT)); // 🚀 Correction ici
+        }
+
+        // Affecter les rôles directement
+        $user->setRoles($data['roles']);
+
+        // Toujours forcer Admin false si c'est ta logique
+        $user->setAdmin(false);
+
+        // Supprimer les participations existantes
         $participantRepo = $em->getRepository(Participant::class);
         $existingParticipants = $participantRepo->findBy(['utilisateur' => $user]);
         foreach ($existingParticipants as $participant) {
             $em->remove($participant);
         }
 
-        if (!empty($data['ues'])) {
+        // Ajouter les nouvelles participations
+        if (!empty($data['ues']) && is_array($data['ues'])) {
             foreach ($data['ues'] as $ueCode) {
                 $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
                 if ($cours) {
@@ -272,9 +279,12 @@ class AdminController extends AbstractController
                 }
             }
         }
+
         $em->flush();
+
         return new JsonResponse(['success' => true, 'message' => 'Utilisateur mis à jour']);
     }
+
 
     #[Route('/admin/supprimer-utilisateur/{id}', name: 'admin_supprimer_utilisateur', methods: ['POST'])]
     public function supprimerUtilisateur(int $id, EntityManagerInterface $em): JsonResponse

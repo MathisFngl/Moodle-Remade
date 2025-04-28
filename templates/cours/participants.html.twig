@@ -22,7 +22,7 @@
             <ul id="participantList" class="list-group">
                 {% for participant in participants %}
                     {% if participant.utilisateur is not null %}
-                        {% if participant.utilisateur.getRoleByIndex(0) == 'Etudiant' %}
+                        {% if participant.utilisateur.getRoleByIndex(0) == 'ROLE_ELEVE' %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     {{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}
@@ -42,7 +42,7 @@
             <h2 class="mt-4 mb-3">Professeurs</h2>
             <ul id="profList" class="list-group">
                 {% for participant in participants %}
-                    {% if participant.utilisateur is not null and participant.utilisateur.getRoleByIndex(0) == 'Professeur' %}
+                    {% if participant.utilisateur is not null and participant.utilisateur.getRoleByIndex(0) == 'ROLE_PROFESSEUR' %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong>{{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}</strong>
@@ -56,7 +56,7 @@
                         </li>
                     {% endif %}
                 {% endfor %}
-                {% if participants|filter(p => p.utilisateur is not null and p.utilisateur.getRoleByIndex(0) == 'Professeur') is empty %}
+                {% if participants|filter(p => p.utilisateur is not null and p.utilisateur.getRoleByIndex(0) == 'ROLE_PROFESSEUR') is empty %}
                     <li class="list-group-item text-center text-muted">Aucun professeur inscrit</li>
                 {% endif %}
             </ul>
