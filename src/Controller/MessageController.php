@@ -5,13 +5,14 @@ namespace App\Controller;
 use App\Entity\Message;
 use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class MessageController
+class MessageController extends AbstractController
 {
     #[Route('/create-message', name: 'create_message', methods: ['POST'])]
     public function createMessage(Request $request, EntityManagerInterface $em)
