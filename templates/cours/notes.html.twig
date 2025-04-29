@@ -30,10 +30,7 @@
                 <td>{{ exam.max }}</td>
                 <td>
                     <button class="btn btn-danger" onclick="supprimerExamen({{ exam.id }})">Supprimer</button>
-                    <form action="{{ path('modifier_page_examen', { id: exam.id }) }}" method="POST">
-                        <input type="hidden" name="_method" value="PUT">
-                        <button type="submit" class="btn btn-warning">Modifier</button>
-                    </form>
+                    <a href="{{ path('modifier_page_examen', { id: exam.id }) }}" class="btn btn-warning">Modifier</a>
 
                 </td>
             </tr>

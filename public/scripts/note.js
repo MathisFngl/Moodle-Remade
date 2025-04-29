@@ -104,35 +104,4 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Erreur :", error));
     }
-
-    // Modifier un examen
-    window.modifierExamen = function (examId) {
-        const nouvellesNotes = [];
-
-        document.querySelectorAll(`.gradeInput[data-exam-id="${examId}"]`).forEach(input => {
-            nouvellesNotes.push({
-                idNote: input.dataset.noteId,
-                note: parseFloat(input.value)
-            });
-        });
-
-        fetch(`/examen/${examId}/modifier`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest" // Parfois nécessaire
-            },
-            body: JSON.stringify({ notes: nouvellesNotes })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.success);
-                    location.reload();
-                } else {
-                    alert(data.error);
-                }
-            })
-            .catch(error => console.error("Erreur :", error));
-    }
 });

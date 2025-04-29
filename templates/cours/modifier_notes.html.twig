@@ -1,0 +1,60 @@
+{% extends 'cours/base_cours.html.twig' %}
+{% set nav = 'notes' %}
+
+{% block cours_content %}
+    <h2>Modifier les notes pour l'examen : {{ examen.titre }}</h2>
+
+    <form id="updateNotesForm">
+        <input type="hidden" id="examenId" value="{{ examen.id }}">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Étudiant</th>
+                <th>Note</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for note in notes %}
+                <tr>
+                    <td>{{ note.utilisateur.prenom }} {{ note.utilisateur.nom }}</td>
+                    <td>
+                        <input type="number" class="form-control gradeInput" data-note-id="{{ note.id }}" value="{{ note.note }}">
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <button type="button" id="updateNotesBtn" class="btn btn-success">Mettre à jour</button>
+    </form>
+{% endblock %}
+
+{% block cours_scripts %}
+    <script>
+        document.getElementById("updateNotesBtn").addEventListener("click", function () {
+            const examenId = document.getElementById("examenId").value;
+            const notes = [];
+
+            document.querySelectorAll(".gradeInput").forEach(input => {
+                notes.push({
+                    idNote: input.dataset.noteId,
+                    nouvelleNote: input.value
+                });
+            });
+
+            fetch(`/examen/${examenId}/update-notes`, {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ notes: notes })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.success || data.error);
+                    if (data.success) {
+                        location.href = "{{ path('cours_notes', { code: cours.code }) }}";
+                    }
+                });
+        });
+    </script>
+{% endblock %}

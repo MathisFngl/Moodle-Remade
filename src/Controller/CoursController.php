@@ -358,8 +358,8 @@ class CoursController extends AbstractController
 
         return new JsonResponse(['success' => 'Examen supprimé avec succès']);
     }
-    #[Route('/examen/{id}/modifier', name: 'modifier_page_examen', methods: ['POST','PUT'])]
-    public function modifierExamen(int $id, Request $request, EntityManagerInterface $em): Response
+    #[Route('/examen/{id}/modifier', name: 'modifier_page_examen', methods: ['GET'])]
+    public function modifierPageExamen(int $id, EntityManagerInterface $em): Response
     {
         $examen = $em->getRepository(Examen::class)->find($id);
 
@@ -367,32 +367,38 @@ class CoursController extends AbstractController
             throw $this->createNotFoundException('Examen introuvable');
         }
 
-        $data = $request->request;
+        $cours = $examen->getCours(); // Assure-toi que Examen::getCours() existe
 
-        $titre = $data->get('titre');
-        $bareme = $data->get('bareme');
+        $notes = $em->getRepository(Note::class)->findBy(['examen' => $examen]);
 
-        if ($titre !== null) {
-            $examen->setTitre($titre);
+        return $this->render('cours/modifier_notes.html.twig', [
+            'cours' => $cours,
+            'examen' => $examen,
+            'notes' => $notes
+        ]);
+    }
+    #[Route('/examen/{id}/update-notes', name: 'update_notes_examen', methods: ['PUT'])]
+    public function updateNotes(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $examen = $em->getRepository(Examen::class)->find($id);
+
+        if (!$examen) {
+            return new JsonResponse(['error' => 'Examen non trouvé'], 404);
         }
-        if ($bareme !== null) {
-            $examen->setBareme((float)$bareme);
-        }
 
-        // Mettre à jour les notes
-        foreach ($data->all() as $key => $value) {
-            if (str_starts_with($key, 'note_')) {
-                $noteId = (int) str_replace('note_', '', $key);
-                $note = $em->getRepository(Note::class)->find($noteId);
-
-                if ($note) {
-                    $note->setNote((float) $value);
-                }
+        foreach ($data['notes'] as $noteData) {
+            $note = $em->getRepository(Note::class)->find($noteData['idNote']);
+            if ($note && $note->getExamen()->getId() === $id) {
+                $note->setNote((float)$noteData['nouvelleNote']);
+                $em->persist($note);
             }
         }
 
         $em->flush();
 
-        return $this->redirectToRoute('cours_notes', ['code' => $examen->getCours()->getCode()]);
+        return new JsonResponse(['success' => 'Notes mises à jour avec succès.']);
     }
+
+
 }
