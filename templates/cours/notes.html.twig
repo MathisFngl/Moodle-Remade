@@ -1,18 +1,48 @@
 {% extends 'cours/base_cours.html.twig' %}
-
 {% set nav = 'notes' %}
-
 {% block cours_content %}
     <div class="d-flex justify-content-center mb-3 pt-2">
         <a href="{{ path('ajouter_note', { code: cours.code }) }}" class="btn btn-primary d-flex align-items-center">
             <i class="bi bi-plus-lg me-2"></i> Ajouter une note
         </a>
     </div>
-    {# <ul>
-        {% for note in cours.notes %}
-            <li>{{ note.titre }} - {{ note.note }}</li>
-        {% else %}
-            <li>Aucune note enregistrée</li>
+
+    <h2>Examens du cours</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nom de l'examen</th>
+            <th>Barème</th>
+            <th>Moyenne</th>
+            <th>Note minimale</th>
+            <th>Note maximale</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for exam in examStats %}
+            <tr>
+                <td>{{ exam.nom }}</td>
+                <td>{{ exam.bareme }}</td>
+                <td>{{ exam.moyenne }}</td>
+                <td>{{ exam.min }}</td>
+                <td>{{ exam.max }}</td>
+                <td>
+                    <button class="btn btn-danger" onclick="supprimerExamen({{ exam.id }})">Supprimer</button>
+                    <form action="{{ path('modifier_page_examen', { id: exam.id }) }}" method="POST">
+                        <input type="hidden" name="_method" value="PUT">
+                        <button type="submit" class="btn btn-warning">Modifier</button>
+                    </form>
+
+                </td>
+            </tr>
         {% endfor %}
-    </ul> #}
+        </tbody>
+    </table>
+
 {% endblock %}
+{% block cours_scripts %}
+    <script src="{{ asset('scripts/note.js') }}"></script>
+{% endblock %}
+

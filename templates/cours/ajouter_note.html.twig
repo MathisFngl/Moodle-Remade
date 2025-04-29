@@ -24,7 +24,7 @@
         </thead>
         <tbody>
         {% for participant in participants %}
-            {% if participant.utilisateur.getRoleByIndex == "Etudiant" %}
+            {% if participant.utilisateur.getRoleByIndex == "ROLE_ELEVE" %}
             <tr>
                 <td>{{ participant.utilisateur.nom }}</td>
                 <td>{{ participant.utilisateur.prenom }}</td>

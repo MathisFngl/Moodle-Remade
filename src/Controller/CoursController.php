@@ -20,10 +20,41 @@ class CoursController extends AbstractController
     #[Route('/cours/{code}', name: 'cours_par_code')]
     public function cours(string $code, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $code]);
 
         if (!$cours) {
-            throw $this->createNotFoundException('Cours non trouvé');
+            $admins = $em->getRepository(Utilisateur::class)->createQueryBuilder('u')
+                ->where('u.roles LIKE :role')
+                ->setParameter('role', '%ROLE_ADMIN%')
+                ->getQuery()
+                ->getResult();
+
+            return $this->render('cours/non-autorise.html.twig', [
+                'admins' => $admins,
+            ]);
+        }
+
+        $participant = $em->getRepository(Participant::class)->findOneBy([
+            'cours' => $cours,
+            'utilisateur' => $user,
+        ]);
+
+        if (!$participant) {
+            $admins = $em->getRepository(Utilisateur::class)->createQueryBuilder('u')
+                ->where('u.roles LIKE :role')
+                ->setParameter('role', '%ROLE_ADMIN%')
+                ->getQuery()
+                ->getResult();
+
+            return $this->render('cours/non-autorise.html.twig', [
+                'admins' => $admins,
+            ]);
         }
 
         $messages = $em->getRepository(Message::class)->findBy(
@@ -38,6 +69,8 @@ class CoursController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/cours/{code}/notes', name: 'cours_notes')]
     public function notes(string $code, EntityManagerInterface $em): Response
     {
@@ -47,11 +80,36 @@ class CoursController extends AbstractController
             throw $this->createNotFoundException('Cours non trouvé');
         }
 
-        $participants = $em->getRepository(Participant::class)->findBy(['cours' => $cours]);
+        $examens = $em->getRepository(Examen::class)->findBy(['cours' => $cours]);
+        $examStats = [];
+
+        foreach ($examens as $examen) {
+            $notes = $em->getRepository(Note::class)->findBy(['examen' => $examen]);
+
+            if (!empty($notes)) {
+                $values = array_map(fn($note) => $note->getNote(), $notes);
+                $examStats[$examen->getId()] = [
+                    'id' => $examen->getId(),
+                    'nom' => $examen->getTitre(),
+                    'bareme' => $examen->getBareme(),
+                    'moyenne' => array_sum($values) / count($values),
+                    'min' => min($values),
+                    'max' => max($values)
+                ];
+            } else {
+                $examStats[$examen->getId()] = [
+                    'nom' => $examen->getTitre(),
+                    'bareme' => $examen->getBareme(),
+                    'moyenne' => 'N/A',
+                    'min' => 'N/A',
+                    'max' => 'N/A'
+                ];
+            }
+        }
 
         return $this->render('cours/notes.html.twig', [
             'cours' => $cours,
-            'participants' => $participants,
+            'examStats' => $examStats,
             'nav' => 'notes',
         ]);
     }
@@ -278,7 +336,63 @@ class CoursController extends AbstractController
 
         return new JsonResponse(['status' => 'success', 'message' => 'Message updated successfully']);
     }
+    #[Route('/examen/{id}/supprimer', name: 'supprimer_examen', methods: ['DELETE'])]
+    public function supprimerExamen(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $examen = $em->getRepository(Examen::class)->find($id);
+
+        if (!$examen) {
+            return new JsonResponse(['error' => 'Examen introuvable'], 404);
+        }
+
+        // Supprimer toutes les notes liées
+        $notes = $em->getRepository(Note::class)->findBy(['examen' => $examen]);
+
+        foreach ($notes as $note) {
+            $em->remove($note);
+        }
+
+        // Supprimer l'examen
+        $em->remove($examen);
+        $em->flush();
+
+        return new JsonResponse(['success' => 'Examen supprimé avec succès']);
+    }
+    #[Route('/examen/{id}/modifier', name: 'modifier_page_examen', methods: ['POST','PUT'])]
+    public function modifierExamen(int $id, Request $request, EntityManagerInterface $em): Response
+    {
+        $examen = $em->getRepository(Examen::class)->find($id);
+
+        if (!$examen) {
+            throw $this->createNotFoundException('Examen introuvable');
+        }
+
+        $data = $request->request;
+
+        $titre = $data->get('titre');
+        $bareme = $data->get('bareme');
+
+        if ($titre !== null) {
+            $examen->setTitre($titre);
+        }
+        if ($bareme !== null) {
+            $examen->setBareme((float)$bareme);
+        }
+
+        // Mettre à jour les notes
+        foreach ($data->all() as $key => $value) {
+            if (str_starts_with($key, 'note_')) {
+                $noteId = (int) str_replace('note_', '', $key);
+                $note = $em->getRepository(Note::class)->find($noteId);
+
+                if ($note) {
+                    $note->setNote((float) $value);
+                }
+            }
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('cours_notes', ['code' => $examen->getCours()->getCode()]);
+    }
 }
-
-
-
