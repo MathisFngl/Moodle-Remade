@@ -45,16 +45,17 @@ class MessageController extends AbstractController
         }
 
         /** @var UploadedFile $file */
-        $filename = uniqid();
-        $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/files/' . $filename;
+        $originalExtension = $file->guessExtension() ?? 'bin';
+        $filename = uniqid() . '.' . $originalExtension;
 
-        $file->move($this->getParameter('kernel.project_dir') . '/public/uploads/files/', $filename);
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/messages/';
+        $file->move($uploadDir, $filename);
 
         $message = new Message();
         $message->setCoursCode($coursCode)
             ->setTitle($fileTitle)
             ->setContent($fileDescription)
-            ->setFile($filename)
+            ->setFile($filename) // Enregistrement du nom du fichier
             ->setImportant(false)
             ->setAuthor($user->getId());
 

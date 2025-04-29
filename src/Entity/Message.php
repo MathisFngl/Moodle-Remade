@@ -26,7 +26,7 @@ class Message
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private $file = null;
 
     #[ORM\Column]

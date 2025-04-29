@@ -104,15 +104,29 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
-            .then(data => {
+            .then(async response => {
+                const contentType = response.headers.get('content-type');
+
+                if (!response.ok) {
+                    const errorText = contentType && contentType.includes('application/json')
+                        ? await response.json()
+                        : await response.text();
+
+                    console.error('Erreur serveur:', errorText);
+                    alert('Erreur côté serveur: ' + (errorText.message || 'voir console'));
+                    return;
+                }
+
+                const data = await response.json();
                 const modal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
                 modal.hide();
                 location.reload();
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Erreur JS:', error);
+                alert('Erreur JavaScript: ' + error.message);
             });
+
     });
 
     // Delete message
