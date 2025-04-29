@@ -31,7 +31,7 @@
             {% if is_granted('ROLE_PROFESSEUR') %} <a href="{{ path('cours_notes', { code: cours.code }) }}" class="{% if nav == 'notes' %}current{% endif %}">Notes</a> {% endif%}
         </div>
 
-        {% if is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_PROFESSEUR') %}
             {% block cours_content %}{% endblock %}
         {% endif %}
     </div>
