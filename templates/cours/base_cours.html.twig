@@ -28,7 +28,7 @@
         <div class="cours_nav">
             <a href="{{ path('cours_par_code', { code: cours.code }) }}" class="{% if nav == 'cours' %}current{% endif %}">Cours</a>
             <a href="{{ path('cours_participants', { code: cours.code }) }}" class="{% if nav == 'participants' %}current{% endif %}">Participants</a>
-            <a href="{{ path('cours_notes', { code: cours.code }) }}" class="{% if nav == 'notes' %}current{% endif %}">Notes</a>
+            {% if is_granted('ROLE_PROFESSEUR') %} <a href="{{ path('cours_notes', { code: cours.code }) }}" class="{% if nav == 'notes' %}current{% endif %}">Notes</a> {% endif%}
         </div>
 
         {% block cours_content %}{% endblock %}

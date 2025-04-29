@@ -15,21 +15,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class MessageController extends AbstractController
 {
     #[Route('/create-message', name: 'create_message', methods: ['POST'])]
-    public function createMessage(Request $request, EntityManagerInterface $em)
+    public function createMessage(Request $request, EntityManagerInterface $em, UserInterface $user): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
-        $user = $em->getRepository(Utilisateur::class)->find($data['author']);
-        if (!$user) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Invalid author ID'], 400);
-        }
 
         $message = new Message();
         $message->setCoursCode($data['coursCode']);
         $message->setTitle($data['title']);
         $message->setContent($data['content']);
         $message->setImportant($data['important']);
-        $message->setAuthor($data['author']);
+        $message->setAuthor($user->getId());
 
         $em->persist($message);
         $em->flush();
@@ -50,7 +45,7 @@ class MessageController extends AbstractController
         }
 
         /** @var UploadedFile $file */
-        $filename = uniqid() . '.' . $file->guessExtension();
+        $filename = uniqid();
         $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/files/' . $filename;
 
         $file->move($this->getParameter('kernel.project_dir') . '/public/uploads/files/', $filename);
