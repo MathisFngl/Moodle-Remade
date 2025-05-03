@@ -27,8 +27,8 @@ class SecurityController extends AbstractController
             'error' => $error,
             'nb_uv' => $coursRepository->count([]),
             'nb_utilisateurs' => $utilisateurRepository->count([]),
-            'nb_etudiants' => $utilisateurRepository->countByRole('Etudiant'),
-            'nb_profs' => $utilisateurRepository->countByRole('Professeur'),
+            'nb_etudiants' => $utilisateurRepository->countByRole('ROLE_ETUDIANT'),
+            'nb_profs' => $utilisateurRepository->countByRole('ROLE_PROFESSEUR'),
         ]);
     }
 
