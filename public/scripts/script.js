@@ -3,12 +3,12 @@ function togglePwd() {
     var toggleBtn = document.getElementById("togglePassword");
 
     if (passwordField.type === "password") {
-        passwordField.type = "text"; // Show password
-        toggleBtn.innerHTML = '<i class="fas fa-eye"></i>'; // Eye with slash icon
+        passwordField.type = "text"; // mot de passe visible
+        toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
         console.log("Password is now visible.");
     } else {
-        passwordField.type = "password"; // Hide password
-        toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>'; // Eye icon
+        passwordField.type = "password"; // invisible
+        toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
         console.log("Password is now hidden.");
     }
 }

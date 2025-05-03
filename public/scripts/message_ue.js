@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('tabMessage').classList.remove('active');
     });
 
-    // Handle Message form submission (create or edit)
     document.getElementById('formMessage').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -26,12 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const messageTitle = document.getElementById('messageTitle').value;
         const messageContent = document.getElementById('messageContent').value;
         const isImportant = messageType === 'Important';
-        const author = 1; // Example author ID
+        const author = 1; // Par défaut (jamais sensé rester ainsi)
 
         const editId = this.getAttribute('data-edit-id');
 
         if (editId) {
-            // Edit existing message
             fetch(`/update-message/${editId}`, {
                 method: 'PUT',
                 headers: {
@@ -56,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Error:', error);
                 });
         } else {
-            // Create new message
+            // creer un message
             fetch('/create-message', {
                 method: 'POST',
                 headers: {
@@ -82,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Handle file form submission
+    // Form de fichier
     document.getElementById('formFile').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -129,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-    // Delete message
+    // Supprimer un message
     document.querySelectorAll('.btn-delete-message').forEach(button => {
         button.addEventListener('click', function () {
             const messageId = this.dataset.id;
@@ -149,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-// Edit message
+// Editer un message (gérer les champs grisés ou non : fastidieux)
     document.querySelectorAll('.btn-edit-message').forEach(button => {
         button.addEventListener('click', function () {
             const messageId = this.dataset.id;
@@ -182,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('formFile').classList.add('d-none');
                 document.getElementById('formMessage').setAttribute('data-edit-id', messageId);
             }
-
             modal.show();
         });
     });
@@ -194,6 +191,4 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('tabMessage').classList.remove('disabled');
         document.getElementById('tabFile').classList.remove('disabled');
     });
-
-
 });

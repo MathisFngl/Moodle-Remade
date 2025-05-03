@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('description', desc);
         formData.append('responsable_ue', respo);
 
-        // Append the image if there is one
+        // Append l'image si il y en a une
         if (image) {
             formData.append('image', image);
         }
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fetch(url, {
             method: 'POST',
-            body: formData,  // Send the FormData
+            body: formData,
         })
             .then(res => res.json())
             .then(data => {
@@ -120,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(url, {
             method: 'POST',
             body: formData
-            // PAS DE Content-Type ici → le navigateur le gère automatiquement
         })
             .then(res => res.json())
             .then(data => {

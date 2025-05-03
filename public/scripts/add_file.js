@@ -69,19 +69,18 @@ document.addEventListener("DOMContentLoaded", function () {
             const icon = document.createElement("img");
             icon.src =
                 messageType === "Important"
-                    ? "images/Important.png" // Icône pour les messages importants
-                    : "images/Information.png"; // Icône pour les messages d'information
+                    ? "images/Important.png"
+                    : "images/Information.png";
             icon.alt = messageType === "Important" ? "Important Icon" : "Information Icon";
             icon.classList.add("icon");
 
             const title = document.createElement("span");
-            title.textContent = messageTitle; // Affiche uniquement le titre
+            title.textContent = messageTitle;
 
             const date = document.createElement("div");
             date.classList.add("date");
-            date.textContent = getCurrentDateTime(); // Ajoute la date et l'heure
+            date.textContent = getCurrentDateTime();
 
-            // Ajout du comportement au clic : afficher le message complet
             newElement.onclick = function () {
                 alert(`Type: ${messageType}\nTitre: ${messageTitle}\nMessage: ${messageContent}`);
             };
@@ -105,22 +104,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const fileUpload = document.getElementById("fileUpload").files[0];
 
         if (fileTitle && fileDescription && fileUpload) {
-            const newElement = document.createElement("a"); // Utilisation d'un lien pour le téléchargement
+            const newElement = document.createElement("a");
             newElement.classList.add("element");
-            newElement.href = URL.createObjectURL(fileUpload); // Crée une URL pour le fichier
-            newElement.download = fileUpload.name; // Nom du fichier pour le téléchargement
+            newElement.href = URL.createObjectURL(fileUpload);
+            newElement.download = fileUpload.name;
 
             const icon = document.createElement("img");
-            icon.src = "images/pdf.png"; // Icône pour un fichier
+            icon.src = "images/pdf.png";
             icon.alt = "File Icon";
             icon.classList.add("icon");
 
             const titleAndDescription = document.createElement("span");
-            titleAndDescription.textContent = `${fileTitle} - ${fileDescription}`; // Affiche le titre et la description séparés par " - "
+            titleAndDescription.textContent = `${fileTitle} - ${fileDescription}`;
 
             const date = document.createElement("div");
             date.classList.add("date");
-            date.textContent = getCurrentDateTime(); // Ajoute la date et l'heure
+            date.textContent = getCurrentDateTime();
 
             newElement.appendChild(icon);
             newElement.appendChild(titleAndDescription);

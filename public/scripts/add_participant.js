@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const participantList = document.querySelector("#participantList");
 
     if (!input || !resultContainer || !form || !hiddenInput || !hiddenCodeCoursInput || !participantList) {
-        console.error("❌ Erreur : Certains éléments du DOM sont introuvables.");
+        console.error("Erreur : Certains éléments du DOM sont introuvables.");
         return;
     }
 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(`/search_students?q=${query}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("✅ Données reçues :", data);
+                    console.log("Données reçues :", data);
                     resultContainer.innerHTML = "";
 
                     if (data.length === 0) {
@@ -60,11 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const coursCode = hiddenCodeCoursInput.value.trim();
 
         if (!utilisateurId || !coursCode) {
-            alert("⚠️ Veuillez sélectionner un utilisateur et un cours avant d'ajouter !");
+            alert("Veuillez sélectionner un utilisateur et un cours avant d'ajouter !");
             return;
         }
 
-        console.log("📤 Données envoyées :", { id_utilisateur: utilisateurId, code_cours: coursCode });
+        console.log("Données envoyées :", { id_utilisateur: utilisateurId, code_cours: coursCode });
 
         fetch(`/cours/${coursCode}/ajouter-participant`, {
             method: "POST",
@@ -83,12 +83,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                alert("🎉 Utilisateur ajouté avec succès !");
+                alert("Utilisateur ajouté avec succès !");
                 location.reload();
             })
             .catch(error => {
-                console.error("❌ Erreur lors de l'ajout :", error);
-                alert("⚠️ Erreur lors de l'ajout du participant.");
+                console.error("Erreur lors de l'ajout :", error);
+                alert("Erreur lors de l'ajout du participant.");
             });
     });
 });
