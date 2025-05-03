@@ -19,6 +19,16 @@ class MessageController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        $query = $em->createQuery(
+            'SELECT c FROM App\Entity\Cours c WHERE c.code = :code'
+        )->setParameter('code', $data['coursCode']);
+
+        $cours = $query->getOneOrNullResult();
+
+        if (!$cours) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Cours introuvable'], 404);
+        }
+
         $message = new Message();
         $message->setCoursCode($data['coursCode']);
         $message->setTitle($data['title']);
@@ -50,6 +60,16 @@ class MessageController extends AbstractController
 
         $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/messages/';
         $file->move($uploadDir, $filename);
+
+        $query = $em->createQuery(
+            'SELECT c FROM App\Entity\Cours c WHERE c.code = :code'
+        )->setParameter('code', $coursCode);
+
+        $cours = $query->getOneOrNullResult();
+
+        if (!$cours) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Cours introuvable'], 404);
+        }
 
         $message = new Message();
         $message->setCoursCode($coursCode)

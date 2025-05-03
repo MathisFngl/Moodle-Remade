@@ -18,48 +18,55 @@ class AdminController extends AbstractController
     #[Route('/admin', name: 'admin_dashboard')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $ues = $entityManager->getRepository(Cours::class)->findAll();
-        $users = $entityManager->getRepository(Utilisateur::class)->findAll();
+        // Récupération de tous les cours
+        $query = $entityManager->createQuery(
+            'SELECT c FROM App\Entity\Cours c'
+        );
+        $ues = $query->getResult();
+
+        // Récupération de tous les utilisateurs
+        $query = $entityManager->createQuery(
+            'SELECT u FROM App\Entity\Utilisateur u'
+        );
+        $users = $query->getResult();
 
         $userUEs = [];
 
+        // Associer les utilisateurs aux cours auxquels ils participent
         foreach ($users as $user) {
             $userId = $user->getId();
             $userUEs[$userId] = [];
 
-            $participants = $entityManager->getRepository(Participant::class)->findBy(['utilisateur' => $user]);
+            $query = $entityManager->createQuery(
+                'SELECT c FROM App\Entity\Cours c
+                 JOIN App\Entity\Participant p WITH p.cours = c
+                 WHERE p.utilisateur = :user'
+            )->setParameter('user', $user);
+
+            $participants = $query->getResult();
 
             foreach ($participants as $participant) {
-                $cours = $participant->getCours();
-                if ($cours !== null) {
-                    $userUEs[$userId][] = $cours->getCode();
-                }
+                $userUEs[$userId][] = $participant->getCode();
             }
         }
 
-        $uesData = [];
-        foreach ($ues as $ue) {
-            $responsableUeId = $ue->getResponsableUe();
-            $responsableUe = $entityManager->getRepository(Utilisateur::class)->find($responsableUeId); // Récupération de l'utilisateur responsable
+        // Récupérer les responsables de chaque UE
+        foreach ($ues as &$ue) {
+            $query = $entityManager->createQuery(
+                'SELECT u FROM App\Entity\Utilisateur u WHERE u.id = :id'
+            )->setParameter('id', $ue->getResponsableUe());
 
-            $responsableNom = $responsableUe ? $responsableUe->getNom() : 'Inconnu';
-            $responsablePrenom = $responsableUe ? $responsableUe->getPrenom() : 'Inconnu';
+            $responsableUe = $query->getOneOrNullResult();
 
-            $uesData[] = [
-                'code' => $ue->getCode(),
-                'nom' => $ue->getNom(),
-                'description' => $ue->getDescription(),
-                'image' => $ue->getImage(),
-                'responsableUe' => [
-                    'id' => $responsableUeId,
-                    'nom' => $responsableNom,
-                    'prenom' => $responsablePrenom,
-                ],
+            $ue->responsableUe = [
+                'id' => $responsableUe ? $responsableUe->getId() : null,
+                'nom' => $responsableUe ? $responsableUe->getNom() : 'Inconnu',
+                'prenom' => $responsableUe ? $responsableUe->getPrenom() : 'Inconnu',
             ];
         }
 
         return $this->render('admin.html.twig', [
-            'ues' => $uesData,
+            'ues' => $ues,
             'users' => $users,
             'userUEs' => $userUEs,
         ]);
