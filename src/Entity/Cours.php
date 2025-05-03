@@ -73,9 +73,12 @@ class Cours
         return $this->responsable_ue;
     }
 
-    public function setResponsableUe(int $responsable_ue): static
+    public static function findByCode(EntityManagerInterface $em, string $code): ?self
     {
-        $this->responsable_ue = $responsable_ue;
-        return $this;
+        $query = $em->createQuery(
+            'SELECT c FROM App\Entity\Cours c WHERE c.code = :code'
+        )->setParameter('code', $code);
+
+        return $query->getOneOrNullResult();
     }
 }

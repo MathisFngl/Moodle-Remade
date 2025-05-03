@@ -220,30 +220,24 @@ class CoursController extends AbstractController
     #[Route('/search_students', name: 'search_students', methods: ['GET'])]
     public function searchStudents(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $query = $request->query->get('q');
+        $queryString = $request->query->get('q');
 
-        if (!$query) {
+        if (!$queryString) {
             return new JsonResponse([], JsonResponse::HTTP_OK);
         }
 
-        try {
-            $students = $entityManager->getRepository(Utilisateur::class)
-                ->createQueryBuilder('u')
-                ->where('u.nom LIKE :query OR u.prenom LIKE :query')
-                ->setParameter('query', '%' . $query . '%')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult();
+        $query = $entityManager->createQuery(
+            'SELECT u FROM App\Entity\Utilisateur u WHERE u.nom LIKE :query OR u.prenom LIKE :query'
+        )->setParameter('query', '%' . $queryString . '%')
+            ->setMaxResults(10);
 
-            return new JsonResponse(array_map(fn($s) => [
-                'id' => $s->getId(),
-                'name' => $s->getPrenom() . ' ' . $s->getNom(),
-            ], $students), JsonResponse::HTTP_OK);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $students = $query->getResult();
+
+        return new JsonResponse(array_map(fn($s) => [
+            'id' => $s->getId(),
+            'name' => $s->getPrenom() . ' ' . $s->getNom(),
+        ], $students), JsonResponse::HTTP_OK);
     }
-
     #[Route('/cours/{code}/ajouter-participant', name: 'ajouter_participant', methods: ['POST'])]
     public function ajouterParticipant(string $code, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
