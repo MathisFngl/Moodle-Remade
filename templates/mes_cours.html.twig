@@ -15,7 +15,8 @@
         {% for cours in cours_list %}
             <div class="cours">
                 <a href="{{ path('cours_par_code', { code: cours.code }) }}">
-                    <img src="https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png" alt="Image de {{ cours.code }}">
+                    {# Vérification si l'image existe pour le cours, sinon affichage de l'image par défaut #}
+                    <img src="{{ cours.image ? asset('uploads/files/' ~ cours.image) : 'https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png' }}" alt="Image de {{ cours.code }}">
                 </a>
                 <div class="desc">
                     <a class="uv_description" href="{{ path('cours_par_code', { code: cours.code }) }}">

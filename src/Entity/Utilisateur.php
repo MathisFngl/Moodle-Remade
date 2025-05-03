@@ -32,8 +32,8 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
 
-    #[ORM\Column(type: Types::BLOB, nullable: true)]
-    private $photo;
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $photo = null;
 
     public function getId(): ?int
     {
@@ -127,12 +127,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoto()
+    public function getPhoto(): ?string
     {
         return $this->photo;
     }
 
-    public function setPhoto($photo): static
+    public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
         return $this;

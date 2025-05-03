@@ -16,8 +16,8 @@ class LoginController extends AbstractController
         return $this->render('login.html.twig', [
             'nb_uv' => $coursRepository->count([]),
             'nb_utilisateurs' => $utilisateurRepository->count([]),
-            'nb_etudiants' => $utilisateurRepository->countByRole('etudiant'),
-            'nb_profs' => $utilisateurRepository->countByRole('prof'),
+            'nb_etudiants' => $utilisateurRepository->countByRole('ROLE_ETUDIANT'),
+            'nb_profs' => $utilisateurRepository->countByRole('ROLE_PROFESSEUR'),
         ]);
     }
 }

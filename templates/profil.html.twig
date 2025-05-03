@@ -48,8 +48,15 @@
                         <input type="password" class="form-control" id="confirmer_mot_de_passe" name="confirmer_mot_de_passe">
                     </div>
 
+                    <hr>
+
                     <div class="mb-4">
                         <label for="avatar" class="form-label">Image de profil</label>
+                        {% if app.user.photo %}
+                            <div class="mb-3">
+                                <img src="{{ asset('uploads/avatars/' ~ app.user.photo) }}" alt="Avatar de profil" class="img-thumbnail" style="width: 150px; height: 150px;">
+                            </div>
+                        {% endif %}
                         <input class="form-control" type="file" id="avatar" name="avatar" accept="image/*">
                     </div>
 

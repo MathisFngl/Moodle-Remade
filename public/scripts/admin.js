@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const nom = document.getElementById('ueNom').value.trim();
         const desc = document.getElementById('ueDesc').value.trim();
         const respo = document.getElementById('ueRespo').value.trim();
+        const image = document.getElementById('ueImage').files[0]; // Get the selected image file
 
         if (!code || !nom) return;
 
@@ -41,21 +42,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const data = {
-            code: code,
-            nom: nom,
-            description: desc,
-            responsable_ue: respo
-        };
+        const formData = new FormData();
+        formData.append('code', code);
+        formData.append('nom', nom);
+        formData.append('description', desc);
+        formData.append('responsable_ue', respo);
+
+        // Append the image if there is one
+        if (image) {
+            formData.append('image', image);
+        }
 
         const url = editingUECode ? '/admin/modifier-ue' : '/admin/ajouter-ue';
 
         fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            body: formData,  // Send the FormData
         })
             .then(res => res.json())
             .then(data => {
@@ -74,9 +76,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    // --- Ajouter / Modifier un utilisateur ---
+
+// --- Ajouter / Modifier un utilisateur ---
     userForm.addEventListener('submit', function (e) {
         e.preventDefault();
+
         const prenom = escapeStringForJS(document.getElementById('prenom').value.trim());
         const nom = escapeStringForJS(document.getElementById('nom').value.trim());
         const email = escapeStringForJS(document.getElementById('email').value.trim());
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const selectedRole = document.getElementById('role').value;
         const isAdmin = document.getElementById('isAdmin').checked;
+        const photoInput = document.getElementById('photo');
 
         let roles = [];
 
@@ -97,23 +102,25 @@ document.addEventListener('DOMContentLoaded', function () {
             roles.push('ROLE_ADMIN');
         }
 
-        const userData = {
-            id: editingUserId,
-            prenom,
-            nom,
-            email,
-            password,
-            roles, // <- Attention ici : ROLES (pluriel)
-            isAdmin,
-            ues: assignedUEs
-        };
+        const formData = new FormData();
+        if (editingUserId) formData.append('id', editingUserId);
+        formData.append('prenom', prenom);
+        formData.append('nom', nom);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('roles', JSON.stringify(roles));
+        formData.append('ues', JSON.stringify(assignedUEs));
+
+        if (photoInput && photoInput.files.length > 0) {
+            formData.append('photo', photoInput.files[0]);
+        }
 
         const url = editingUserId ? '/admin/modifier-utilisateur' : '/admin/ajouter-utilisateur';
 
         fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
+            body: formData
+            // PAS DE Content-Type ici → le navigateur le gère automatiquement
         })
             .then(res => res.json())
             .then(data => {
@@ -125,36 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.hide();
     });
 
-
-    // --- Sélection des UEs (badges) ---
-    document.getElementById('ueSelect').addEventListener('change', function () {
-        const ueCode = this.value;
-        const ueName = this.options[this.selectedIndex].text;
-
-        if (!ueCode || assignedUEs.includes(ueCode)) return;
-
-        assignedUEs.push(ueCode);
-
-        const badge = document.createElement('span');
-        badge.className = 'badge bg-secondary me-2';
-        badge.innerHTML = `${ueName} <span class="badge-close-button" style="cursor:pointer;">×</span>`;
-
-        badge.querySelector('.badge-close-button').onclick = () => {
-            assignedUEs = assignedUEs.filter(code => code !== ueCode);
-            badge.remove();
-        };
-
-        document.getElementById('ueBadges').appendChild(badge);
-    });
-
-    // Reset vars on modal close
-    document.getElementById('ueModal').addEventListener('hidden.bs.modal', () => {
-        editingUECode = null;
-    });
-    document.getElementById('userModal').addEventListener('hidden.bs.modal', () => {
-        editingUserId = null;
-        assignedUEs = [];
-    });
 });
 
 // --- Édition d’une UE ---

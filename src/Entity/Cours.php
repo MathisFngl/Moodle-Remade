@@ -10,7 +10,7 @@ class Cours
 {
     #[ORM\Id]
     #[ORM\Column(length: 4)]
-    private ?string $code = null;  // 🔥 Code devient la clé primaire
+    private ?string $code = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;

@@ -68,40 +68,44 @@ class AdminController extends AbstractController
     #[Route('/admin/ajouter-ue', name: 'admin_ajouter_ue', methods: ['POST'])]
     public function ajouterUe(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request->all();  // Get POST data
+        $imageFile = $request->files->get('image'); // Get the image file
 
-        // Validation: check for required fields
+        // Validation
         if (!isset($data['code']) || !isset($data['nom']) || !isset($data['responsable_ue'])) {
             return new JsonResponse(['success' => false, 'message' => 'Données manquantes (code, nom, ou responsable_ue)']);
         }
 
-        // Create new Cours entity and set its properties
+        // Create the course entity
         $cours = new Cours();
         $cours->setCode($data['code']);
         $cours->setNom($data['nom']);
         $cours->setDescription($data['description'] ?? ''); // Default to empty string if description is not provided
 
-        // Handle responsible user
-        if (!empty($data['responsable_ue'])) {
-            $responsable = $em->getRepository(Utilisateur::class)->find($data['responsable_ue']);
-            if ($responsable) {
-                $cours->setResponsableUe($responsable->getId());
+        // Handle image upload
+        if ($imageFile) {
+            $imagePath = $this->uploadImage($imageFile);  // Helper function to handle image upload
+            $cours->setImage($imagePath);
+        }
 
-                // Check if the responsible user is already a participant in this course
-                $existing = $em->getRepository(Participant::class)->findOneBy([
-                    'utilisateur' => $responsable,
-                    'cours' => $cours
-                ]);
+        // Handle the responsible user
+        $responsable = $em->getRepository(Utilisateur::class)->find($data['responsable_ue']);
+        if ($responsable) {
+            $cours->setResponsableUe($responsable->getId());
 
-                if (!$existing) {
-                    $participant = new Participant();
-                    $participant->setUtilisateur($responsable);
-                    $participant->setCours($cours);
-                    $em->persist($participant);
-                }
-            } else {
-                return new JsonResponse(['success' => false, 'message' => 'Responsable non trouvé']);
+            // Check if the responsible user is already a participant in this course
+            $existing = $em->getRepository(Participant::class)->findOneBy([
+                'utilisateur' => $responsable,
+                'cours' => $cours
+            ]);
+            if (!$existing) {
+                $participant = new Participant();
+                $participant->setUtilisateur($responsable);
+                $participant->setCours($cours);
+                $em->persist($participant);
             }
+        } else {
+            return new JsonResponse(['success' => false, 'message' => 'Responsable non trouvé']);
         }
 
         // Persist the course entity
@@ -111,12 +115,14 @@ class AdminController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'UE ajoutée']);
     }
 
+
     #[Route('/admin/modifier-ue', name: 'admin_modifier_ue', methods: ['POST'])]
     public function modifierUe(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request->all(); // Get POST data
+        $imageFile = $request->files->get('image'); // Get the image file
 
-        // Validation: check if the code is provided
+        // Validation
         if (!isset($data['code'])) {
             return new JsonResponse(['success' => false, 'message' => 'Code de l\'UE manquant']);
         }
@@ -128,9 +134,14 @@ class AdminController extends AbstractController
         }
 
         // Update course data
-        $cours->setNom($data['nom'] ?? $cours->getNom()); // Keep existing name if not provided
-        $cours->setDescription($data['description'] ?? $cours->getDescription()); // Keep existing description if not provided
-        $cours->setImage($data['image'] ?? $cours->getImage()); // Optional image field
+        $cours->setNom($data['nom'] ?? $cours->getNom());
+        $cours->setDescription($data['description'] ?? $cours->getDescription());
+
+        // Handle image upload if a new image is provided
+        if ($imageFile) {
+            $imagePath = $this->uploadImage($imageFile);  // Helper function to handle image upload
+            $cours->setImage($imagePath);
+        }
 
         // Handle responsible user update
         if (!empty($data['responsable_ue'])) {
@@ -160,6 +171,7 @@ class AdminController extends AbstractController
 
         return new JsonResponse(['success' => true, 'message' => 'UE mise à jour']);
     }
+
 
     #[Route('/admin/supprimer-ue/{code}', name: 'admin_supprimer_ue', methods: ['POST'])]
     public function supprimerUe(string $code, EntityManagerInterface $em): JsonResponse
@@ -193,35 +205,35 @@ class AdminController extends AbstractController
     #[Route('/admin/ajouter-utilisateur', name: 'admin_ajouter_utilisateur', methods: ['POST'])]
     public function ajouterUtilisateur(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request;
+        $photoFile = $request->files->get('photo');
 
-        // Vérification des données reçues
-        if (!$data || !isset($data['prenom'], $data['nom'], $data['email'], $data['password'], $data['roles']) || !is_array($data['roles'])) {
-            return new JsonResponse(['success' => false, 'message' => 'Données manquantes ou format invalide.'], 400);
+        if (!$data->has('prenom') || !$data->has('nom') || !$data->has('email') || !$data->has('password') || !$data->has('roles')) {
+            return new JsonResponse(['success' => false, 'message' => 'Données manquantes'], 400);
         }
 
         $utilisateur = new Utilisateur();
-        $utilisateur->setPrenom($data['prenom']);
-        $utilisateur->setNom($data['nom']);
-        $utilisateur->setEmail($data['email']);
-        $utilisateur->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT));
-
-        // Affecter les rôles (liste)
-        $utilisateur->setRoles($data['roles']);
-
-        // isAdmin: tu veux forcer à false ici
+        $utilisateur->setPrenom($data->get('prenom'));
+        $utilisateur->setNom($data->get('nom'));
+        $utilisateur->setEmail($data->get('email'));
+        $utilisateur->setMotDePasse(password_hash($data->get('password'), PASSWORD_BCRYPT));
+        $utilisateur->setRoles(json_decode($data->get('roles'), true) ?? []);
         $utilisateur->setAdmin(false);
 
-        // Traitement des UEs si fournis
-        if (!empty($data['ues']) && is_array($data['ues'])) {
-            foreach ($data['ues'] as $ueCode) {
-                $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
-                if ($cours) {
-                    $participant = new Participant();
-                    $participant->setUtilisateur($utilisateur);
-                    $participant->setCours($cours);
-                    $em->persist($participant);
-                }
+        if ($photoFile) {
+            $photoPath = $this->uploadAvatar($photoFile);
+            $utilisateur->setPhoto($photoPath);
+        }
+
+        // UEs
+        $ues = json_decode($data->get('ues') ?? '[]', true);
+        foreach ($ues as $ueCode) {
+            $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
+            if ($cours) {
+                $participant = new Participant();
+                $participant->setUtilisateur($utilisateur);
+                $participant->setCours($cours);
+                $em->persist($participant);
             }
         }
 
@@ -232,51 +244,52 @@ class AdminController extends AbstractController
     }
 
 
+
     #[Route('/admin/modifier-utilisateur', name: 'admin_modifier_utilisateur', methods: ['POST'])]
     public function modifierUtilisateur(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->request;
+        $photoFile = $request->files->get('photo');
 
-        if (!$data || !isset($data['id'], $data['prenom'], $data['nom'], $data['email'], $data['roles']) || !is_array($data['roles'])) {
-            return new JsonResponse(['success' => false, 'message' => 'Données manquantes ou format invalide.'], 400);
+        if (!$data->has('id') || !$data->has('prenom') || !$data->has('nom') || !$data->has('email') || !$data->has('roles')) {
+            return new JsonResponse(['success' => false, 'message' => 'Données manquantes'], 400);
         }
 
-        $user = $em->getRepository(Utilisateur::class)->find($data['id']);
+        $user = $em->getRepository(Utilisateur::class)->find($data->get('id'));
         if (!$user) {
             return new JsonResponse(['success' => false, 'message' => 'Utilisateur non trouvé'], 404);
         }
 
-        $user->setPrenom($data['prenom']);
-        $user->setNom($data['nom']);
-        $user->setEmail($data['email']);
+        $user->setPrenom($data->get('prenom'));
+        $user->setNom($data->get('nom'));
+        $user->setEmail($data->get('email'));
 
-        if (!empty($data['password'])) {
-            $user->setMotDePasse(password_hash($data['password'], PASSWORD_BCRYPT)); // 🚀 Correction ici
+        if ($data->has('password') && $data->get('password')) {
+            $user->setMotDePasse(password_hash($data->get('password'), PASSWORD_BCRYPT));
         }
 
-        // Affecter les rôles directement
-        $user->setRoles($data['roles']);
-
-        // Toujours forcer Admin false si c'est ta logique
+        $user->setRoles(json_decode($data->get('roles'), true) ?? []);
         $user->setAdmin(false);
 
-        // Supprimer les participations existantes
-        $participantRepo = $em->getRepository(Participant::class);
-        $existingParticipants = $participantRepo->findBy(['utilisateur' => $user]);
-        foreach ($existingParticipants as $participant) {
-            $em->remove($participant);
+        if ($photoFile) {
+            $photoPath = $this->uploadAvatar($photoFile);
+            $user->setPhoto($photoPath);
         }
 
-        // Ajouter les nouvelles participations
-        if (!empty($data['ues']) && is_array($data['ues'])) {
-            foreach ($data['ues'] as $ueCode) {
-                $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
-                if ($cours) {
-                    $participant = new Participant();
-                    $participant->setUtilisateur($user);
-                    $participant->setCours($cours);
-                    $em->persist($participant);
-                }
+        // Participations
+        $participantRepo = $em->getRepository(Participant::class);
+        foreach ($participantRepo->findBy(['utilisateur' => $user]) as $p) {
+            $em->remove($p);
+        }
+
+        $ues = json_decode($data->get('ues') ?? '[]', true);
+        foreach ($ues as $ueCode) {
+            $cours = $em->getRepository(Cours::class)->findOneBy(['code' => $ueCode]);
+            if ($cours) {
+                $participant = new Participant();
+                $participant->setUtilisateur($user);
+                $participant->setCours($cours);
+                $em->persist($participant);
             }
         }
 
@@ -284,6 +297,7 @@ class AdminController extends AbstractController
 
         return new JsonResponse(['success' => true, 'message' => 'Utilisateur mis à jour']);
     }
+
 
 
     #[Route('/admin/supprimer-utilisateur/{id}', name: 'admin_supprimer_utilisateur', methods: ['POST'])]
@@ -327,5 +341,23 @@ class AdminController extends AbstractController
                 'isAdmin' => $user->isAdmin(),
             ]
         ]);
+    }
+    private function uploadImage($image)
+    {
+        $uploadDir = $this->getParameter('upload_directory');
+        $imageName = uniqid() . '.' . $image->guessExtension();
+
+        $image->move($uploadDir, $imageName);
+
+        return  $imageName;
+    }
+    private function uploadAvatar($image)
+    {
+        $uploadDir = $this->getParameter('avatars_directory');
+        $imageName = uniqid() . '.' . $image->guessExtension();
+
+        $image->move($uploadDir, $imageName);
+
+        return  $imageName;
     }
 }

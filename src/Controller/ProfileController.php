@@ -10,16 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileController extends AbstractController
 {
     #[Route('/mon-profil', name: 'profil')]
     public function index(Request $request, UtilisateurRepository $utilisateurRepository, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        /** @var Utilisateur $user
-        $user = $this->getUser();*/
-
-        //TAMPP
+        /** @var Utilisateur $user */
         $user = $utilisateurRepository->findOneBy([], ['id' => 'ASC']);
 
         if ($request->isMethod('POST')) {
@@ -28,6 +27,7 @@ class ProfileController extends AbstractController
             $motDePasse = $request->request->get('nouveau_mot_de_passe');
             $confirmation = $request->request->get('confirmer_mot_de_passe');
 
+            // Si un nouveau nom ou prénom est fourni, on met à jour
             if ($nom) {
                 $user->setNom($nom);
             }
@@ -36,7 +36,7 @@ class ProfileController extends AbstractController
                 $user->setPrenom($prenom);
             }
 
-            // Si un des deux champs mot de passe est rempli, on traite la modification
+            // Gestion du mot de passe
             if (!empty($motDePasse) || !empty($confirmation)) {
                 if ($motDePasse !== $confirmation) {
                     $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
@@ -52,13 +52,32 @@ class ProfileController extends AbstractController
                 $user->setMotDePasse($hashedPassword);
             }
 
+            // Gestion de l'image de profil
+            $avatarFile = $request->files->get('avatar');
+            if ($avatarFile) {
+                // Définir le nom de fichier unique pour éviter les collisions
+                $newFilename = uniqid() . '.' . $avatarFile->guessExtension();
+
+                try {
+                    // Déplacer le fichier vers le répertoire public
+                    $avatarFile->move(
+                        $this->getParameter('avatars_directory'), // Dossier dans config/services.yaml
+                        $newFilename
+                    );
+                    // Mettre à jour le chemin du fichier dans l'entité Utilisateur
+                    $user->setPhoto($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+            }
+
+            // Persister les modifications
             $em->persist($user);
             $em->flush();
 
             $this->addFlash('success', 'Informations mises à jour avec succès.');
             return $this->redirectToRoute('profil');
         }
-
 
         return $this->render('profil.html.twig', [
             'user' => $user,

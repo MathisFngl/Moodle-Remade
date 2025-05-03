@@ -49,7 +49,7 @@
 {# MODALE UTILISATEUR #}
 <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content" id="userForm">
+        <form class="modal-content" id="userForm" method="post" enctype="multipart/form-data">
             <div class="modal-header">
                 <h5 class="modal-title">Créer / Modifier un utilisateur</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -58,42 +58,49 @@
                 <div class="d-flex justify-content-between mb-3">
                     <div class="w-45">
                         <label class="form-label">Prénom</label>
-                        <input type="text" class="form-control" id="prenom" required>
+                        <input type="text" class="form-control" id="prenom" name="prenom" required>
                     </div>
                     <div class="w-45">
                         <label class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="nom" required>
+                        <input type="text" class="form-control" id="nom" name="nom" required>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                     <div class="w-45">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control bg-light text-muted" id="email" required readonly>
+                        <input type="email" class="form-control bg-light text-muted" id="email" name="email" required readonly>
                     </div>
                     <div class="w-45">
                         <label class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" id="password">
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mb-3">
                     <div class="w-45">
                         <label class="form-label">Rôle</label>
-                        <select class="form-select" id="role">
+                        <select class="form-select" id="role" name="role">
                             <option value="ROLE_ELEVE">Étudiant</option>
                             <option value="ROLE_PROFESSEUR">Professeur</option>
                             <option value="ROLE_ADMIN">Administrateur</option>
                         </select>
                     </div>
                     <div class="w-45 d-flex align-items-center">
-                        <input class="form-check-input" type="checkbox" id="isAdmin">
+                        <input class="form-check-input" type="checkbox" id="isAdmin" name="isAdmin">
                         <label class="form-check-label ms-2">Administrateur</label>
                     </div>
                 </div>
+
+                <!-- ✅ Ajout du champ d'upload d'image -->
+                <div class="mb-3">
+                    <label class="form-label">Photo de profil</label>
+                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                    <small class="text-muted">Format accepté : JPG, PNG, taille max 2Mo</small>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label">UEs assignées</label>
-                    <div id="ueBadges" class="d-flex flex-wrap">
-                    </div>
-                    <select class="form-select mt-2" id="ueSelect">
+                    <div id="ueBadges" class="d-flex flex-wrap"></div>
+                    <select class="form-select mt-2" id="ueSelect" name="ues[]">
                         <option value="">Ajouter une UE</option>
                         {% for ue in ues %}
                             <option value="{{ ue.code }}">{{ ue.nom }}</option>
@@ -101,6 +108,7 @@
                     </select>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
