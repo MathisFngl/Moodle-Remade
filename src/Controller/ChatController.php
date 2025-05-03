@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChatController extends AbstractController
 {
+    // Faire le rendu du fragment du chat d'user a user
     #[Route('/chat-fragment', name: 'chat_fragment')]
     public function chatFragment(): Response
     {

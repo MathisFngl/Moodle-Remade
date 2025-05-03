@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class CoursController extends AbstractController
 {
+    // Page d’un cours par son code (affiche les messages associés)
     #[Route('/cours/{code}', name: 'cours_par_code')]
     public function cours(string $code, EntityManagerInterface $em): Response
     {
@@ -70,7 +71,7 @@ class CoursController extends AbstractController
     }
 
 
-
+    // Page d’un cours avec statistiques de notes par examen
     #[Route('/cours/{code}/notes', name: 'cours_notes')]
     public function notes(string $code, EntityManagerInterface $em): Response
     {
@@ -114,6 +115,7 @@ class CoursController extends AbstractController
         ]);
     }
 
+    // Formulaire pour ajouter des notes à un examen
     #[Route('/cours/{code}/notes/ajouter', name: 'ajouter_note')]
     public function ajouterNote(string $code, EntityManagerInterface $em): Response
     {
@@ -130,6 +132,8 @@ class CoursController extends AbstractController
             'participants' => $participants,
         ]);
     }
+
+    // Enregistrement des notes d’un examen (appel AJAX)
     #[Route('/cours/{code}/notes/enregistrer', name: 'enregistrer_notes', methods: ['POST'])]
     public function enregistrerNotes(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -160,6 +164,8 @@ class CoursController extends AbstractController
 
         return new JsonResponse(['success' => true, 'message' => 'Toutes les notes ont été enregistrées.']);
     }
+
+    // Création d’un nouvel examen (appel AJAX)
     #[Route('/examen/creer', name: 'creer_examen', methods: ['POST'])]
     public function creerExamen(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -191,14 +197,7 @@ class CoursController extends AbstractController
         }
     }
 
-
-
-
-
-
-
-
-
+    // Page des participants d’un cours
     #[Route('/cours/{code}/participants', name: 'cours_participants')]
     public function participants(string $code, EntityManagerInterface $entityManager): Response
     {
@@ -217,6 +216,7 @@ class CoursController extends AbstractController
         ]);
     }
 
+    // Recherche d’étudiants pour autocomplete (appel AJAX)
     #[Route('/search_students', name: 'search_students', methods: ['GET'])]
     public function searchStudents(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -238,6 +238,8 @@ class CoursController extends AbstractController
             'name' => $s->getPrenom() . ' ' . $s->getNom(),
         ], $students), JsonResponse::HTTP_OK);
     }
+
+    // Ajout d’un participant à un cours (appel AJAX)
     #[Route('/cours/{code}/ajouter-participant', name: 'ajouter_participant', methods: ['POST'])]
     public function ajouterParticipant(string $code, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -275,6 +277,7 @@ class CoursController extends AbstractController
         return new JsonResponse(["success" => "Utilisateur ajouté avec succès"], JsonResponse::HTTP_OK);
     }
 
+    // Page d’ajout de participant à un cours ("formulaire")
     #[Route('/cours/{code}/ajouter-participant-page', name: 'new_participant')]
     public function afficherFormulaireAjout(string $code, EntityManagerInterface $entityManager): Response
     {
@@ -289,10 +292,7 @@ class CoursController extends AbstractController
         ]);
     }
 
-
-
-
-
+    // Suppression d’un message (appel AJAX)
     #[Route('/delete-message/{id}', name: 'delete_message', methods: ['DELETE'])]
     public function deleteMessage(int $id, EntityManagerInterface $em): JsonResponse
     {
@@ -308,6 +308,7 @@ class CoursController extends AbstractController
         return new JsonResponse(['status' => 'success', 'message' => 'Message deleted successfully']);
     }
 
+    // Modification d’un message (appel AJAX)
     #[Route('/update-message/{id}', name: 'update_message', methods: ['PUT'])]
     public function updateMessage(int $id, Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -330,6 +331,8 @@ class CoursController extends AbstractController
 
         return new JsonResponse(['status' => 'success', 'message' => 'Message updated successfully']);
     }
+
+    // Suppression d’un examen et de ses notes associées (appel AJAX)
     #[Route('/examen/{id}/supprimer', name: 'supprimer_examen', methods: ['DELETE'])]
     public function supprimerExamen(int $id, EntityManagerInterface $em): JsonResponse
     {
@@ -352,6 +355,8 @@ class CoursController extends AbstractController
 
         return new JsonResponse(['success' => 'Examen supprimé avec succès']);
     }
+
+    // Page de modification des notes d’un examen
     #[Route('/examen/{id}/modifier', name: 'modifier_page_examen', methods: ['GET'])]
     public function modifierPageExamen(int $id, EntityManagerInterface $em): Response
     {
@@ -361,7 +366,7 @@ class CoursController extends AbstractController
             throw $this->createNotFoundException('Examen introuvable');
         }
 
-        $cours = $examen->getCours(); // Assure-toi que Examen::getCours() existe
+        $cours = $examen->getCours();
 
         $notes = $em->getRepository(Note::class)->findBy(['examen' => $examen]);
 
@@ -371,6 +376,8 @@ class CoursController extends AbstractController
             'notes' => $notes
         ]);
     }
+
+    // Mise à jour des notes d’un examen (appel AJAX)
     #[Route('/examen/{id}/update-notes', name: 'update_notes_examen', methods: ['PUT'])]
     public function updateNotes(int $id, Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -390,7 +397,6 @@ class CoursController extends AbstractController
         }
 
         $em->flush();
-
         return new JsonResponse(['success' => 'Notes mises à jour avec succès.']);
     }
 
