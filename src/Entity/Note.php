@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 class Note
 {
+    // Une note est caractérisée par un id, un examen associé, un utilisateur et une note (valeur)
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
