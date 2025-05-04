@@ -5,6 +5,7 @@
     <h2>Modifier les notes pour l'examen : {{ examen.titre }}</h2>
 
     <form id="updateNotesForm">
+        <!-- Champ caché contenant l'ID de l'examen -->
         <input type="hidden" id="examenId" value="{{ examen.id }}">
 
         <table class="table">
@@ -19,6 +20,7 @@
                 <tr>
                     <td>{{ note.utilisateur.prenom }} {{ note.utilisateur.nom }}</td>
                     <td>
+                        <!-- Champ qui permet de modifier la note d'un étudiant -->
                         <input type="number" class="form-control gradeInput" data-note-id="{{ note.id }}" value="{{ note.note }}">
                     </td>
                 </tr>
@@ -26,23 +28,27 @@
             </tbody>
         </table>
 
+        <!-- Bouton qui enregistre les modifications -->
         <button type="button" id="updateNotesBtn" class="btn btn-success">Mettre à jour</button>
     </form>
 {% endblock %}
 
 {% block cours_scripts %}
     <script>
+        // Gère la mise à jour des notes lorsqu'on clique sur le bouton
         document.getElementById("updateNotesBtn").addEventListener("click", function () {
             const examenId = document.getElementById("examenId").value;
             const notes = [];
 
+            // Collecte toutes les notes modifiées
             document.querySelectorAll(".gradeInput").forEach(input => {
                 notes.push({
-                    idNote: input.dataset.noteId,
-                    nouvelleNote: input.value
+                    idNote: input.dataset.noteId, // ID unique de la note
+                    nouvelleNote: input.value // Nouvelle valeur entrée par l'utilisateur
                 });
             });
 
+            // Envoi des données mises à jour au serveur via une requête AJAX
             fetch(`/examen/${examenId}/update-notes`, {
                 method: "PUT",
                 headers: { 'Content-Type': 'application/json' },
@@ -50,8 +56,10 @@
             })
                 .then(res => res.json())
                 .then(data => {
+                    // Affichage d'un message de confirmation ou d'erreur
                     alert(data.success || data.error);
                     if (data.success) {
+                        // Redirection vers la page des notes après mise à jour réussie
                         location.href = "{{ path('cours_notes', { code: cours.code }) }}";
                     }
                 });

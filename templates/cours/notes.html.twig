@@ -1,6 +1,8 @@
 {% extends 'cours/base_cours.html.twig' %}
 {% set nav = 'notes' %}
+
 {% block cours_content %}
+    <!-- Permet d'ajouter une nouvelle note pour un examen -->
     <div class="d-flex justify-content-center mb-3 pt-2">
         <a href="{{ path('ajouter_note', { code: cours.code }) }}" class="btn btn-primary d-flex align-items-center">
             <i class="bi bi-plus-lg me-2"></i> Ajouter une note
@@ -9,6 +11,7 @@
 
     <h2>Examens du cours</h2>
 
+    <!-- Affiche les statistiques des examens du cours -->
     <table class="table table-striped">
         <thead>
         <tr>
@@ -29,9 +32,10 @@
                 <td>{{ exam.min }}</td>
                 <td>{{ exam.max }}</td>
                 <td>
+                    <!-- Supprime un examen -->
                     <button class="btn btn-danger" onclick="supprimerExamen({{ exam.id }})">Supprimer</button>
+                    <!-- Permet de modifier un examen -->
                     <a href="{{ path('modifier_page_examen', { id: exam.id }) }}" class="btn btn-warning">Modifier</a>
-
                 </td>
             </tr>
         {% endfor %}
@@ -39,7 +43,8 @@
     </table>
 
 {% endblock %}
+
 {% block cours_scripts %}
+    <!-- Inclusion du script gérant les notes des examens -->
     <script src="{{ asset('scripts/note.js') }}"></script>
 {% endblock %}
-

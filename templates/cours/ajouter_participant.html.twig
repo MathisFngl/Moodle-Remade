@@ -4,17 +4,26 @@
 {% block cours_content %}
     <div class="add">
         <form id="participantForm">
-            <input type="hidden" name="id_cours" id="id_cours" value="{{ cours.id }}"> <!-- Ajout du champ caché pour l'ID du cours -->
+            <!-- Champ caché qui contient  l'ID du cours -->
+            <input type="hidden" name="id_cours" id="id_cours" value="{{ cours.id }}">
 
             <label for="searchInput"><b>Nouveau participant</b></label>
+            <!-- Champ de recherche qui permet de trouver un utilisateur à ajouter -->
             <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
-            <input type="hidden" name="id_utilisateur" id="id_utilisateur"> <!-- Champ caché pour l'utilisateur -->
+
+            <!-- Champ caché qui stocke l'ID de l'utilisateur sélectionné -->
+            <input type="hidden" name="id_utilisateur" id="id_utilisateur">
+
+            <!-- Conteneur des suggestions de recherche -->
             <div id="autocomplete-results" class="autocomplete-results"></div>
+
+            <!-- Bouton pour valider l'ajout du participant -->
             <button type="submit" class="add_button">Ajouter</button>
         </form>
     </div>
 {% endblock %}
 
 {% block cours_scripts %}
+    <!-- Inclusion du script JS qui gère la recherche et l'ajout des participants -->
     <script src="{{ asset('scripts/add_participant.js') }}"></script>
 {% endblock %}

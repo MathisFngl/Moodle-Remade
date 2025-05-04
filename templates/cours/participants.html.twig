@@ -1,30 +1,39 @@
 {% extends 'cours/base_cours.html.twig' %}
-
 {% set nav = 'participants' %}
 
 {% block cours_content %}
 
     {% if is_granted('ROLE_PROFESSEUR') %}
-    <div class="add mb-4">
-        <form id="participantForm">
-            <input type="hidden" name="code_cours" id="code_cours" value="{{ cours.code }}">
-            <label for="searchInput"><b>Nouveau participant</b></label>
-            <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
-            <input type="hidden" name="id_utilisateur" id="id_utilisateur">
+        <!-- Permet aux professeurs d'ajouter un nouveau participant -->
+        <div class="add mb-4">
+            <form id="participantForm">
+                <!-- Champ caché contenant le code du cours -->
+                <input type="hidden" name="code_cours" id="code_cours" value="{{ cours.code }}">
 
-            <div id="autocomplete-results" class="autocomplete-results"></div>
-            <button type="submit" class="add_button">Ajouter</button>
-        </form>
-    </div>
+                <label for="searchInput"><b>Nouveau participant</b></label>
+                <!-- Champ de recherche pour trouver un participant -->
+                <input type="text" name="etudiant" placeholder="Entrez un nom" required id="searchInput">
+
+                <!-- Champ caché qui stocke l'ID de l'utilisateur sélectionné -->
+                <input type="hidden" name="id_utilisateur" id="id_utilisateur">
+
+                <!-- suggestions de recherche -->
+                <div id="autocomplete-results" class="autocomplete-results"></div>
+
+                <!-- ajouter un participant -->
+                <button type="submit" class="add_button">Ajouter</button>
+            </form>
+        </div>
     {% endif %}
 
     <div class="row">
         <div class="col-md-6">
-            <h2 class="mt-4 mb-3">Liste des Etudiants</h2>
+            <h2 class="mt-4 mb-3">Liste des Étudiants</h2>
             <ul id="participantList" class="list-group">
                 {% for participant in participants %}
                     {% if participant.utilisateur is not null %}
                         {% if participant.utilisateur.getRoleByIndex(0) == 'ROLE_ELEVE' %}
+                            <!--  étudiants inscrits dans le cours -->
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     {{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}
@@ -45,13 +54,16 @@
             <ul id="profList" class="list-group">
                 {% for participant in participants %}
                     {% if participant.utilisateur is not null and participant.utilisateur.getRoleByIndex(0) == 'ROLE_PROFESSEUR' %}
+                        <!-- professeurs associés au cours -->
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong>{{ participant.utilisateur.prenom }} {{ participant.utilisateur.nom }}</strong>
+                                <!-- Lien mail du professeur -->
                                 <a href="mailto:{{ participant.utilisateur.email }}" class="ms-2 text-decoration-none">
                                     {{ participant.utilisateur.email }}
                                 </a>
                                 {% if participant.utilisateur.id == participant.cours.getResponsableUe() %}
+                                    <!-- Indication  responsable de l'UE -->
                                     <span class="badge bg-warning text-dark ms-2">Responsable de l'UE</span>
                                 {% endif %}
                             </div>

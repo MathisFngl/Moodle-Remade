@@ -25,13 +25,13 @@
         <tbody>
         {% for participant in participants %}
             {% if participant.utilisateur.getRoleByIndex == "ROLE_ELEVE" %}
-            <tr>
-                <td>{{ participant.utilisateur.nom }}</td>
-                <td>{{ participant.utilisateur.prenom }}</td>
-                <td>
-                    <input type="number" class="gradeInput" min="0" data-user-id="{{ participant.utilisateur.id }}">
-                </td>
-            </tr>
+                <tr>
+                    <td>{{ participant.utilisateur.nom }}</td>
+                    <td>{{ participant.utilisateur.prenom }}</td>
+                    <td>
+                        <input type="number" class="gradeInput" min="0" data-user-id="{{ participant.utilisateur.id }}">
+                    </td>
+                </tr>
             {% endif %}
         {% else %}
             <tr>
@@ -41,14 +41,17 @@
         </tbody>
     </table>
 
+    <!-- Bouton pour enregistrer des notes. On trensmet le code du cours -->
     <button id="saveNotes" data-code="{{ cours.code }}">Enregistrer les Notes</button>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
+    <!-- Inclusion du fichier CSS -->
     <link rel="stylesheet" href="{{ asset('styles/note.css') }}">
 {% endblock %}
 
 {% block cours_scripts %}
+    <!-- Chargement du js-->
     <script src="{{ asset('scripts/note.js') }}"></script>
 {% endblock %}
