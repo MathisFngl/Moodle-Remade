@@ -1,32 +1,33 @@
-{# templates/chat.html.twig #}
-<link rel="stylesheet" href="{{ asset('styles/chat.css') }}">
+{% include 'header.html.twig' %}
 
-<div id="chatPanel" class="chat-panel hidden">
-    <div class="header">
-        <span>Messagerie</span>
-        <button id="newDiscussion" class="new-discussion">+ Nouvelle Discussion</button>
-    </div>
-
-    <div class="content">
-        <!-- Liste des discussions -->
-        <div class="chat-discussion">
-            <div class="chat-message">
-                <p class="sender-name">Alice :</p>
-                <p class="message">Bonjour, comment ça va ?</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mes cours</title>
+    <link rel="stylesheet" href="{{ asset('styles/mes_cours.css') }}">
+</head>
+<body>
+{# List of all the classes of the user #}
+<div class="conteneur">
+    <p id="mes_cours">Mes cours</p>
+    <p id="vue">Vue d'ensemble des cours</p>
+    <div class="c_cours">
+        {% for cours in cours_list %}
+            <div class="cours">
+                <a href="{{ path('cours_par_code', { code: cours.code }) }}">
+                    {# Vérification si l'image existe pour le cours, sinon affichage de l'image par défaut #}
+                    <img src="{{ cours.image ? asset('uploads/files/' ~ cours.image) : 'https://www.pokepedia.fr/images/thumb/3/31/Lugulabre_de_Chammal.png/300px-Lugulabre_de_Chammal.png' }}" alt="Image de {{ cours.code }}">
+                </a>
+                <div class="desc">
+                    <a class="uv_description" href="{{ path('cours_par_code', { code: cours.code }) }}">
+                        {{ cours.code }} - {{ cours.nom }}
+                    </a>
+                    <p class="uv_description">{{ cours.description }}</p>
+                </div>
             </div>
-            <div class="chat-message">
-                <p class="sender-name">Vous :</p>
-                <p class="message">Ça va bien, merci ! Et toi ?</p>
-            </div>
-            <div class="chat-message">
-                <p class="sender-name">Alice :</p>
-                <p class="message">Je vais bien, merci de demander ! 😊</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <input type="text" id="chatInput" placeholder="Écrire un message..." />
-        <button id="sendMessage">Envoyer</button>
+        {% endfor %}
     </div>
 </div>
+</body>
+</html>
