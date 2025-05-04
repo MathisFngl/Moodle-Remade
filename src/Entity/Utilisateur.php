@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    // Un utilisateur est caractérisé par un id, un nom, un prénom, un mail, un mot de passe, une liste de roles et une photo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
