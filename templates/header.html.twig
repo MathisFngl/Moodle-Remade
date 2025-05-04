@@ -44,9 +44,12 @@
     </div>
 
     <div class="right">
+        {# Affiche le  lien Admin uniquement si l'utilisateur a le rôle administrateur #}
         {% if is_granted('ROLE_ADMIN') %}
             <a class="normal_padding" href="{{ path('admin_dashboard', {}, false) }}"><i class="fa fa-cubes"></i> Admin</a>
         {% endif %}
+
+        {# Icônes et liens vers les notifications, la messagerie, le profil et la déconnexion #}
         <a id="notification-icon" class="normal_padding" href="#notifications" role="button"><i class="fa fa-bell"></i></a>
         <a class="normal_padding" id="openChat"><i class="fa fa-comments"></i> Messagerie</a>
         <a class="normal_padding" href="{{ path('profil', {}, false) }}"><i class="fa fa-user"></i> Profil</a>

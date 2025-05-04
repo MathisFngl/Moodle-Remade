@@ -8,11 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const hiddenCodeCoursInput = document.querySelector("#code_cours");
     const participantList = document.querySelector("#participantList");
 
+    // Vérifie que tous les éléments nécessaires du DOM existent avant de continuer
     if (!input || !resultContainer || !form || !hiddenInput || !hiddenCodeCoursInput || !participantList) {
         console.error("Erreur : Certains éléments du DOM sont introuvables.");
         return;
     }
 
+    // Gère la recherche des utilisateurs en fonction de l'entrée utilisateur
     input.addEventListener("input", function () {
         let query = input.value.trim();
         console.log("🔍 Requête envoyée :", query);
@@ -35,10 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         let div = document.createElement("div");
                         div.textContent = utilisateur.name;
                         div.className = "autocomplete-item";
+
+                        // Ajoute un écouteur de clic pour sélectionner un utilisateur et remplir les champs cachés
                         div.addEventListener("click", () => {
                             input.value = utilisateur.name;
                             hiddenInput.value = utilisateur.id;
-                            resultContainer.innerHTML = "";
+                            resultContainer.innerHTML = ""; // Nettoyage des résultats après sélection
                         });
 
                         resultContainer.appendChild(div);
@@ -53,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Gère l'ajout d'un utilisateur à un cours via une requête AJAX
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
