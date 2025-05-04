@@ -11,10 +11,13 @@
 
 <nav class="navbar">
     <div class="nav-left">
+        {# Button for dashboard #}
         <a class="normal_padding" href="{{ path('app_dashboard') }}">Tableau de bord</a>
+        {# Button for classes #}
         <a class="normal_padding" href="{{ path('mes_cours') }}">Mes cours</a>
 
         <div class="dropdown">
+            {# Button with hovering to show other websites #}
             <button class="dropbtn normal_padding">Sites UTBM <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-content">
                 <a href="https://www.utbm.fr/">UTBM</a>
@@ -25,6 +28,7 @@
         </div>
 
         <div class="dropdown">
+            {# Button with hovering to show other websites #}
             <button class="dropbtn normal_padding">Semestre à l'UTBM <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-content">
                 <a href="#annales">Annales</a>
@@ -34,6 +38,7 @@
         </div>
 
         <div class="dropdown">
+            {# Button with hovering to show other websites #}
             <button class="dropbtn normal_padding">Stages/S.E.E. <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-content">
                 <a href="#stages">Stages</a>
@@ -44,6 +49,7 @@
     </div>
 
     <div class="right">
+        {# Admin button, appears only if the user has the role "ROLE_ADMIN" #}
         {% if is_granted('ROLE_ADMIN') %}
             <a class="normal_padding" href="{{ path('admin_dashboard', {}, false) }}"><i class="fa fa-cubes"></i> Admin</a>
         {% endif %}

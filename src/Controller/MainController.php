@@ -8,9 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
+    // Affiche la page d'accueil du site
     #[Route('/', name: 'homepage')]
     public function homepage(): Response
     {
+        // Charge et affiche le fichier de base du site
         return $this->render("base.html.twig");
     }
 }

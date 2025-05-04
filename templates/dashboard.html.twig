@@ -9,7 +9,6 @@
 </head>
 <body>
 
-{# Include a header file if needed #}
 {% include 'header.html.twig' %}
 
 <div class="dashboard-container">
@@ -31,14 +30,17 @@
                 {% for cour in cours %}
                     <div class="course-messages">
                         <h4>{{ cour.nom }} - {{ cour.code }}</h4>
+
                         {% if messages[cour.code] is not empty %}
                             <ul>
                                 {% for message in messages[cour.code] %}
                                     <li>
                                         <a href="/cours/{{ cour.code }}" style="text-decoration: none; color: black">
+
                                             {% if message.important %}
-                                                <span class="text-warning">⚠️</span>
+                                                <span class="text-warning">⚠️</span> {# Affiche un avertissement visuel si le message est important #}
                                             {% endif %}
+
                                             <strong>{{ message.author_name }} a posté un
                                                 {% if message.file is not null %}
                                                     fichier
@@ -47,8 +49,9 @@
                                                 {% endif %}
                                             </strong> -
 
-                                            {{ message.timestamp|date('d/m/Y H:i') }}<br>
+                                            {{ message.timestamp|date('d/m/Y H:i') }}<br> {# Formate la date et l'heure du message #}
 
+                                            {# Affiche soit le fichier, soit le contenu du message, avec une limite de 100 caractères pour éviter un affichage trop long #}
                                             {% if message.file is not null %}
                                                 {{ message.file|slice(0, 100) }}...
                                             {% else %}
@@ -67,7 +70,7 @@
         </div>
     </div>
 
-<div class="calendar-container">
+    <div class="calendar-container">
         <div class="calendar-header">
             <h2>Calendrier - <span id="current-date"></span></h2>
         </div>

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveButton = document.getElementById("saveNotes");
 
     if (saveButton) {
+        // Gère la sauvegarde des notes d'un examen en plusieurs étapes
         saveButton.addEventListener("click", () => {
             const coursCode = saveButton.getAttribute("data-code");
             const evaluationName = document.getElementById("evaluationName").value.trim();
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Collecter les notes des inputs
+            // Collecte toutes les notes saisies dans les champs
             document.querySelectorAll(".gradeInput").forEach((input) => {
                 const idUtilisateur = input.dataset.userId;
                 const note = input.value;
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Supprimer un examen
+    // Supprime un examen après confirmation de l'utilisateur
     window.supprimerExamen = function (examId) {
         if (!confirm("Voulez-vous vraiment supprimer cet examen ?")) return;
 
