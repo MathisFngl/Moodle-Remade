@@ -7,24 +7,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <!-- Saisir le code de l'UE (lecture seule) -->
                 <div class="mb-3">
                     <label class="form-label">Code</label>
                     <input type="text" class="form-control bg-light text-muted" id="ueCode" required readonly>
-
                 </div>
+
+                <!-- Saisir le nom de l'UE -->
                 <div class="mb-3">
                     <label class="form-label">Nom</label>
                     <input type="text" class="form-control" id="ueNom" required>
                 </div>
+
+                <!-- Ajouter une description à l'UE -->
                 <div class="mb-3">
                     <label class="form-label">Description</label>
                     <textarea class="form-control" id="ueDesc" rows="3"></textarea>
                 </div>
+
+                <!-- Ajout une image pour l'UE -->
                 <div class="mb-3">
                     <label class="form-label">Image</label>
                     <input type="file" class="form-control" id="ueImage">
                     <small class="text-muted">Choisissez une image pour cette UE</small>
                 </div>
+
+                <!-- Sélection du responsable de l'UE parmi les professeurs disponibles -->
                 <div class="mb-3">
                     <label class="form-label">Responsable UE</label>
                     <select class="form-select" id="ueRespo">
@@ -39,7 +47,9 @@
             </div>
 
             <div class="modal-footer">
+                <!-- Bouton pour enregistrer l'UE -->
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <!-- Bouton pour fermer la modale sans enregistrer -->
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
             </div>
         </form>
@@ -55,6 +65,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <!--  saisir le prénom et le nom de l'utilisateur -->
                 <div class="d-flex justify-content-between mb-3">
                     <div class="w-45">
                         <label class="form-label">Prénom</label>
@@ -65,6 +76,8 @@
                         <input type="text" class="form-control" id="nom" name="nom" required>
                     </div>
                 </div>
+
+                <!-- saisir l'email et le mot de passe -->
                 <div class="d-flex justify-content-between mb-3">
                     <div class="w-45">
                         <label class="form-label">Email</label>
@@ -75,6 +88,8 @@
                         <input type="password" class="form-control" id="password" name="password">
                     </div>
                 </div>
+
+                <!-- Sélection du rôle de l'utilisateur -->
                 <div class="d-flex justify-content-between mb-3">
                     <div class="w-45">
                         <label class="form-label">Rôle</label>
@@ -90,13 +105,14 @@
                     </div>
                 </div>
 
-                <!-- ✅ Ajout du champ d'upload d'image -->
+                <!--  champ d'upload d'image pour la photo de profil -->
                 <div class="mb-3">
                     <label class="form-label">Photo de profil</label>
                     <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
                     <small class="text-muted">Format accepté : JPG, PNG, taille max 2Mo</small>
                 </div>
 
+                <!-- Sélection des UEs de l'utilisateur -->
                 <div class="mb-3">
                     <label class="form-label">UEs assignées</label>
                     <div id="ueBadges" class="d-flex flex-wrap"></div>
@@ -110,7 +126,9 @@
             </div>
 
             <div class="modal-footer">
+                <!-- enregistrer l'utilisateur -->
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <!-- fermer la modale sans enregistrer -->
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
             </div>
         </form>
