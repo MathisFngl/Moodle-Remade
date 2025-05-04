@@ -10,6 +10,7 @@ use App\Entity\Cours;
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 class Participant
 {
+    // Un participant est caractérisé par un id, un utilisateur, et un cours
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
