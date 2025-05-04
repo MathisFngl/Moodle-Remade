@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
+    // Un message est caractérisé par un id, le code du cours, une date, un titre, un contenu, un fichier et l'auteur
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
