@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MessageController extends AbstractController
 {
+    // Création d'un message à partir d'informations comme le contenu, le type de message, son titre, etc...
     #[Route('/create-message', name: 'create_message', methods: ['POST'])]
     public function createMessage(Request $request, EntityManagerInterface $em, UserInterface $user): JsonResponse
     {
