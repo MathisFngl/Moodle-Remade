@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileController extends AbstractController
 {
+    // Gérer l'affichage du nom et prénom de l'utilisateur et leur changement (ainsi que le changement du mot de passe)
     #[Route('/mon-profil', name: 'profil')]
     public function index(Request $request, UtilisateurRepository $utilisateurRepository, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
